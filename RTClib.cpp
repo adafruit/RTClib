@@ -1,3 +1,6 @@
+// Code by JeeLabs http://news.jeelabs.org/code/
+// Released to the public domain! Enjoy!
+
 #include <Wire.h>
 #include <avr/pgmspace.h>
 #include "RTClib.h"
@@ -5,6 +8,8 @@
 
 #define DS1307_ADDRESS 0x68
 #define SECONDS_PER_DAY 86400L
+
+#define SECONDS_FROM_1970_TO_2000 946684800
 
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
@@ -31,7 +36,9 @@ static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
 // DateTime implementation - ignores time zones and DST changes
 // NOTE: also ignores leap seconds, see http://en.wikipedia.org/wiki/Leap_second
 
-DateTime::DateTime (long t) {
+DateTime::DateTime (uint32_t t) {
+  t -= SECONDS_FROM_1970_TO_2000;    // bring to 2000 timestamp from 1970
+
     ss = t % 60;
     t /= 60;
     mm = t % 60;
@@ -98,13 +105,17 @@ DateTime::DateTime (const char* date, const char* time) {
 }
 
 uint8_t DateTime::dayOfWeek() const {    
-    uint16_t day = get() / SECONDS_PER_DAY;
+    uint16_t day = secondstime() / SECONDS_PER_DAY;
     return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
 }
 
-long DateTime::get() const {
-    uint16_t days = date2days(yOff, m, d);
-    return time2long(days, hh, mm, ss);
+uint32_t DateTime::unixtime(void) const {
+  uint32_t t;
+  uint16_t days = date2days(yOff, m, d);
+  t = time2long(days, hh, mm, ss);
+  t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
+
+  return t;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,8 +126,16 @@ static uint8_t bin2bcd (uint8_t val) { return val + 6 * (val / 10); }
 
 uint8_t RTC_DS1307::begin(void) {
   return 1;
+}
 
+uint8_t RTC_DS1307::isrunning(void) {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0);	
+  Wire.endTransmission();
 
+  Wire.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t ss = Wire.receive();
+  return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
@@ -134,20 +153,20 @@ void RTC_DS1307::adjust(const DateTime& dt) {
 }
 
 DateTime RTC_DS1307::now() {
-  	Wire.beginTransmission(DS1307_ADDRESS);
-  	Wire.send(0);	
-    Wire.endTransmission();
-
-    Wire.requestFrom(DS1307_ADDRESS, 7);
-    uint8_t ss = bcd2bin(Wire.receive());
-    uint8_t mm = bcd2bin(Wire.receive());
-    uint8_t hh = bcd2bin(Wire.receive());
-    Wire.receive();
-    uint8_t d = bcd2bin(Wire.receive());
-    uint8_t m = bcd2bin(Wire.receive());
-    uint16_t y = bcd2bin(Wire.receive()) + 2000;
-    
-    return DateTime (y, m, d, hh, mm, ss);
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0);	
+  Wire.endTransmission();
+  
+  Wire.requestFrom(DS1307_ADDRESS, 7);
+  uint8_t ss = bcd2bin(Wire.receive() & 0x7F);
+  uint8_t mm = bcd2bin(Wire.receive());
+  uint8_t hh = bcd2bin(Wire.receive());
+  Wire.receive();
+  uint8_t d = bcd2bin(Wire.receive());
+  uint8_t m = bcd2bin(Wire.receive());
+  uint16_t y = bcd2bin(Wire.receive()) + 2000;
+  
+  return DateTime (y, m, d, hh, mm, ss);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -156,11 +175,11 @@ DateTime RTC_DS1307::now() {
 long RTC_Millis::offset = 0;
 
 void RTC_Millis::adjust(const DateTime& dt) {
-    offset = dt.get() - millis() / 1000;
+    offset = dt.secondstime() - millis() / 1000;
 }
 
 DateTime RTC_Millis::now() {
-    return offset + millis() / 1000;
+  return (uint32_t)(offset + millis() / 1000);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

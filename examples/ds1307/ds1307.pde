@@ -9,9 +9,12 @@ void setup () {
     Serial.begin(57600);
     Wire.begin();
     RTC.begin();
-    
+
+  if (! RTC.isrunning()) {
+    Serial.println("RTC is NOT running!");
     // following line sets the RTC to the date & time this sketch was compiled
-    //RTC.adjust(DateTime(__DATE__, __TIME__));
+    RTC.adjust(DateTime(__DATE__, __TIME__));
+  }
 }
 
 void loop () {
@@ -30,14 +33,14 @@ void loop () {
     Serial.print(now.second(), DEC);
     Serial.println();
     
-    Serial.print(" since 2000 = ");
-    Serial.print(now.get());
+    Serial.print(" since midnight 1/1/1970 = ");
+    Serial.print(now.unixtime());
     Serial.print("s = ");
-    Serial.print(now.get() / 86400L);
+    Serial.print(now.unixtime() / 86400L);
     Serial.println("d");
     
     // calculate a date which is 7 days and 30 seconds into the future
-    DateTime future (now.get() + 7 * 86400L + 30);
+    DateTime future (now.unixtime() + 7 * 86400L + 30);
     
     Serial.print(" now + 7d + 30s: ");
     Serial.print(future.year(), DEC);
