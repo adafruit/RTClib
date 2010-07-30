@@ -105,8 +105,8 @@ DateTime::DateTime (const char* date, const char* time) {
 }
 
 uint8_t DateTime::dayOfWeek() const {    
-    uint16_t day = secondstime() / SECONDS_PER_DAY;
-    return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
+    uint16_t day = unixtime() / SECONDS_PER_DAY;
+    return (day + 4) % 7; // Jan 1, 2000 is a Thursday, i.e. returns 4
 }
 
 uint32_t DateTime::unixtime(void) const {
@@ -175,7 +175,7 @@ DateTime RTC_DS1307::now() {
 long RTC_Millis::offset = 0;
 
 void RTC_Millis::adjust(const DateTime& dt) {
-    offset = dt.secondstime() - millis() / 1000;
+    offset = dt.unixtime() - millis() / 1000;
 }
 
 DateTime RTC_Millis::now() {

@@ -27,11 +27,11 @@ void loop () {
     Serial.print(now.second(), DEC);
     Serial.println();
     
-    Serial.print(" seconds since 2000: ");
-    Serial.println(now.get());
+    Serial.print(" seconds since 1970: ");
+    Serial.println(now.unixtime());
     
     // calculate a date which is 7 days and 30 seconds into the future
-    DateTime future (now.get() + 7 * 86400L + 30);
+    DateTime future (now.unixtime() + 7 * 86400L + 30);
     
     Serial.print(" now + 7d + 30s: ");
     Serial.print(future.year(), DEC);

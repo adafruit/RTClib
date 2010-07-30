@@ -19,10 +19,10 @@ void showDate(const char* txt, const DateTime& dt) {
     Serial.print(dt.second(), DEC);
     
     Serial.print(" = ");
-    Serial.print(dt.get());
+    Serial.print(dt.unixtime());
     Serial.print("s / ");
-    Serial.print(dt.get() / 86400L);
-    Serial.print("d since 2000");
+    Serial.print(dt.unixtime() / 86400L);
+    Serial.print("d since 1970");
     
     Serial.println();
 }
@@ -51,13 +51,13 @@ void setup () {
     DateTime dt6 (2009, 12, 27, 0, 0, 0);
     showDate("dt6", dt6);
 
-    DateTime dt7 (dt6.get() + 3600); // one hour later
+    DateTime dt7 (dt6.unixtime() + 3600); // one hour later
     showDate("dt7", dt7);
 
-    DateTime dt8 (dt6.get() + 86400L); // one day later
+    DateTime dt8 (dt6.unixtime() + 86400L); // one day later
     showDate("dt8", dt8);
 
-    DateTime dt9 (dt6.get() + 7 * 86400L); // one week later
+    DateTime dt9 (dt6.unixtime() + 7 * 86400L); // one week later
     showDate("dt9", dt9);
 }
 
