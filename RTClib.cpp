@@ -105,8 +105,8 @@ DateTime::DateTime (const char* date, const char* time) {
 }
 
 uint8_t DateTime::dayOfWeek() const {    
-    uint16_t day = unixtime() / SECONDS_PER_DAY;
-    return (day + 4) % 7; // Jan 1, 2000 is a Thursday, i.e. returns 4
+    uint16_t day = date2days(yOff, m, d);
+    return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
 }
 
 uint32_t DateTime::unixtime(void) const {
