@@ -20,6 +20,8 @@ public:
     long secondstime() const;   
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
+	// as a string
+	char* toString(char* buf, int maxlen) const;
 
 protected:
     uint8_t yOff, m, d, hh, mm, ss;
@@ -28,10 +30,26 @@ protected:
 // RTC based on the DS1307 chip connected via I2C and the Wire library
 class RTC_DS1307 {
 public:
-  static uint8_t begin(void);
+    static uint8_t begin(void);
     static void adjust(const DateTime& dt);
     uint8_t isrunning(void);
     static DateTime now();
+};
+
+// RTC based on the DS3234 chip connected via SPI and the SPI library
+class RTC_DS3234 {
+public:
+	RTC_DS3234(int _cs_pin): cs_pin(_cs_pin) {}
+	uint8_t begin(void);
+	void adjust(const DateTime& dt);
+    uint8_t isrunning(void);
+	DateTime now();
+
+protected:
+	void cs(int _value) { digitalWrite(cs_pin,_value); }
+
+private:
+	int cs_pin;
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
