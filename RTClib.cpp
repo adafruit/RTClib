@@ -69,11 +69,11 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uin
     if (year >= 2000)
         year -= 2000;
     yOff = year;
-    m = month;
-    d = day;
-    hh = hour;
-    mm = min;
-    ss = sec;
+    m = min(month,12);
+    d = min(day,31);
+    hh = min(hour,23);
+    mm = min(min,60);
+    ss = min(sec,60);
 }
 
 static uint8_t conv2d(const char* p) {
@@ -136,6 +136,11 @@ char* DateTime::toString(char* buf, int maxlen) const
 	return buf;
 }
 
+void DateTime::operator+=(uint32_t additional)
+{
+    DateTime after = DateTime( unixtime() + additional );
+    *this = after;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_DS1307 implementation
@@ -284,3 +289,4 @@ DateTime RTC_Millis::now() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// vim:ci:sw=4 sts=4 ft=cpp

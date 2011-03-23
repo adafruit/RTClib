@@ -1,6 +1,9 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
+#ifndef __RTCLIB_H__
+#define __RTCLIB_H__
+
 // Simple general-purpose date/time class (no TZ / DST / leap second handling!)
 class DateTime {
 public:
@@ -20,8 +23,10 @@ public:
     long secondstime() const;   
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
-	// as a string
-	char* toString(char* buf, int maxlen) const;
+    // as a string
+    char* toString(char* buf, int maxlen) const;
+    // add aditional time
+    void operator+=(uint32_t);
 
 protected:
     uint8_t yOff, m, d, hh, mm, ss;
@@ -63,3 +68,7 @@ public:
 protected:
     static long offset;
 };
+
+#endif // __RTCLIB_H__
+
+
