@@ -49,7 +49,7 @@ DateTime::DateTime (uint32_t t)
     for (yOff = 0; ; ++yOff)
     {
         leap = yOff % 4 == 0;
-        if (days < 365 + leap)
+        if (days < 365U + leap)
             break;
         days -= 365 + leap;
     }
@@ -142,7 +142,7 @@ uint32_t DateTime::unixtime(void) const
     return t;
 }
 
-char* months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+const char* months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
 // as a string
 char* DateTime::toString(char* buf, int maxlen) const
