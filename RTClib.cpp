@@ -176,8 +176,6 @@ uint8_t bin2bcd (uint8_t val)
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_Millis implementation
 
-long RTC_Millis::offset = 0;
-
 void RTC_Millis::adjust(const DateTime& dt)
 {
     offset = dt.unixtime() - millis() / 1000;

@@ -60,15 +60,19 @@ extern uint8_t bin2bcd (uint8_t val);
 class RTC_Millis
 {
 public:
-    static void begin(const DateTime& dt)
+    void begin(const DateTime& dt)
     {
         adjust(dt);
     }
-    static void adjust(const DateTime& dt);
-    static DateTime now();
+    void adjust(const DateTime& dt);
+    DateTime now();
+    RTC_Millis(void)
+    {
+	adjust(DateTime(2000,1,1,0,0,0));
+    }
 
 protected:
-    static long offset;
+    long offset;
 };
 
 #endif // __RTCLIB_H__
