@@ -1,6 +1,7 @@
 // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
 
 #include <SPI.h>
+#include <Wire.h>
 #include <RTClib.h>
 #include <RTC_DS3234.h>
 
