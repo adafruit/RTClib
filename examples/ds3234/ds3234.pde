@@ -5,36 +5,39 @@
 #include <RTClib.h>
 #include <RTC_DS3234.h>
 
+// Avoid spurious warnings
+#undef PROGMEM
+#define PROGMEM __attribute__(( section(".progmem.data") ))
+#undef PSTR
+#define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];}))
+
 // Create an RTC instance, using the chip select pin it's connected to
 RTC_DS3234 RTC(8);
 
 void setup () {
     Serial.begin(57600);
+    Serial.println("RTClib/examples/ds3234/");
     SPI.begin();
     RTC.begin();
 
   if (! RTC.isrunning()) {
     Serial.println("RTC is NOT running!");
+    Serial.print("Setting time to... ");
+    Serial.print(__DATE__);
+    Serial.print(' ');
+    Serial.println(__TIME__);
     // following line sets the RTC to the date & time this sketch was compiled
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
 }
 
 void loop () {
+    const int len = 32;
+    static char buf[len];
+
     DateTime now = RTC.now();
-    
-    Serial.print(now.year(), DEC);
-    Serial.print('/');
-    Serial.print(now.month(), DEC);
-    Serial.print('/');
-    Serial.print(now.day(), DEC);
-    Serial.print(' ');
-    Serial.print(now.hour(), DEC);
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
-    Serial.println();
+
+    Serial.println(now.toString(buf,len));
     
     Serial.print(" since midnight 1/1/1970 = ");
     Serial.print(now.unixtime());
@@ -43,23 +46,12 @@ void loop () {
     Serial.println("d");
     
     // calculate a date which is 7 days and 30 seconds into the future
-    DateTime future (now.unixtime() + 7 * 86400L + 30);
+    DateTime future (now.unixtime() + 7 * 86400L + 30 );
     
     Serial.print(" now + 7d + 30s: ");
-    Serial.print(future.year(), DEC);
-    Serial.print('/');
-    Serial.print(future.month(), DEC);
-    Serial.print('/');
-    Serial.print(future.day(), DEC);
-    Serial.print(' ');
-    Serial.print(future.hour(), DEC);
-    Serial.print(':');
-    Serial.print(future.minute(), DEC);
-    Serial.print(':');
-    Serial.print(future.second(), DEC);
-    Serial.println();
+    Serial.println(future.toString(buf,len));
     
     Serial.println();
     delay(3000);
 }
-// vim:ci:sw=4 sts=4 ft=cpp
+// vim:cin:ai:sw=4 sts=4 ft=cpp
