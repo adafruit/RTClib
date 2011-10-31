@@ -4,7 +4,7 @@
 #include <Wire.h>
 #include <avr/pgmspace.h>
 #include "RTClib.h"
-#include <WProgram.h>
+#include <arduino.h>
 
 #define DS1307_ADDRESS 0x68
 #define SECONDS_PER_DAY 86400L
