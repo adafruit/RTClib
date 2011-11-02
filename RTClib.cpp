@@ -184,7 +184,7 @@ DateTime RTC_DS1307::now() {
 
 #endif
 
-#if ARDUINO < 22
+#if ARDUINO <= 22
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
@@ -192,7 +192,7 @@ uint8_t RTC_DS1307::isrunning(void) {
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.read();
+  uint8_t ss = Wire.receive();
   return !(ss>>7);
 }
 
@@ -219,7 +219,7 @@ DateTime RTC_DS1307::now() {
   uint8_t ss = bcd2bin(Wire.receive() & 0x7F);
   uint8_t mm = bcd2bin(Wire.receive());
   uint8_t hh = bcd2bin(Wire.receive());
-  Wire.read();
+  Wire.receive();
   uint8_t d = bcd2bin(Wire.receive());
   uint8_t m = bcd2bin(Wire.receive());
   uint16_t y = bcd2bin(Wire.receive()) + 2000;
