@@ -2,12 +2,21 @@
 // Released to the public domain! Enjoy!
 
 #include <avr/pgmspace.h>
-#include <WProgram.h>
 #include "RTClib.h"
 
 #define SECONDS_PER_DAY 86400L
 #define SECONDS_FROM_1970_TO_2000 946684800
 
+#if ARDUINO > 22
+#include <arduino.h>
+#endif
+
+#if ARDUINO <= 22
+#include <WProgram.h>
+#endif
+
+
+int i = 0; //The new wire library needs to take an int when you are sending for the zero register
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
 

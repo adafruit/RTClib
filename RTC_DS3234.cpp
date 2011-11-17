@@ -1,8 +1,13 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
-#include <avr/pgmspace.h>
+#if ARDUINO < 100
 #include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
+
+#include <avr/pgmspace.h>
 #include <SPI.h>
 #include "RTClib.h"
 #include "RTC_DS3234.h"

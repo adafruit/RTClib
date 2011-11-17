@@ -2,4 +2,5 @@
 *.orig
 .*.swp
 ojam/
+16000000/
 version.h

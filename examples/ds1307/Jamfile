@@ -1,6 +1,6 @@
 # (1) Project Information
 
-PROJECT_LIBS 	= RTClib Wire SPI ; 
+PROJECT_LIBS 	= RTClib Wire ; 
 
 # (2) Board Information
 
