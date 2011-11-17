@@ -1,7 +1,9 @@
 // Date and time functions using a DS1307 RTC connected via I2C and Wire lib
 
 #include <Wire.h>
-#include "RTClib.h"
+#include <SPI.h>
+#include <RTClib.h>
+#include <RTC_DS1307.h>
 
 RTC_DS1307 RTC;
 
@@ -59,3 +61,4 @@ void loop () {
     Serial.println();
     delay(3000);
 }
+// vim:ci:sw=4 sts=4 ft=cpp
