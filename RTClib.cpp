@@ -136,7 +136,7 @@ uint8_t RTC_DS1307::begin(void) {
 }
 
 
-#if ARDUINO => 100
+#if ARDUINO >= 100
 
 
 uint8_t RTC_DS1307::isrunning(void) {
