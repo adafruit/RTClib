@@ -10,14 +10,11 @@
 
 #define SECONDS_FROM_1970_TO_2000 946684800
 
-#if ARDUINO > 22
-#include <arduino.h>
+#if (ARDUINO >= 100)
+ #include <arduino.h>
+#else
+ #include <WProgram.h>
 #endif
-
-#if ARDUINO <= 22
-#include <WProgram.h>
-#endif
-
 
 int i = 0; //The new wire library needs to take an int when you are sending for the zero register
 ////////////////////////////////////////////////////////////////////////////////
@@ -138,8 +135,7 @@ uint8_t RTC_DS1307::begin(void) {
 }
 
 
-#if ARDUINO > 22
-
+#if (ARDUINO >= 100)
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
@@ -182,9 +178,7 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
-#endif
-
-#if ARDUINO <= 22
+#else
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
