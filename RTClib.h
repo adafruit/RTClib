@@ -32,6 +32,8 @@ public:
     static void adjust(const DateTime& dt);
     uint8_t isrunning(void);
     static DateTime now();
+    static uint8_t readMemory(uint8_t offset, uint8_t* data, uint8_t length);
+    static uint8_t writeMemory(uint8_t offset, uint8_t* data, uint8_t length);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use

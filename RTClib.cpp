@@ -178,6 +178,33 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+uint8_t RTC_DS1307::readMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_read = 0;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x08 + offset);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)length);
+  while (Wire.available() > 0 && bytes_read < length) {
+    data[bytes_read] = Wire.read();
+    bytes_read++;
+  }
+
+  return bytes_read;
+}
+
+uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_written;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x08 + offset);
+  bytes_written =  Wire.write(data, length);
+  Wire.endTransmission();
+
+  return bytes_written;
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -220,6 +247,33 @@ DateTime RTC_DS1307::now() {
   
   return DateTime (y, m, d, hh, mm, ss);
 }
+
+uint8_t RTC_DS1307::readMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_read = 0;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x08 + offset);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)length);
+  while (Wire.available() > 0 && bytes_read < length) {
+    data[bytes_read] = Wire.receive();
+    bytes_read++;
+  }
+
+  return bytes_read;
+}
+
+uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x08 + offset);
+  Wire.send(data, length);
+  Wire.endTransmission();
+
+  return length;
+}
+
 
 #endif
 
