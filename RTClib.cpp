@@ -205,6 +205,27 @@ uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
   return bytes_written;
 }
 
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x07);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = Wire.read();
+
+  mode &= 0x93;
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x07);
+  Wire.write(mode);
+  Wire.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -274,6 +295,27 @@ uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
   return length;
 }
 
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x07);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = Wire.receive();
+
+  mode &= 0x93;
+
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x07);
+  Wire.send(mode);
+  Wire.endTransmission();
+}
 
 #endif
 

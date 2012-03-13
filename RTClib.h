@@ -26,6 +26,8 @@ protected:
 };
 
 // RTC based on the DS1307 chip connected via I2C and the Wire library
+enum Ds1307SqwPinMode { OFF = 0x00, ON = 0x80, SquareWave1HZ = 0x10, SquareWave4kHz = 0x11, SquareWave8kHz = 0x12, SquareWave32kHz = 0x13 };
+
 class RTC_DS1307 {
 public:
   static uint8_t begin(void);
@@ -34,6 +36,8 @@ public:
     static DateTime now();
     static uint8_t readMemory(uint8_t offset, uint8_t* data, uint8_t length);
     static uint8_t writeMemory(uint8_t offset, uint8_t* data, uint8_t length);
+    static Ds1307SqwPinMode readSqwPinMode();
+    static void writeSqwPinMode(Ds1307SqwPinMode mode);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
