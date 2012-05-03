@@ -12,8 +12,12 @@
 
 #if (ARDUINO >= 100)
  #include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
+ #define Wire_read Wire.read
+ #define Wire_write Wire.write
 #else
  #include <WProgram.h>
+ #define Wire_read Wire.receive
+ #define Wire_write Wire.send
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,93 +138,46 @@ uint8_t RTC_DS1307::begin(void) {
 }
 
 
-#if (ARDUINO >= 100)
-
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write((byte)0);	
+  Wire_write((byte)0);	
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.read();
+  uint8_t ss = Wire_read();
   return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write((byte)0);
-    Wire.write(bin2bcd(dt.second()));
-    Wire.write(bin2bcd(dt.minute()));
-    Wire.write(bin2bcd(dt.hour()));
-    Wire.write(bin2bcd(0));
-    Wire.write(bin2bcd(dt.day()));
-    Wire.write(bin2bcd(dt.month()));
-    Wire.write(bin2bcd(dt.year() - 2000));
-    Wire.write((byte)0);
+    Wire_write((byte)0);
+    Wire_write(bin2bcd(dt.second()));
+    Wire_write(bin2bcd(dt.minute()));
+    Wire_write(bin2bcd(dt.hour()));
+    Wire_write(bin2bcd(0));
+    Wire_write(bin2bcd(dt.day()));
+    Wire_write(bin2bcd(dt.month()));
+    Wire_write(bin2bcd(dt.year() - 2000));
+    Wire_write((byte)0);
     Wire.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write((byte)0);	
+  Wire_write((byte)0);	
   Wire.endTransmission();
   
   Wire.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(Wire.read() & 0x7F);
-  uint8_t mm = bcd2bin(Wire.read());
-  uint8_t hh = bcd2bin(Wire.read());
-  Wire.read();
-  uint8_t d = bcd2bin(Wire.read());
-  uint8_t m = bcd2bin(Wire.read());
-  uint16_t y = bcd2bin(Wire.read()) + 2000;
+  uint8_t ss = bcd2bin(Wire_read() & 0x7F);
+  uint8_t mm = bcd2bin(Wire_read());
+  uint8_t hh = bcd2bin(Wire_read());
+  Wire_read();
+  uint8_t d = bcd2bin(Wire_read());
+  uint8_t m = bcd2bin(Wire_read());
+  uint16_t y = bcd2bin(Wire_read()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
 }
-
-#else
-
-uint8_t RTC_DS1307::isrunning(void) {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send((byte)0);	
-  Wire.endTransmission();
-
-  Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.receive();
-  return !(ss>>7);
-}
-
-void RTC_DS1307::adjust(const DateTime& dt) {
-    Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.send((byte)0);
-    Wire.send(bin2bcd(dt.second()));
-    Wire.send(bin2bcd(dt.minute()));
-    Wire.send(bin2bcd(dt.hour()));
-    Wire.send(bin2bcd(0));
-    Wire.send(bin2bcd(dt.day()));
-    Wire.send(bin2bcd(dt.month()));
-    Wire.send(bin2bcd(dt.year() - 2000));
-    Wire.send((byte)0);
-    Wire.endTransmission();
-}
-
-DateTime RTC_DS1307::now() {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send((byte)0);	
-  Wire.endTransmission();
-  
-  Wire.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(Wire.receive() & 0x7F);
-  uint8_t mm = bcd2bin(Wire.receive());
-  uint8_t hh = bcd2bin(Wire.receive());
-  Wire.receive();
-  uint8_t d = bcd2bin(Wire.receive());
-  uint8_t m = bcd2bin(Wire.receive());
-  uint16_t y = bcd2bin(Wire.receive()) + 2000;
-  
-  return DateTime (y, m, d, hh, mm, ss);
-}
-
-#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////
