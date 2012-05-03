@@ -16,7 +16,6 @@
  #include <WProgram.h>
 #endif
 
-int i = 0; //The new wire library needs to take an int when you are sending for the zero register
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
 
@@ -139,7 +138,7 @@ uint8_t RTC_DS1307::begin(void) {
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
+  Wire.write((byte)0);	
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
@@ -149,7 +148,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write(i);
+    Wire.write((byte)0);
     Wire.write(bin2bcd(dt.second()));
     Wire.write(bin2bcd(dt.minute()));
     Wire.write(bin2bcd(dt.hour()));
@@ -157,13 +156,13 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.write(bin2bcd(dt.day()));
     Wire.write(bin2bcd(dt.month()));
     Wire.write(bin2bcd(dt.year() - 2000));
-    Wire.write(i);
+    Wire.write((byte)0);
     Wire.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
+  Wire.write((byte)0);	
   Wire.endTransmission();
   
   Wire.requestFrom(DS1307_ADDRESS, 7);
@@ -182,7 +181,7 @@ DateTime RTC_DS1307::now() {
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
+  Wire.send((byte)0);	
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
@@ -192,7 +191,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.send(i);
+    Wire.send((byte)0);
     Wire.send(bin2bcd(dt.second()));
     Wire.send(bin2bcd(dt.minute()));
     Wire.send(bin2bcd(dt.hour()));
@@ -200,13 +199,13 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.send(bin2bcd(dt.day()));
     Wire.send(bin2bcd(dt.month()));
     Wire.send(bin2bcd(dt.year() - 2000));
-    Wire.send(i);
+    Wire.send((byte)0);
     Wire.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
+  Wire.send((byte)0);	
   Wire.endTransmission();
   
   Wire.requestFrom(DS1307_ADDRESS, 7);
