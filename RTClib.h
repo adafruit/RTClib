@@ -15,6 +15,13 @@ public:
     uint8_t minute() const      { return mm; }
     uint8_t second() const      { return ss; }
     uint8_t dayOfWeek() const;
+    
+    void setYear(uint16_t year) { yOff = year - 2000; }
+    void setMonth(uint8_t month) { m = month; }
+    void setDay(uint8_t day) { d = day; }
+    void setHour(uint8_t hour) { hh = hour; }
+    void setMinute(uint8_t minute) { mm = minute; }
+    void setSecond(uint8_t second) { ss = second; }
 
     // 32-bit times as seconds since 1/1/2000
     long secondstime() const;   
