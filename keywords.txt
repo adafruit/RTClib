@@ -27,6 +27,12 @@ begin	KEYWORD2
 adjust	KEYWORD2
 isrunning	KEYWORD2
 now	KEYWORD2
+setYear	KEYWORD2
+setMonth	KEYWORD2
+setDay	KEYWORD2
+setHour	KEYWORD2
+setMinute	KEYWORD2
+setSecond	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
