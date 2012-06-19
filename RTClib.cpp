@@ -14,6 +14,9 @@
  #include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
 #else
  #include <WProgram.h>
+ // Redefine send/receive to write/read for compatability to Arduino Wire 1.00+, Dataman, 6/19/12
+ #define Wire.send(i)	Wire.write(i) 
+ #deinfe Wire.receive()	Wire.read()
 #endif
 
 int i = 0; //The new wire library needs to take an int when you are sending for the zero register
@@ -134,9 +137,6 @@ uint8_t RTC_DS1307::begin(void) {
   return 1;
 }
 
-
-#if (ARDUINO >= 100)
-
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
   Wire.write(i);	
@@ -177,52 +177,6 @@ DateTime RTC_DS1307::now() {
   
   return DateTime (y, m, d, hh, mm, ss);
 }
-
-#else
-
-uint8_t RTC_DS1307::isrunning(void) {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
-  Wire.endTransmission();
-
-  Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.receive();
-  return !(ss>>7);
-}
-
-void RTC_DS1307::adjust(const DateTime& dt) {
-    Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.send(i);
-    Wire.send(bin2bcd(dt.second()));
-    Wire.send(bin2bcd(dt.minute()));
-    Wire.send(bin2bcd(dt.hour()));
-    Wire.send(bin2bcd(0));
-    Wire.send(bin2bcd(dt.day()));
-    Wire.send(bin2bcd(dt.month()));
-    Wire.send(bin2bcd(dt.year() - 2000));
-    Wire.send(i);
-    Wire.endTransmission();
-}
-
-DateTime RTC_DS1307::now() {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
-  Wire.endTransmission();
-  
-  Wire.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(Wire.receive() & 0x7F);
-  uint8_t mm = bcd2bin(Wire.receive());
-  uint8_t hh = bcd2bin(Wire.receive());
-  Wire.receive();
-  uint8_t d = bcd2bin(Wire.receive());
-  uint8_t m = bcd2bin(Wire.receive());
-  uint16_t y = bcd2bin(Wire.receive()) + 2000;
-  
-  return DateTime (y, m, d, hh, mm, ss);
-}
-
-#endif
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_Millis implementation
