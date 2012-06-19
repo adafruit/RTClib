@@ -14,9 +14,9 @@
  #include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
 #else
  #include <WProgram.h>
- // Redefine send/receive to write/read for compatability to Arduino Wire 1.00+, Dataman, 6/19/12
- #define Wire.send(i)	Wire.write(i) 
- #deinfe Wire.receive()	Wire.read()
+ // Arduino 1.00+ refines Wire.send/receive as write/read.  Back Compatability, Dataman, 6/19/12
+ #define write(i) send(i)
+ #define read() receive()
 #endif
 
 int i = 0; //The new wire library needs to take an int when you are sending for the zero register
@@ -192,3 +192,7 @@ DateTime RTC_Millis::now() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+// Arduino 1.00+ refines Wire.send/receive as write/read.  Prevent leakage to outside code.
+#undef write(i)
+#undef read()
