@@ -1,0 +1,8 @@
+This a fork of the RTCLib from Lady Ada,
+Originally forked from Jee Labs.
+That makes this a pitchfork!  Tripple Fork!
+
+Anyhow, it's just a code simplification,
+A couple of #defs/#undefs to cut out about 40 lines of dupe code.
+
+
