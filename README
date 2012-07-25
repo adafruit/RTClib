@@ -1,0 +1,13 @@
+Original code from JeeLabs http://news.jeelabs.org/code/
+
+forked by Adafruit
+
+and then forked by me... rlameiro :D
+
+The only modification I made, was to add a little class/function to allow to set the time directly via the microcontroller.
+
+so, calling:
+
+RTC_DS1307.set(hour, min, sec, day, month, year-4digit)
+
+you set the DS1307 clock. 
