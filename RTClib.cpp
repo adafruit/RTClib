@@ -39,16 +39,6 @@ static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
 }
 
 
-
-
-
-
-//int bcdToDec(int val)
-//{
-// return ( (val/16*10) + (val%16) );
-//}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // DateTime implementation - ignores time zones and DST changes
 // NOTE: also ignores leap seconds, see http://en.wikipedia.org/wiki/Leap_second
