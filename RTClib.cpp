@@ -38,6 +38,7 @@ static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
     return ((days * 24L + h) * 60 + m) * 60 + s;
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // DateTime implementation - ignores time zones and DST changes
 // NOTE: also ignores leap seconds, see http://en.wikipedia.org/wiki/Leap_second
@@ -129,6 +130,8 @@ uint32_t DateTime::unixtime(void) const {
 
 static uint8_t bcd2bin (uint8_t val) { return val - 6 * (val >> 4); }
 static uint8_t bin2bcd (uint8_t val) { return val + 6 * (val / 10); }
+static uint8_t decToBcd(uint8_t val) { return ( (val/10*16) + (val%10) );}
+
 
 uint8_t RTC_DS1307::begin(void) {
   return 1;
@@ -160,6 +163,22 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.write(i);
     Wire.endTransmission();
 }
+
+void RTC_DS1307::set(int shour, int smin, int ssec, int sday, int smonth, int syear) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+    Wire.write(i);
+    Wire.write(decToBcd(ssec));
+    Wire.write(decToBcd(smin));
+    Wire.write(decToBcd(shour));
+    Wire.write(decToBcd(0));
+    Wire.write(decToBcd(sday));
+    Wire.write(decToBcd(smonth));
+    Wire.write(decToBcd(syear - 2000));
+    Wire.write(i);
+    Wire.endTransmission();
+}
+
+
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
@@ -200,6 +219,21 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.send(bin2bcd(dt.day()));
     Wire.send(bin2bcd(dt.month()));
     Wire.send(bin2bcd(dt.year() - 2000));
+    Wire.send(i);
+    Wire.endTransmission();
+}
+
+
+void RTC_DS1307::set(int shour, int smin, int ssec, int sday, int smonth, int syear) {
+    Wire.beginTransmission(DS1307_ADDRESS);
+    Wire.send(i);
+    Wire.send(decToBcd(ssec));
+    Wire.send(decToBcd(smin));
+    Wire.send(decToBcd(shour));
+    Wire.send(decToBcd(0));
+    Wire.send(decToBcd(sday));
+    Wire.send(decToBcd(smonth));
+    Wire.send(decToBcd(syear - 2000));
     Wire.send(i);
     Wire.endTransmission();
 }

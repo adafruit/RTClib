@@ -25,6 +25,7 @@ secondstime	KEYWORD2
 unixtime	KEYWORD2
 begin	KEYWORD2
 adjust	KEYWORD2
+set	KEYWORD2
 isrunning	KEYWORD2
 now	KEYWORD2
 
