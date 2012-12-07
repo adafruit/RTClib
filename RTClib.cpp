@@ -16,7 +16,6 @@
  #include <WProgram.h>
 #endif
 
-int i = 0; //The new wire library needs to take an int when you are sending for the zero register
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
 
@@ -139,7 +138,7 @@ uint8_t RTC_DS1307::begin(void) {
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
+  Wire.write((uint8_t)0);
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
@@ -149,7 +148,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write(i);
+    Wire.write((uint8_t)0);
     Wire.write(bin2bcd(dt.second()));
     Wire.write(bin2bcd(dt.minute()));
     Wire.write(bin2bcd(dt.hour()));
@@ -157,13 +156,13 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.write(bin2bcd(dt.day()));
     Wire.write(bin2bcd(dt.month()));
     Wire.write(bin2bcd(dt.year() - 2000));
-    Wire.write(i);
+    Wire.write((uint8_t)0);
     Wire.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
+  Wire.write((uint8_t)0);
   Wire.endTransmission();
   
   Wire.requestFrom(DS1307_ADDRESS, 7);
@@ -178,11 +177,59 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+uint8_t RTC_DS1307::readMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_read = 0;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x08 + offset);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)length);
+  while (Wire.available() > 0 && bytes_read < length) {
+    data[bytes_read] = Wire.read();
+    bytes_read++;
+  }
+
+  return bytes_read;
+}
+
+uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_written;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x08 + offset);
+  bytes_written =  Wire.write(data, length);
+  Wire.endTransmission();
+
+  return bytes_written;
+}
+
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x07);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = Wire.read();
+
+  mode &= 0x93;
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(0x07);
+  Wire.write(mode);
+  Wire.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
+  Wire.send((uint8_t)0);
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 1);
@@ -192,7 +239,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.send(i);
+    Wire.send((uint8_t)0);
     Wire.send(bin2bcd(dt.second()));
     Wire.send(bin2bcd(dt.minute()));
     Wire.send(bin2bcd(dt.hour()));
@@ -200,13 +247,13 @@ void RTC_DS1307::adjust(const DateTime& dt) {
     Wire.send(bin2bcd(dt.day()));
     Wire.send(bin2bcd(dt.month()));
     Wire.send(bin2bcd(dt.year() - 2000));
-    Wire.send(i);
+    Wire.send((uint8_t)0);
     Wire.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
+  Wire.send((uint8_t)0);	
   Wire.endTransmission();
   
   Wire.requestFrom(DS1307_ADDRESS, 7);
@@ -219,6 +266,54 @@ DateTime RTC_DS1307::now() {
   uint16_t y = bcd2bin(Wire.receive()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
+}
+
+uint8_t RTC_DS1307::readMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+  uint8_t bytes_read = 0;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x08 + offset);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)length);
+  while (Wire.available() > 0 && bytes_read < length) {
+    data[bytes_read] = Wire.receive();
+    bytes_read++;
+  }
+
+  return bytes_read;
+}
+
+uint8_t RTC_DS1307::writeMemory(uint8_t offset, uint8_t* data, uint8_t length) {
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x08 + offset);
+  Wire.send(data, length);
+  Wire.endTransmission();
+
+  return length;
+}
+
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x07);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = Wire.receive();
+
+  mode &= 0x93;
+
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(0x07);
+  Wire.send(mode);
+  Wire.endTransmission();
 }
 
 #endif
