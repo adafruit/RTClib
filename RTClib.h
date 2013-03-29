@@ -2,6 +2,9 @@
 // Released to the public domain! Enjoy!
 
 // Simple general-purpose date/time class (no TZ / DST / leap second handling!)
+
+#ifndef RTCLIB_H
+#define RTCLIB_H
 class DateTime {
 public:
     DateTime (uint32_t t =0);
@@ -45,3 +48,4 @@ public:
 protected:
     static long offset;
 };
+#endif // RTCLIB_H
