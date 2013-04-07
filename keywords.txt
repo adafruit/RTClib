@@ -9,6 +9,12 @@
 DateTime	KEYWORD1
 RTC_DS1307	KEYWORD1
 RTC_Millis	KEYWORD1
+Frequencies	KEYWORD1
+Frequency_t	KEYWORD1
+Frequency_1Hz	KEYWORD1
+Frequency_4096Hz	KEYWORD1
+Frequency_8192Hz	KEYWORD1
+Frequency_32768Hz	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -27,6 +33,14 @@ begin	KEYWORD2
 adjust	KEYWORD2
 isrunning	KEYWORD2
 now	KEYWORD2
+setYear	KEYWORD2
+setMonth	KEYWORD2
+setDay	KEYWORD2
+setHour	KEYWORD2
+setMinute	KEYWORD2
+setSecond	KEYWORD2
+setSqwOutLevel	KEYWORD2
+setSqwOutSignal	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
