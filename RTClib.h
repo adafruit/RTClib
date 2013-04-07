@@ -35,10 +35,24 @@ protected:
 // RTC based on the DS1307 chip connected via I2C and the Wire library
 class RTC_DS1307 {
 public:
-  static uint8_t begin(void);
+
+    // SQW/OUT frequencies.
+    typedef enum Frequencies
+    {
+        Frequency_1Hz,
+        Frequency_4096Hz,
+        Frequency_8192Hz,
+        Frequency_32768Hz
+    } Frequency_t;
+    
+    static uint8_t begin(void);
     static void adjust(const DateTime& dt);
     uint8_t isrunning(void);
     static DateTime now();
+    
+    // SQW/OUT methods.
+    static void setSqwOutLevel(uint8_t level);
+    static void setSqwOutSignal(Frequencies frequency);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use

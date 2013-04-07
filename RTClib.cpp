@@ -5,7 +5,18 @@
 #include <avr/pgmspace.h>
 #include "RTClib.h"
 
-#define DS1307_ADDRESS 0x68
+// DS1307 address.
+#define DS1307_ADDRESS  0x68
+
+// DS1307 registers.
+#define DS1307_CONTROL_REGISTER 0x07
+
+// DS1307 control register bits.
+#define DS1307_RS0  0x00
+#define DS1307_RS1  0x01
+#define DS1307_SQWE 0x04
+#define DS1307_OUT  0x07
+
 #define SECONDS_PER_DAY 86400L
 
 #define SECONDS_FROM_1970_TO_2000 946684800
@@ -178,6 +189,38 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+void RTC_DS1307::setSqwOutLevel(uint8_t level) {
+    uint8_t value = (level == LOW) ? 0x00 : (1 << DS1307_OUT);  
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(DS1307_CONTROL_REGISTER);	
+  	Wire.write(value);
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::setSqwOutSignal(Frequencies frequency) {
+    uint8_t value = (1 << DS1307_SQWE);
+    switch (frequency)
+    {
+        case Frequency_1Hz:
+            // Nothing to do.
+        break;
+        case Frequency_4096Hz:
+            value |= (1 << DS1307_RS0);
+        break;
+        case Frequency_8192Hz:
+            value |= (1 << DS1307_RS1);
+        break;
+        case Frequency_32768Hz:
+        default:
+            value |= (1 << DS1307_RS1) | (1 << DS1307_RS0);
+        break;
+    }
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.write(DS1307_CONTROL_REGISTER);	
+  	Wire.write(value);
+    Wire.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -219,6 +262,38 @@ DateTime RTC_DS1307::now() {
   uint16_t y = bcd2bin(Wire.receive()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
+}
+
+void RTC_DS1307::setSqwOutLevel(uint8_t level) {
+    uint8_t value = (level == LOW) ? 0x00 : (1 << DS1307_OUT);  
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(DS1307_CONTROL_REGISTER);	
+  	Wire.send(value);
+    Wire.endTransmission();
+}
+
+void RTC_DS1307::setSqwOutSignal(Frequencies frequency) {
+    uint8_t value = (1 << DS1307_SQWE);
+    switch (frequency)
+    {
+        case Frequency_1Hz:
+            // Nothing to do.
+        break;
+        case Frequency_4096Hz:
+            value |= (1 << DS1307_RS0);
+        break;
+        case Frequency_8192Hz:
+            value |= (1 << DS1307_RS1);
+        break;
+        case Frequency_32768Hz:
+        default:
+            value |= (1 << DS1307_RS1) | (1 << DS1307_RS0);
+        break;
+    }
+    Wire.beginTransmission(DS1307_ADDRESS);
+  	Wire.send(DS1307_CONTROL_REGISTER);	
+  	Wire.send(value);
+    Wire.endTransmission();
 }
 
 #endif
