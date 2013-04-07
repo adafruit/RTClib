@@ -1,5 +1,6 @@
 // SQW/OUT signal functions using a DS1307 RTC connected via I2C and Wire lib.
-// 2012-11-14 idreammicro.com http://opensource.org/licenses/mit-license.php
+// 2012-11-14 Julien Le Sech - http://www.idreammicro.com
+// http://opensource.org/licenses/mit-license.php
 
 #include <Wire.h>
 #include <RTClib.h>
