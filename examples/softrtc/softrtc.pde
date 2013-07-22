@@ -3,16 +3,16 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-RTC_Millis RTC;
+RTC_Millis rtc;
 
 void setup () {
     Serial.begin(57600);
     // following line sets the RTC to the date & time this sketch was compiled
-    RTC.begin(DateTime(__DATE__, __TIME__));
+    rtc.begin(DateTime(__DATE__, __TIME__));
 }
 
 void loop () {
-    DateTime now = RTC.now();
+    DateTime now = rtc.now();
     
     Serial.print(now.year(), DEC);
     Serial.print('/');

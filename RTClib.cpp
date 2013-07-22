@@ -2,8 +2,15 @@
 // Released to the public domain! Enjoy!
 
 #include <Wire.h>
-#include <avr/pgmspace.h>
 #include "RTClib.h"
+#ifdef __AVR__
+ #include <avr/pgmspace.h>
+ #define WIRE Wire
+#else
+ #define PROGMEM
+ #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+ #define WIRE Wire1
+#endif
 
 #define DS1307_ADDRESS 0x68
 #define SECONDS_PER_DAY 86400L
@@ -16,11 +23,10 @@
  #include <WProgram.h>
 #endif
 
-int i = 0; //The new wire library needs to take an int when you are sending for the zero register
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
 
-const uint8_t daysInMonth [] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 }; //has to be const or compiler compaints
+const uint8_t daysInMonth [] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 // number of days since 2000/01/01, valid for 2001..2099
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
@@ -138,42 +144,42 @@ uint8_t RTC_DS1307::begin(void) {
 #if (ARDUINO >= 100)
 
 uint8_t RTC_DS1307::isrunning(void) {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
-  Wire.endTransmission();
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.write(0);
+  WIRE.endTransmission();
 
-  Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.read();
+  WIRE.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t ss = WIRE.read();
   return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
-    Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.write(i);
-    Wire.write(bin2bcd(dt.second()));
-    Wire.write(bin2bcd(dt.minute()));
-    Wire.write(bin2bcd(dt.hour()));
-    Wire.write(bin2bcd(0));
-    Wire.write(bin2bcd(dt.day()));
-    Wire.write(bin2bcd(dt.month()));
-    Wire.write(bin2bcd(dt.year() - 2000));
-    Wire.write(i);
-    Wire.endTransmission();
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.write(0);
+    WIRE.write(bin2bcd(dt.second()));
+    WIRE.write(bin2bcd(dt.minute()));
+    WIRE.write(bin2bcd(dt.hour()));
+    WIRE.write(bin2bcd(0));
+    WIRE.write(bin2bcd(dt.day()));
+    WIRE.write(bin2bcd(dt.month()));
+    WIRE.write(bin2bcd(dt.year() - 2000));
+    WIRE.write(0);
+    WIRE.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.write(i);	
-  Wire.endTransmission();
-  
-  Wire.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(Wire.read() & 0x7F);
-  uint8_t mm = bcd2bin(Wire.read());
-  uint8_t hh = bcd2bin(Wire.read());
-  Wire.read();
-  uint8_t d = bcd2bin(Wire.read());
-  uint8_t m = bcd2bin(Wire.read());
-  uint16_t y = bcd2bin(Wire.read()) + 2000;
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.write(0);	
+  WIRE.endTransmission();
+
+  WIRE.requestFrom(DS1307_ADDRESS, 7);
+  uint8_t ss = bcd2bin(WIRE.read() & 0x7F);
+  uint8_t mm = bcd2bin(WIRE.read());
+  uint8_t hh = bcd2bin(WIRE.read());
+  WIRE.read();
+  uint8_t d = bcd2bin(WIRE.read());
+  uint8_t m = bcd2bin(WIRE.read());
+  uint16_t y = bcd2bin(WIRE.read()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
 }
@@ -181,42 +187,42 @@ DateTime RTC_DS1307::now() {
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
-  Wire.endTransmission();
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.send(0);	
+  WIRE.endTransmission();
 
-  Wire.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = Wire.receive();
+  WIRE.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t ss = WIRE.receive();
   return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
-    Wire.beginTransmission(DS1307_ADDRESS);
-    Wire.send(i);
-    Wire.send(bin2bcd(dt.second()));
-    Wire.send(bin2bcd(dt.minute()));
-    Wire.send(bin2bcd(dt.hour()));
-    Wire.send(bin2bcd(0));
-    Wire.send(bin2bcd(dt.day()));
-    Wire.send(bin2bcd(dt.month()));
-    Wire.send(bin2bcd(dt.year() - 2000));
-    Wire.send(i);
-    Wire.endTransmission();
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0);
+    WIRE.send(bin2bcd(dt.second()));
+    WIRE.send(bin2bcd(dt.minute()));
+    WIRE.send(bin2bcd(dt.hour()));
+    WIRE.send(bin2bcd(0));
+    WIRE.send(bin2bcd(dt.day()));
+    WIRE.send(bin2bcd(dt.month()));
+    WIRE.send(bin2bcd(dt.year() - 2000));
+    WIRE.send(0);
+    WIRE.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
-  Wire.beginTransmission(DS1307_ADDRESS);
-  Wire.send(i);	
-  Wire.endTransmission();
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.send(0);	
+  WIRE.endTransmission();
   
-  Wire.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(Wire.receive() & 0x7F);
-  uint8_t mm = bcd2bin(Wire.receive());
-  uint8_t hh = bcd2bin(Wire.receive());
-  Wire.receive();
-  uint8_t d = bcd2bin(Wire.receive());
-  uint8_t m = bcd2bin(Wire.receive());
-  uint16_t y = bcd2bin(Wire.receive()) + 2000;
+  WIRE.requestFrom(DS1307_ADDRESS, 7);
+  uint8_t ss = bcd2bin(WIRE.receive() & 0x7F);
+  uint8_t mm = bcd2bin(WIRE.receive());
+  uint8_t hh = bcd2bin(WIRE.receive());
+  WIRE.receive();
+  uint8_t d = bcd2bin(WIRE.receive());
+  uint8_t m = bcd2bin(WIRE.receive());
+  uint16_t y = bcd2bin(WIRE.receive()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
 }
