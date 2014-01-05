@@ -195,62 +195,6 @@ uint8_t RTC_DS1337::getAlarmFlags(void) {
   return flags;
 }
 
-void RTC_DS1337::enableAlarm1(void) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.endTransmission();
-
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t control = WIRE.read();
-  
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.write(control | 0x01);	
-  WIRE.endTransmission();
-}
-
-void RTC_DS1337::enableAlarm2(void) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.endTransmission();
-
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t control = WIRE.read();
-  
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.write(control | 0x02);	
-  WIRE.endTransmission();
-}
-
-void RTC_DS1337::disableAlarm1(void) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.endTransmission();
-
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t control = WIRE.read();
-  
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.write(control | (~0x01));	
-  WIRE.endTransmission();
-}
-
-void RTC_DS1337::disableAlarm2(void) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.endTransmission();
-
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t control = WIRE.read();
-  
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0x0e);	
-  WIRE.write(control | (~0x02));	
-  WIRE.endTransmission();
-}
-
 void RTC_DS1337::setAlarm1Time(const DateTime& dt) {
     // This is the higher resolution alarm
     // we configure it to match hours, minutes, and seconds.
@@ -409,9 +353,36 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+uint8_t RTC_DS1337::getAlarmFlags(void) {
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.send(0x0f);	
+  WIRE.endTransmission();
+
+  WIRE.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t flags = WIRE.receive() & 0x03;
+  
+  return flags;
+}
+
 void RTC_DS1337::setAlarm1Time(const DateTime& dt) {
     // This is the higher resolution alarm
     // we configure it to match hours, minutes, and seconds.
+    
+    // enable alarm 1 in the configuration
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.endTransmission();
+
+    WIRE.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t control = WIRE.receive();
+
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.send(control | 0x01);	
+    WIRE.endTransmission();
+    
+    // clear the interrupt flag
+    clearAlarm1Flag();
     
     // write alarm registers
     WIRE.beginTransmission(DS1307_ADDRESS);
@@ -424,8 +395,89 @@ void RTC_DS1337::setAlarm1Time(const DateTime& dt) {
 }
 
 void RTC_DS1337::setAlarm2Time(const DateTime& dt) {
+    // This is the lower resolution alarm
+    // we configure it to match hours and minutes.
+    
+    // enable alarm 2 in the configuration
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.endTransmission();
+
+    WIRE.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t control = WIRE.receive();
+
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.send(control | 0x02);	
+    WIRE.endTransmission();
+    
+    // clear the interrupt flag
+    clearAlarm2Flag();
+    
+    // write alarm registers
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0b);
+    WIRE.send(bin2bcd(dt.minute()));
+    WIRE.send(bin2bcd(dt.hour()));
+    WIRE.send(0x80);
+    WIRE.endTransmission();
 }
 
+void RTC_DS1337::disableAlarm1(void) {
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.endTransmission();
+
+    WIRE.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t control = WIRE.receive();
+
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.send(control & (~0x01));	
+    WIRE.endTransmission();
+}
+
+void RTC_DS1337::disableAlarm2(void) {
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.endTransmission();
+
+    WIRE.requestFrom(DS1307_ADDRESS, 1);
+    uint8_t control = WIRE.receive();
+
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0e);	
+    WIRE.send(control & (~0x02));	
+    WIRE.endTransmission();
+}
+
+uint8_t RTC_DS1337::getAlarm1Flag(void) {
+  uint8_t flags = getAlarmFlags();
+  
+  return (flags & 0x01) != 0;
+}
+
+uint8_t RTC_DS1337::getAlarm2Flag(void) {
+  uint8_t flags = getAlarmFlags();
+  
+  return (flags & 0x02) != 0;
+}
+
+void RTC_DS1337::clearAlarm1Flag(void) {
+    // clear the alarm 1 flag
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0f);
+    WIRE.send(~0x01);
+    WIRE.endTransmission();
+}
+
+void RTC_DS1337::clearAlarm2Flag(void) {
+    // clear the alarm 2 flag
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x0f);
+    WIRE.send(~0x02);
+    WIRE.endTransmission();
+}
 
 #endif
 
