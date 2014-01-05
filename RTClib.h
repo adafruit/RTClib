@@ -37,6 +37,20 @@ public:
     static DateTime now();
 };
 
+class RTC_DS1337: public RTC_DS1307 {
+private:
+    static uint8_t getAlarmFlags(void);
+public:
+	static void setAlarm1Time(const DateTime& dt);
+	static void setAlarm2Time(const DateTime& dt);
+    static void disableAlarm1(void);
+    static void disableAlarm2(void);
+    static uint8_t getAlarm1Flag(void);
+    static uint8_t getAlarm2Flag(void);
+    static void clearAlarm1Flag(void);
+    static void clearAlarm2Flag(void);
+};
+
 // RTC using the internal millis() clock, has to be initialized before use
 // NOTE: this clock won't be correct once the millis() timer rolls over (>49d?)
 class RTC_Millis {
