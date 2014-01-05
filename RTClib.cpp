@@ -184,6 +184,29 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+void RTC_DS1337::setAlarm1Time(const DateTime& dt) {
+    // This is the higher resolution alarm
+    // we configure it to match hours, minutes, and seconds.
+    
+    // enable the alarms in the configuration
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.write(0x0f);
+    WIRE.write(0x07);
+    WIRE.endTransmission();
+    
+    // write alarm registers
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.write(0x07);
+    WIRE.write(bin2bcd(dt.second()));
+    WIRE.write(bin2bcd(dt.minute()));
+    WIRE.write(bin2bcd(dt.hour()));
+    WIRE.write(0x80);
+    WIRE.endTransmission();
+}
+
+void RTC_DS1337::setAlarm2Time(const DateTime& dt) {
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -226,6 +249,24 @@ DateTime RTC_DS1307::now() {
   
   return DateTime (y, m, d, hh, mm, ss);
 }
+
+void RTC_DS1337::setAlarm1Time(const DateTime& dt) {
+    // This is the higher resolution alarm
+    // we configure it to match hours, minutes, and seconds.
+    
+    // write alarm registers
+    WIRE.beginTransmission(DS1307_ADDRESS);
+    WIRE.send(0x07);
+    WIRE.send(bin2bcd(dt.second()));
+    WIRE.send(bin2bcd(dt.minute()));
+    WIRE.send(bin2bcd(dt.hour()));
+    WIRE.send(0x80);
+    WIRE.endTransmission();
+}
+
+void RTC_DS1337::setAlarm2Time(const DateTime& dt) {
+}
+
 
 #endif
 
