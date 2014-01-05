@@ -90,10 +90,17 @@ void loop () {
     Serial.print(future.second(), DEC);
     Serial.println();
     
-    Serial.print("Alarm 1 is ");
-    Serial.print(alarm1 ? "Set" : "Cleared");
-    Serial.print(". Alarm 2 is ");
-    Serial.println(alarm2 ? "Set" : "Cleared");
+    if (alarm1)
+    {
+        Serial.println("Alarm 1 is set.");
+        rtc.clearAlarm1Flag();
+    }
+    
+    if (alarm2)
+    {
+        Serial.println("Alarm 2 is set.");
+        rtc.clearAlarm2Flag();
+    }
     
     Serial.println();
     delay(1000);

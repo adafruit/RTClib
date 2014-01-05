@@ -43,9 +43,12 @@ private:
 public:
 	static void setAlarm1Time(const DateTime& dt);
 	static void setAlarm2Time(const DateTime& dt);
-    static uint8_t getAlarm1State(void);
-    static uint8_t getAlarm2State(void);
-    static void clearAlarmFlags(void);
+    static void disableAlarm1(void);
+    static void disableAlarm2(void);
+    static uint8_t getAlarm1Flag(void);
+    static uint8_t getAlarm2Flag(void);
+    static void clearAlarm1Flag(void);
+    static void clearAlarm2Flag(void);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
