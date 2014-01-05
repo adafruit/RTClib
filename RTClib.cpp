@@ -239,7 +239,7 @@ void RTC_DS1337::setAlarm2Time(const DateTime& dt) {
 
     WIRE.beginTransmission(DS1307_ADDRESS);
     WIRE.write(0x0e);	
-    WIRE.write(control | 0x02);	
+    WIRE.write(control | 0x06); // set the A2IE bit as well as the INTCN bit.	
     WIRE.endTransmission();
     
     // clear the interrupt flag
