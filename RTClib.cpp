@@ -95,7 +95,7 @@ static uint8_t conv2d(const char* p) {
 
 // A convenient constructor for using "the compiler's time":
 //   DateTime now (__DATE__, __TIME__);
-// NOTE: using PSTR would further reduce the RAM footprint
+// NOTE: using F() would further reduce the RAM footprint, see below.
 DateTime::DateTime (const char* date, const char* time) {
     // sample input: date = "Dec 26 2009", time = "12:34:56"
     yOff = conv2d(date + 9);
@@ -114,6 +114,32 @@ DateTime::DateTime (const char* date, const char* time) {
     hh = conv2d(time);
     mm = conv2d(time + 3);
     ss = conv2d(time + 6);
+}
+
+// A convenient constructor for using "the compiler's time":
+// This version will save RAM by using PROGMEM to store it by using the F macro.
+//   DateTime now (F(__DATE__), F(__TIME__));
+DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time) {
+    // sample input: date = "Dec 26 2009", time = "12:34:56"
+    char buff[11];
+    memcpy_P(buff, date, 11);
+    yOff = conv2d(buff + 9);
+    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+    switch (buff[0]) {
+        case 'J': m = buff[1] == 'a' ? 1 : m = buff[2] == 'n' ? 6 : 7; break;
+        case 'F': m = 2; break;
+        case 'A': m = buff[2] == 'r' ? 4 : 8; break;
+        case 'M': m = buff[2] == 'r' ? 3 : 5; break;
+        case 'S': m = 9; break;
+        case 'O': m = 10; break;
+        case 'N': m = 11; break;
+        case 'D': m = 12; break;
+    }
+    d = conv2d(buff + 4);
+    memcpy_P(buff, time, 8);
+    hh = conv2d(buff);
+    mm = conv2d(buff + 3);
+    ss = conv2d(buff + 6);
 }
 
 uint8_t DateTime::dayOfWeek() const {    
