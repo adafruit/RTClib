@@ -13,6 +13,7 @@
 #endif
 
 #define DS1307_ADDRESS 0x68
+#define DS1307_NVRAM   0x08
 #define SECONDS_PER_DAY 86400L
 
 #define SECONDS_FROM_1970_TO_2000 946684800
@@ -210,6 +211,47 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+uint8_t RTC_DS1307::readnvram(uint8_t address) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(addrByte);
+  Wire.endTransmission();
+  
+  Wire.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t data = Wire.read();
+  return data;
+}
+
+void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(addrByte);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t) DS1307_ADDRESS, size);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    buf[pos] = Wire.read();
+  }
+}
+
+void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(addrByte);
+  Wire.write(data);
+  Wire.endTransmission();
+}
+
+void RTC_DS1307::writenvram(uint8_t address, uint8_t* buf, uint8_t size) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(addrByte);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    Wire.write(buf[pos]);
+  }
+  Wire.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -251,6 +293,47 @@ DateTime RTC_DS1307::now() {
   uint16_t y = bcd2bin(WIRE.receive()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
+}
+
+uint8_t RTC_DS1307::readnvram(uint8_t address) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(addrByte);
+  Wire.endTransmission();
+  
+  Wire.requestFrom(DS1307_ADDRESS, 1);
+  uint8_t data = Wire.receive();
+  return data;
+}
+
+void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(addrByte);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t) DS1307_ADDRESS, size);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    buf[pos] = Wire.receive();
+  }
+}
+
+void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(addrByte);
+  Wire.send(data);
+  Wire.endTransmission();
+}
+
+void RTC_DS1307::writenvram(uint8_t address, uint8_t* buf, uint8_t size) {
+  int addrByte = DS1307_NVRAM + address;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.send(addrByte);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    Wire.send(buf[pos]);
+  }
+  Wire.endTransmission();
 }
 
 #endif
