@@ -40,6 +40,10 @@ public:
     static DateTime now();
     static Ds1307SqwPinMode readSqwPinMode();
     static void writeSqwPinMode(Ds1307SqwPinMode mode);
+    uint8_t readnvram(uint8_t address);
+    void readnvram(uint8_t* buf, uint8_t size, uint8_t address);
+    void writenvram(uint8_t address, uint8_t data);
+    void writenvram(uint8_t address, uint8_t* buf, uint8_t size);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
