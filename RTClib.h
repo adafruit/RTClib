@@ -11,6 +11,7 @@ public:
     DateTime (uint16_t year, uint8_t month, uint8_t day,
                 uint8_t hour =0, uint8_t min =0, uint8_t sec =0);
     DateTime (const char* date, const char* time);
+    DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time);
     uint16_t year() const       { return 2000 + yOff; }
     uint8_t month() const       { return m; }
     uint8_t day() const         { return d; }
