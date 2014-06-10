@@ -8,7 +8,7 @@ RTC_Millis rtc;
 void setup () {
     Serial.begin(57600);
     // following line sets the RTC to the date & time this sketch was compiled
-    rtc.begin(DateTime(__DATE__, __TIME__));
+    rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
 }
 
 void loop () {
