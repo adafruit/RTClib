@@ -210,6 +210,27 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.write(0x07);
+  WIRE.endTransmission();
+  
+  WIRE.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = WIRE.read();
+
+  mode &= 0x93;
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.write(0x07);
+  WIRE.write(mode);
+  WIRE.endTransmission();
+}
+
 #else
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -251,6 +272,28 @@ DateTime RTC_DS1307::now() {
   uint16_t y = bcd2bin(WIRE.receive()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
+}
+
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.send(0x07);
+  WIRE.endTransmission();
+  
+  WIRE.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = WIRE.receive();
+
+  mode &= 0x93;
+
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.send(0x07);
+  WIRE.send(mode);
+  WIRE.endTransmission();
 }
 
 #endif
