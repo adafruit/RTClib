@@ -27,6 +27,22 @@ void showDate(const char* txt, const DateTime& dt) {
     Serial.println();
 }
 
+void showTimeSpan(const char* txt, const TimeSpan& ts) {
+    Serial.print(txt);
+    Serial.print(" ");
+    Serial.print(ts.days(), DEC);
+    Serial.print(" days ");
+    Serial.print(ts.hours(), DEC);
+    Serial.print(" hours ");
+    Serial.print(ts.minutes(), DEC);
+    Serial.print(" minutes ");
+    Serial.print(ts.seconds(), DEC);
+    Serial.print(" seconds (");
+    Serial.print(ts.totalseconds(), DEC);
+    Serial.print(" total seconds)");
+    Serial.println();
+}
+
 void setup () {
     Serial.begin(57600);
     
@@ -51,14 +67,35 @@ void setup () {
     DateTime dt6 (2009, 12, 27, 0, 0, 0);
     showDate("dt6", dt6);
 
-    DateTime dt7 (dt6.unixtime() + 3600); // one hour later
+    DateTime dt7 (dt6.unixtime() + 3600); // One hour later.
     showDate("dt7", dt7);
 
-    DateTime dt8 (dt6.unixtime() + 86400L); // one day later
+    DateTime dt75 = dt6 + TimeSpan(0, 1, 0, 0); // One hour later with TimeSpan addition.
+    showDate("dt7.5", dt75);
+
+    DateTime dt8 (dt6.unixtime() + 86400L); // One day later.
     showDate("dt8", dt8);
 
-    DateTime dt9 (dt6.unixtime() + 7 * 86400L); // one week later
+    DateTime dt85 = dt6 + TimeSpan(1, 0, 0, 0); // One day later with TimeSpan addition.
+    showDate("dt8.5", dt85);
+
+    DateTime dt9 (dt6.unixtime() + 7 * 86400L); // One week later.
     showDate("dt9", dt9);
+
+    DateTime dt95 = dt6 + TimeSpan(7, 0, 0, 0); // One week later with TimeSpan addition.
+    showDate("dt9.5", dt95);
+
+    DateTime dt10 = dt6 + TimeSpan(0, 0, 42, 42); // Fourty two minutes and fourty two seconds later.
+    showDate("dt10", dt10);
+
+    DateTime dt11 = dt6 - TimeSpan(7, 0, 0, 0);  // One week ago.
+    showDate("dt11", dt11);
+
+    TimeSpan ts1 = dt6 - dt5;
+    showTimeSpan("dt6-dt5", ts1);
+
+    TimeSpan ts2 = dt10 - dt6;
+    showTimeSpan("dt10-dt6", ts2);
 }
 
 void loop () {

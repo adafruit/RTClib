@@ -93,6 +93,15 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uin
     ss = sec;
 }
 
+DateTime::DateTime (const DateTime& copy):
+  yOff(copy.yOff),
+  m(copy.m),
+  d(copy.d),
+  hh(copy.hh),
+  mm(copy.mm),
+  ss(copy.ss)
+{}
+
 static uint8_t conv2d(const char* p) {
     uint8_t v = 0;
     if ('0' <= *p && *p <= '9')
@@ -161,6 +170,41 @@ uint32_t DateTime::unixtime(void) const {
   t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
 
   return t;
+}
+
+DateTime DateTime::operator+(const TimeSpan& span) {
+  return DateTime(unixtime()+span.totalseconds());
+}
+
+DateTime DateTime::operator-(const TimeSpan& span) {
+  return DateTime(unixtime()-span.totalseconds());
+}
+
+TimeSpan DateTime::operator-(const DateTime& right) {
+  return TimeSpan(unixtime()-right.unixtime());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TimeSpan implementation
+
+TimeSpan::TimeSpan (int32_t seconds):
+  _seconds(seconds)
+{}
+
+TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
+  _seconds(days*86400L + hours*3600 + minutes*60 + seconds)
+{}
+
+TimeSpan::TimeSpan (const TimeSpan& copy):
+  _seconds(copy._seconds)
+{}
+
+TimeSpan TimeSpan::operator+(const TimeSpan& right) {
+  return TimeSpan(_seconds+right._seconds);
+}
+
+TimeSpan TimeSpan::operator-(const TimeSpan& right) {
+  return TimeSpan(_seconds-right._seconds);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
