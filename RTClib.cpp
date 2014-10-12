@@ -1,13 +1,7 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
-#ifdef __AVR_ATtiny85__
- #include <TinyWireM.h>
- #define Wire TinyWireM
-#else
 #include <Wire.h>
-#endif
-
 #include "RTClib.h"
 #ifdef __AVR__
  #include <avr/pgmspace.h>
@@ -18,16 +12,22 @@
  #define WIRE Wire1
 #endif
 
-#define DS1307_ADDRESS 0x68
-#define DS1307_NVRAM   0x08
+#define DS1307_ADDRESS  0x68
+#define DS1307_CONTROL  0x07
+#define DS1307_NVRAM    0x08
 #define SECONDS_PER_DAY 86400L
 
 #define SECONDS_FROM_1970_TO_2000 946684800
 
 #if (ARDUINO >= 100)
  #include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
+ // Macro to deal with the difference in I2C write functions from old and new Arduino versions.
+ #define _I2C_WRITE write
+ #define _I2C_READ  read
 #else
  #include <WProgram.h>
+ #define _I2C_WRITE send
+ #define _I2C_READ  receive
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +93,15 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uin
     ss = sec;
 }
 
+DateTime::DateTime (const DateTime& copy):
+  yOff(copy.yOff),
+  m(copy.m),
+  d(copy.d),
+  hh(copy.hh),
+  mm(copy.mm),
+  ss(copy.ss)
+{}
+
 static uint8_t conv2d(const char* p) {
     uint8_t v = 0;
     if ('0' <= *p && *p <= '9')
@@ -102,7 +111,7 @@ static uint8_t conv2d(const char* p) {
 
 // A convenient constructor for using "the compiler's time":
 //   DateTime now (__DATE__, __TIME__);
-// NOTE: using PSTR would further reduce the RAM footprint
+// NOTE: using F() would further reduce the RAM footprint, see below.
 DateTime::DateTime (const char* date, const char* time) {
     // sample input: date = "Dec 26 2009", time = "12:34:56"
     yOff = conv2d(date + 9);
@@ -123,6 +132,32 @@ DateTime::DateTime (const char* date, const char* time) {
     ss = conv2d(time + 6);
 }
 
+// A convenient constructor for using "the compiler's time":
+// This version will save RAM by using PROGMEM to store it by using the F macro.
+//   DateTime now (F(__DATE__), F(__TIME__));
+DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time) {
+    // sample input: date = "Dec 26 2009", time = "12:34:56"
+    char buff[11];
+    memcpy_P(buff, date, 11);
+    yOff = conv2d(buff + 9);
+    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+    switch (buff[0]) {
+        case 'J': m = buff[1] == 'a' ? 1 : m = buff[2] == 'n' ? 6 : 7; break;
+        case 'F': m = 2; break;
+        case 'A': m = buff[2] == 'r' ? 4 : 8; break;
+        case 'M': m = buff[2] == 'r' ? 3 : 5; break;
+        case 'S': m = 9; break;
+        case 'O': m = 10; break;
+        case 'N': m = 11; break;
+        case 'D': m = 12; break;
+    }
+    d = conv2d(buff + 4);
+    memcpy_P(buff, time, 8);
+    hh = conv2d(buff);
+    mm = conv2d(buff + 3);
+    ss = conv2d(buff + 6);
+}
+
 uint8_t DateTime::dayOfWeek() const {    
     uint16_t day = date2days(yOff, m, d);
     return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
@@ -137,6 +172,48 @@ uint32_t DateTime::unixtime(void) const {
   return t;
 }
 
+long DateTime::secondstime(void) const {
+  long t;
+  uint16_t days = date2days(yOff, m, d);
+  t = time2long(days, hh, mm, ss);
+  return t;
+}
+
+DateTime DateTime::operator+(const TimeSpan& span) {
+  return DateTime(unixtime()+span.totalseconds());
+}
+
+DateTime DateTime::operator-(const TimeSpan& span) {
+  return DateTime(unixtime()-span.totalseconds());
+}
+
+TimeSpan DateTime::operator-(const DateTime& right) {
+  return TimeSpan(unixtime()-right.unixtime());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TimeSpan implementation
+
+TimeSpan::TimeSpan (int32_t seconds):
+  _seconds(seconds)
+{}
+
+TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
+  _seconds(days*86400L + hours*3600 + minutes*60 + seconds)
+{}
+
+TimeSpan::TimeSpan (const TimeSpan& copy):
+  _seconds(copy._seconds)
+{}
+
+TimeSpan TimeSpan::operator+(const TimeSpan& right) {
+  return TimeSpan(_seconds+right._seconds);
+}
+
+TimeSpan TimeSpan::operator-(const TimeSpan& right) {
+  return TimeSpan(_seconds-right._seconds);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_DS1307 implementation
 
@@ -147,177 +224,99 @@ uint8_t RTC_DS1307::begin(void) {
   return 1;
 }
 
-
-#if (ARDUINO >= 100)
-
 uint8_t RTC_DS1307::isrunning(void) {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0);
+  WIRE._I2C_WRITE(0);
   WIRE.endTransmission();
 
   WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = WIRE.read();
+  uint8_t ss = WIRE._I2C_READ();
   return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.write(0);
-    WIRE.write(bin2bcd(dt.second()));
-    WIRE.write(bin2bcd(dt.minute()));
-    WIRE.write(bin2bcd(dt.hour()));
-    WIRE.write(bin2bcd(0));
-    WIRE.write(bin2bcd(dt.day()));
-    WIRE.write(bin2bcd(dt.month()));
-    WIRE.write(bin2bcd(dt.year() - 2000));
-    WIRE.write(0);
-    WIRE.endTransmission();
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE._I2C_WRITE(0);
+  WIRE._I2C_WRITE(bin2bcd(dt.second()));
+  WIRE._I2C_WRITE(bin2bcd(dt.minute()));
+  WIRE._I2C_WRITE(bin2bcd(dt.hour()));
+  WIRE._I2C_WRITE(bin2bcd(0));
+  WIRE._I2C_WRITE(bin2bcd(dt.day()));
+  WIRE._I2C_WRITE(bin2bcd(dt.month()));
+  WIRE._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  WIRE._I2C_WRITE(0);
+  WIRE.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.write(0);	
+  WIRE._I2C_WRITE(0);	
   WIRE.endTransmission();
 
   WIRE.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(WIRE.read() & 0x7F);
-  uint8_t mm = bcd2bin(WIRE.read());
-  uint8_t hh = bcd2bin(WIRE.read());
-  WIRE.read();
-  uint8_t d = bcd2bin(WIRE.read());
-  uint8_t m = bcd2bin(WIRE.read());
-  uint16_t y = bcd2bin(WIRE.read()) + 2000;
+  uint8_t ss = bcd2bin(WIRE._I2C_READ() & 0x7F);
+  uint8_t mm = bcd2bin(WIRE._I2C_READ());
+  uint8_t hh = bcd2bin(WIRE._I2C_READ());
+  WIRE._I2C_READ();
+  uint8_t d = bcd2bin(WIRE._I2C_READ());
+  uint8_t m = bcd2bin(WIRE._I2C_READ());
+  uint16_t y = bcd2bin(WIRE._I2C_READ()) + 2000;
   
   return DateTime (y, m, d, hh, mm, ss);
 }
 
-uint8_t RTC_DS1307::readnvram(uint8_t address) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.write(addrByte);
-    WIRE.endTransmission();
-    
-    WIRE.requestFrom(DS1307_ADDRESS, 1);
-    uint8_t data = WIRE.read();
-    return data;
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+  int mode;
+
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE._I2C_WRITE(DS1307_CONTROL);
+  WIRE.endTransmission();
+  
+  WIRE.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  mode = WIRE._I2C_READ();
+
+  mode &= 0x93;
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
+
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE._I2C_WRITE(DS1307_CONTROL);
+  WIRE._I2C_WRITE(mode);
+  WIRE.endTransmission();
 }
 
 void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.write(addrByte);
-    WIRE.endTransmission();
-    
-    WIRE.requestFrom((uint8_t) DS1307_ADDRESS, size);
-    for (uint8_t pos = 0; pos < size; ++pos) {
-        buf[pos] = WIRE.read();
-    }
-}
-
-void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.write(addrByte);
-    WIRE.write(data);
-    WIRE.endTransmission();
+  int addrByte = DS1307_NVRAM + address;
+  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE._I2C_WRITE(addrByte);
+  WIRE.endTransmission();
+  
+  WIRE.requestFrom((uint8_t) DS1307_ADDRESS, size);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    buf[pos] = WIRE._I2C_READ();
+  }
 }
 
 void RTC_DS1307::writenvram(uint8_t address, uint8_t* buf, uint8_t size) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.write(addrByte);
-    for (uint8_t pos = 0; pos < size; ++pos) {
-        WIRE.write(buf[pos]);
-    }
-    WIRE.endTransmission();
-}
-
-#else
-
-uint8_t RTC_DS1307::isrunning(void) {
+  int addrByte = DS1307_NVRAM + address;
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.send(0);	
+  WIRE._I2C_WRITE(addrByte);
+  for (uint8_t pos = 0; pos < size; ++pos) {
+    WIRE._I2C_WRITE(buf[pos]);
+  }
   WIRE.endTransmission();
-
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
-  uint8_t ss = WIRE.receive();
-  return !(ss>>7);
-}
-
-void RTC_DS1307::adjust(const DateTime& dt) {
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.send(0);
-    WIRE.send(bin2bcd(dt.second()));
-    WIRE.send(bin2bcd(dt.minute()));
-    WIRE.send(bin2bcd(dt.hour()));
-    WIRE.send(bin2bcd(0));
-    WIRE.send(bin2bcd(dt.day()));
-    WIRE.send(bin2bcd(dt.month()));
-    WIRE.send(bin2bcd(dt.year() - 2000));
-    WIRE.send(0);
-    WIRE.endTransmission();
-}
-
-DateTime RTC_DS1307::now() {
-  WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE.send(0);	
-  WIRE.endTransmission();
-  
-  WIRE.requestFrom(DS1307_ADDRESS, 7);
-  uint8_t ss = bcd2bin(WIRE.receive() & 0x7F);
-  uint8_t mm = bcd2bin(WIRE.receive());
-  uint8_t hh = bcd2bin(WIRE.receive());
-  WIRE.receive();
-  uint8_t d = bcd2bin(WIRE.receive());
-  uint8_t m = bcd2bin(WIRE.receive());
-  uint16_t y = bcd2bin(WIRE.receive()) + 2000;
-  
-  return DateTime (y, m, d, hh, mm, ss);
 }
 
 uint8_t RTC_DS1307::readnvram(uint8_t address) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.send(addrByte);
-    WIRE.endTransmission();
-    
-    WIRE.requestFrom(DS1307_ADDRESS, 1);
-    uint8_t data = WIRE.receive();
-    return data;
-}
-
-void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.send(addrByte);
-    WIRE.endTransmission();
-    
-    WIRE.requestFrom((uint8_t) DS1307_ADDRESS, size);
-    for (uint8_t pos = 0; pos < size; ++pos) {
-        buf[pos] = WIRE.receive();
-    }
+  uint8_t data;
+  readnvram(&data, 1, address);
+  return data;
 }
 
 void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.send(addrByte);
-    WIRE.send(data);
-    WIRE.endTransmission();
+  writenvram(address, &data, 1);
 }
-
-void RTC_DS1307::writenvram(uint8_t address, uint8_t* buf, uint8_t size) {
-    int addrByte = DS1307_NVRAM + address;
-    WIRE.beginTransmission(DS1307_ADDRESS);
-    WIRE.send(addrByte);
-    for (uint8_t pos = 0; pos < size; ++pos) {
-        WIRE.send(buf[pos]);
-    }
-    WIRE.endTransmission();
-}
-
-#endif
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_Millis implementation
