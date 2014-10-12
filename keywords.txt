@@ -9,6 +9,7 @@
 DateTime	KEYWORD1
 RTC_DS1307	KEYWORD1
 RTC_Millis	KEYWORD1
+Ds1307SqwPinMode	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -27,6 +28,8 @@ begin	KEYWORD2
 adjust	KEYWORD2
 isrunning	KEYWORD2
 now	KEYWORD2
+readSqwPinMode	KEYWORD2
+writeSqwPinMode	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

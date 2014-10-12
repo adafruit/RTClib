@@ -1,24 +1,17 @@
-// Date and time functions using a DS1307 RTC connected via I2C and Wire lib
+// Date and time functions using just software, based on millis() & timer
 
 #include <Wire.h>
 #include "RTClib.h"
 
-RTC_DS1307 rtc;
+RTC_Millis rtc;
 
 void setup () {
-  Serial.begin(57600);
-#ifdef AVR
-  Wire.begin();
-#else
-  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
-#endif
-  rtc.begin();
-
-  if (! rtc.isrunning()) {
-    Serial.println("RTC is NOT running!");
+    Serial.begin(57600);
     // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(__DATE__, __TIME__));
-  }
+    rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
 }
 
 void loop () {
@@ -37,11 +30,8 @@ void loop () {
     Serial.print(now.second(), DEC);
     Serial.println();
     
-    Serial.print(" since midnight 1/1/1970 = ");
-    Serial.print(now.unixtime());
-    Serial.print("s = ");
-    Serial.print(now.unixtime() / 86400L);
-    Serial.println("d");
+    Serial.print(" seconds since 1970: ");
+    Serial.println(now.unixtime());
     
     // calculate a date which is 7 days and 30 seconds into the future
     DateTime future (now.unixtime() + 7 * 86400L + 30);
