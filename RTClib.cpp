@@ -1,7 +1,13 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
+#ifdef __AVR_ATtiny85__
+ #include <TinyWireM.h>
+ #define Wire TinyWireM
+#else
 #include <Wire.h>
+#endif
+
 #include "RTClib.h"
 #ifdef __AVR__
  #include <avr/pgmspace.h>
