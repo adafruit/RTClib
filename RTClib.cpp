@@ -214,6 +214,19 @@ TimeSpan TimeSpan::operator-(const TimeSpan& right) {
   return TimeSpan(_seconds-right._seconds);
 }
 
+void TimeSpan::set(int32_t seconds) {
+  _seconds = seconds;
+}
+
+void TimeSpan::set(int32_t days, int32_t hours, int32_t minutes, int32_t seconds) {
+  _seconds = (days*86400L + hours*3600 + minutes*60 + seconds);
+}
+
+void TimeSpan::set(const TimeSpan& copy) {
+  _seconds = copy._seconds;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_DS1307 implementation
 

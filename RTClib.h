@@ -50,6 +50,10 @@ public:
 
     TimeSpan operator+(const TimeSpan& right);
     TimeSpan operator-(const TimeSpan& right);
+    
+    set(int32_t seconds);
+    set(int32_t days, int32_t hours, int32_t minutes, int32_t seconds);
+    set(const TimeSpan& copy);
 
 protected:
     int32_t _seconds;
