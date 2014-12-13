@@ -198,7 +198,7 @@ TimeSpan::TimeSpan (int32_t seconds):
   _seconds(seconds)
 {}
 
-TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
+TimeSpan::TimeSpan (int32_t days, int32_t hours, int32_t minutes, int32_t seconds):
   _seconds(days*86400L + hours*3600 + minutes*60 + seconds)
 {}
 
