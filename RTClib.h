@@ -28,8 +28,11 @@ public:
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
     
-    //ISO 8601 Timestamp
-    String timestamp();
+    //ISO 8601 Timestamp function
+    enum timestampOpt{
+        TIMESTAMP_FULL, TIMESTAMP_TIME, TIMESTAMP_DATE
+    };
+    String timestamp(timestampOpt opt = TIMESTAMP_FULL);
 
     DateTime operator+(const TimeSpan& span);
     DateTime operator-(const TimeSpan& span);

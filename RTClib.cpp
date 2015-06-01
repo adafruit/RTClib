@@ -192,12 +192,26 @@ TimeSpan DateTime::operator-(const DateTime& right) {
 }
 
 //ISO 8601 Timestamp
-String DateTime::timestamp(){
-    char buffer[20];
+String DateTime::timestamp(timestampOpt opt){
+  char buffer[20];
+
+  //Generate timestamp according to opt
+  switch(opt){
+    case TIMESTAMP_TIME:
+    //Only time
+    sprintf(buffer, "%02d:%02d:%02d", hh, mm, ss);
+    break;
+    case TIMESTAMP_DATE:
+    //Only date
+    sprintf(buffer, "%d-%02d-%02d", 2000+yOff, m, d);
+    break;
+    default:
+    //Full
     sprintf(buffer, "%d-%02d-%02dT%02d:%02d:%02d", 2000+yOff, m, d, hh, mm, ss);
-    
-    return String(buffer);
+  }
+  return String(buffer);
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // TimeSpan implementation
