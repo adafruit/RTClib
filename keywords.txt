@@ -30,8 +30,12 @@ isrunning	KEYWORD2
 now	KEYWORD2
 readSqwPinMode	KEYWORD2
 writeSqwPinMode	KEYWORD2
+timestamp	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
+TIMESTAMP_FULL	LITERAL1
+TIMESTAMP_DATE	LITERAL1
+TIMESTAMP_TIME	LITERAL1
 
