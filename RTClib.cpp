@@ -191,6 +191,14 @@ TimeSpan DateTime::operator-(const DateTime& right) {
   return TimeSpan(unixtime()-right.unixtime());
 }
 
+//ISO 8601 Timestamp
+String DateTime::timestamp(){
+    char buffer[20];
+    sprintf(buffer, "%d-%02d-%02dT%02d:%02d:%02d", 2000+yOff, m, d, hh, mm, ss);
+    
+    return String(buffer);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // TimeSpan implementation
 

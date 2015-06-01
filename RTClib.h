@@ -27,6 +27,9 @@ public:
     long secondstime() const;   
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
+    
+    //ISO 8601 Timestamp
+    String timestamp();
 
     DateTime operator+(const TimeSpan& span);
     DateTime operator-(const TimeSpan& span);
