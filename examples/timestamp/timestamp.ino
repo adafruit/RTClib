@@ -1,7 +1,7 @@
 /* Timestamp functions using a DS1307 RTC connected via I2C and Wire lib
 ** 
 ** Useful for file name
-**		` SD.open(now.timestamp()+".log", FILE_WRITE) `
+**		` SD.open(time.timestamp()+".log", FILE_WRITE) `
 **
 **
 ** Created: 2015-06-01 by AxelTB
@@ -34,16 +34,16 @@ void setup() {
 }
 
 void loop() {
- DateTime now = rtc.now();
+ DateTime time = rtc.now();
  
  //Full Timestamp
- Serial.println(String("DateTime::TIMESTAMP_FULL:\t")+now.timestamp(DateTime::TIMESTAMP_FULL));
+ Serial.println(String("DateTime::TIMESTAMP_FULL:\t")+time.timestamp(DateTime::TIMESTAMP_FULL));
  
  //Date Only
- Serial.println(String("DateTime::TIMESTAMP_DATE:\t")+now.timestamp(DateTime::TIMESTAMP_DATE));
+ Serial.println(String("DateTime::TIMESTAMP_DATE:\t")+time.timestamp(DateTime::TIMESTAMP_DATE));
  
  //Full Timestamp
- Serial.println(String("DateTime::TIMESTAMP_TIME:\t")+now.timestamp(DateTime::TIMESTAMP_TIME));
+ Serial.println(String("DateTime::TIMESTAMP_TIME:\t")+time.timestamp(DateTime::TIMESTAMP_TIME));
  
  Serial.println("\n");
  
