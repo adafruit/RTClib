@@ -4,6 +4,12 @@
 #ifndef _RTCLIB_H_
 #define _RTCLIB_H_
 
+#define DS1307_ADDRESS 0x68
+#define DS1307_CONTROL 0x07
+#define DS1307_NVRAM   0x08
+#define SECONDS_PER_DAY 86400L
+#define SECONDS_FROM_1970_TO_2000 946684800
+
 class TimeSpan;
 
 // Simple general-purpose date/time class (no TZ / DST / leap second handling!)
@@ -64,8 +70,8 @@ public:
     static void adjust(const DateTime& dt);
     uint8_t isrunning(void);
     static DateTime now();
-    static Ds1307SqwPinMode readSqwPinMode();
-    static void writeSqwPinMode(Ds1307SqwPinMode mode);
+    static Ds1307SqwPinMode readSqwPinMode(uint8_t control=DS1307_CONTROL);
+    static void writeSqwPinMode(Ds1307SqwPinMode mode, uint8_t control=DS1307_CONTROL);
     uint8_t readnvram(uint8_t address);
     void readnvram(uint8_t* buf, uint8_t size, uint8_t address);
     void writenvram(uint8_t address, uint8_t data);

@@ -12,13 +12,6 @@
  #define WIRE Wire1
 #endif
 
-#define DS1307_ADDRESS  0x68
-#define DS1307_CONTROL  0x07
-#define DS1307_NVRAM    0x08
-#define SECONDS_PER_DAY 86400L
-
-#define SECONDS_FROM_1970_TO_2000 946684800
-
 #if (ARDUINO >= 100)
  #include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
  // Macro to deal with the difference in I2C write functions from old and new Arduino versions.
@@ -265,11 +258,11 @@ DateTime RTC_DS1307::now() {
   return DateTime (y, m, d, hh, mm, ss);
 }
 
-Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
+Ds1307SqwPinMode RTC_DS1307::readSqwPinMode(uint8_t control) {
   int mode;
 
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE(DS1307_CONTROL);
+  WIRE._I2C_WRITE(control);
   WIRE.endTransmission();
   
   WIRE.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
@@ -279,9 +272,9 @@ Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
   return static_cast<Ds1307SqwPinMode>(mode);
 }
 
-void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
+void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode, uint8_t control) {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE(DS1307_CONTROL);
+  WIRE._I2C_WRITE(control);
   WIRE._I2C_WRITE(mode);
   WIRE.endTransmission();
 }
