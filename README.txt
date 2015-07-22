@@ -1,8 +1,5 @@
 This is a fork of Adafruit real time clock library for 86Duino.
 
-For details on using this library with an RTC module like the DS1307, see the guide at: https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview
+Visit the original adafruit/RTClib for detial: https://github.com/adafruit/RTClib
 
-To download. click the DOWNLOADS button to the right, and rename the uncompressed folder RTClib.
-
-Place the RTClib folder in your *arduinosketchfolder*/libraries/ folder. 
-You may need to create the libraries subfolder if its your first library. Restart the IDE.
+Enjoy.
