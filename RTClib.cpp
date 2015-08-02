@@ -6,6 +6,9 @@
 #ifdef __AVR__
  #include <avr/pgmspace.h>
  #define WIRE Wire
+#elif defined(ESP8266)
+ #include <pgmspace.h>
+ #define WIRE Wire
 #else
  #define PROGMEM
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
