@@ -3,7 +3,7 @@
 
 #include <Wire.h>
 #include "RTClib.h"
-#ifdef __AVR__
+#if defined __AVR__ || defined _86DUINO
  #include <avr/pgmspace.h>
  #define WIRE Wire
 #elif defined(ESP8266)
