@@ -9,6 +9,8 @@
 #elif defined(ESP8266)
  #include <pgmspace.h>
  #define WIRE Wire
+#elif defined(ARDUINO_ARCH_SAMD)
+ #define WIRE Wire
 #else
  #define PROGMEM
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
@@ -229,7 +231,7 @@ uint8_t RTC_DS1307::begin(void) {
 
 uint8_t RTC_DS1307::isrunning(void) {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE(0);
+  WIRE._I2C_WRITE((byte)0);
   WIRE.endTransmission();
 
   WIRE.requestFrom(DS1307_ADDRESS, 1);
@@ -239,7 +241,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE(0);
+  WIRE._I2C_WRITE((byte)0);
   WIRE._I2C_WRITE(bin2bcd(dt.second()));
   WIRE._I2C_WRITE(bin2bcd(dt.minute()));
   WIRE._I2C_WRITE(bin2bcd(dt.hour()));
@@ -247,13 +249,13 @@ void RTC_DS1307::adjust(const DateTime& dt) {
   WIRE._I2C_WRITE(bin2bcd(dt.day()));
   WIRE._I2C_WRITE(bin2bcd(dt.month()));
   WIRE._I2C_WRITE(bin2bcd(dt.year() - 2000));
-  WIRE._I2C_WRITE(0);
+  WIRE._I2C_WRITE((byte)0);
   WIRE.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE(0);	
+  WIRE._I2C_WRITE((byte)0);	
   WIRE.endTransmission();
 
   WIRE.requestFrom(DS1307_ADDRESS, 7);

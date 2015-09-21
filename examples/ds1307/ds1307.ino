@@ -3,15 +3,17 @@
 #include <Wire.h>
 #include "RTClib.h"
 
+#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console
+   #define Serial SerialUSB
+#endif
+
 RTC_DS1307 rtc;
 
 void setup () {
+  while (!Serial);  // for Leonardo/Micro/Zero
+
   Serial.begin(57600);
-#ifdef AVR
   Wire.begin();
-#else
-  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
-#endif
   rtc.begin();
 
   if (! rtc.isrunning()) {
