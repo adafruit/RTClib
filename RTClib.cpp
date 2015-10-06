@@ -225,8 +225,9 @@ TimeSpan TimeSpan::operator-(const TimeSpan& right) {
 static uint8_t bcd2bin (uint8_t val) { return val - 6 * (val >> 4); }
 static uint8_t bin2bcd (uint8_t val) { return val + 6 * (val / 10); }
 
-uint8_t RTC_DS1307::begin(void) {
-  return 1;
+boolean RTC_DS1307::begin(void) {
+  WIRE.begin();
+  return true;
 }
 
 uint8_t RTC_DS1307::isrunning(void) {
@@ -241,7 +242,7 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 void RTC_DS1307::adjust(const DateTime& dt) {
   WIRE.beginTransmission(DS1307_ADDRESS);
-  WIRE._I2C_WRITE((byte)0);
+  WIRE._I2C_WRITE((byte)0); // start at location 0
   WIRE._I2C_WRITE(bin2bcd(dt.second()));
   WIRE._I2C_WRITE(bin2bcd(dt.minute()));
   WIRE._I2C_WRITE(bin2bcd(dt.hour()));
@@ -249,7 +250,6 @@ void RTC_DS1307::adjust(const DateTime& dt) {
   WIRE._I2C_WRITE(bin2bcd(dt.day()));
   WIRE._I2C_WRITE(bin2bcd(dt.month()));
   WIRE._I2C_WRITE(bin2bcd(dt.year() - 2000));
-  WIRE._I2C_WRITE((byte)0);
   WIRE.endTransmission();
 }
 

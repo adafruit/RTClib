@@ -15,8 +15,10 @@ void setup () {
   while (!Serial);  // for Leonardo/Micro/Zero
 
   Serial.begin(57600);
-  Wire.begin();
-  rtc.begin();
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
 
   if (! rtc.isrunning()) {
     Serial.println("RTC is NOT running!");
@@ -72,4 +74,3 @@ void loop () {
     Serial.println();
     delay(3000);
 }
-

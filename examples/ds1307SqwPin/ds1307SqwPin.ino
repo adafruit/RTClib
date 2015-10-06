@@ -14,6 +14,10 @@
 #include <Wire.h>
 #include "RTClib.h"
 
+#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console
+   #define Serial SerialUSB
+#endif
+
 RTC_DS1307 rtc;
 
 int mode_index = 0;
@@ -37,9 +41,13 @@ void print_mode() {
 }
 
 void setup () {
+  while (!Serial);  // for Leonardo/Micro/Zero
+
   Serial.begin(57600);
-  Wire.begin();
-  rtc.begin();
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
 
   print_mode();
 }

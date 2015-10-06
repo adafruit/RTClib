@@ -4,6 +4,7 @@
 #ifndef _RTCLIB_H_
 #define _RTCLIB_H_
 
+#include <Arduino.h>
 class TimeSpan;
 
 // Simple general-purpose date/time class (no TZ / DST / leap second handling!)
@@ -60,7 +61,7 @@ enum Ds1307SqwPinMode { OFF = 0x00, ON = 0x80, SquareWave1HZ = 0x10, SquareWave4
 
 class RTC_DS1307 {
 public:
-    static uint8_t begin(void);
+    boolean begin(void);
     static void adjust(const DateTime& dt);
     uint8_t isrunning(void);
     static DateTime now();
