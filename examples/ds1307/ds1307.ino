@@ -9,6 +9,8 @@
 
 RTC_DS1307 rtc;
 
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
 void setup () {
   while (!Serial);  // for Leonardo/Micro/Zero
 
@@ -34,7 +36,9 @@ void loop () {
     Serial.print(now.month(), DEC);
     Serial.print('/');
     Serial.print(now.day(), DEC);
-    Serial.print(' ');
+    Serial.print(" (");
+    Serial.print(daysOfTheWeek[now.dayOfWeek()]);
+    Serial.print(") ");
     Serial.print(now.hour(), DEC);
     Serial.print(':');
     Serial.print(now.minute(), DEC);
@@ -68,3 +72,4 @@ void loop () {
     Serial.println();
     delay(3000);
 }
+
