@@ -16,11 +16,6 @@ void printnvram(uint8_t address) {
 
 void setup () {
   Serial.begin(57600);
-#ifdef AVR
-  Wire.begin();
-#else
-  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
-#endif
   rtc.begin();
 
   // Print old RAM contents on startup.
