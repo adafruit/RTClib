@@ -204,7 +204,7 @@ TimeSpan::TimeSpan (int32_t seconds):
 {}
 
 TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
-  _seconds(days*86400L + hours*3600 + minutes*60 + seconds)
+  _seconds((int32_t)days*86400L + (int32_t)hours*3600 + (int32_t)minutes*60 + seconds)
 {}
 
 TimeSpan::TimeSpan (const TimeSpan& copy):
