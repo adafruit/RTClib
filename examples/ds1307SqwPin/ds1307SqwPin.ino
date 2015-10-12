@@ -14,8 +14,8 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console
-   #define Serial SerialUSB
+#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
+#define Serial SerialUSB
 #endif
 
 RTC_DS1307 rtc;
@@ -27,21 +27,28 @@ Ds1307SqwPinMode modes[] = {OFF, ON, SquareWave1HZ, SquareWave4kHz, SquareWave8k
 
 void print_mode() {
   Ds1307SqwPinMode mode = rtc.readSqwPinMode();
-  
+
   Serial.print("Sqw Pin Mode: ");
-  switch(mode) {
-  case OFF:             Serial.println("OFF");       break;
-  case ON:              Serial.println("ON");        break;
-  case SquareWave1HZ:   Serial.println("1Hz");       break;
-  case SquareWave4kHz:  Serial.println("4.096kHz");  break;
-  case SquareWave8kHz:  Serial.println("8.192kHz");  break;
-  case SquareWave32kHz: Serial.println("32.768kHz"); break;
-  default:              Serial.println("UNKNOWN");   break;
+  switch (mode) {
+    case OFF:             Serial.println("OFF");       break;
+    case ON:              Serial.println("ON");        break;
+    case SquareWave1HZ:   Serial.println("1Hz");       break;
+    case SquareWave4kHz:  Serial.println("4.096kHz");  break;
+    case SquareWave8kHz:  Serial.println("8.192kHz");  break;
+    case SquareWave32kHz: Serial.println("32.768kHz"); break;
+    default:              Serial.println("UNKNOWN");   break;
   }
 }
 
 void setup () {
-  while (!Serial);  // for Leonardo/Micro/Zero
+
+#ifdef ESP8266
+  Wire.pins(2, 14);   // ESP8266 can use any two pins, such as SDA to #2 and SCL to #14
+#endif
+
+#ifndef ESP8266
+  while (!Serial); // for Leonardo/Micro/Zero
+#endif
 
   Serial.begin(57600);
   if (! rtc.begin()) {
