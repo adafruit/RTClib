@@ -3,6 +3,10 @@
 #include <Wire.h>
 #include "RTClib.h"
 
+#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
+#define Serial SerialUSB
+#endif
+
 void showDate(const char* txt, const DateTime& dt) {
     Serial.print(txt);
     Serial.print(' ');
@@ -44,6 +48,13 @@ void showTimeSpan(const char* txt, const TimeSpan& ts) {
 }
 
 void setup () {
+#ifdef ESP8266
+  Wire.pins(2, 14);   // ESP8266 can use any two pins, such as SDA to #2 and SCL to #14
+#endif
+
+#ifndef ESP8266
+  while (!Serial); // for Leonardo/Micro/Zero
+#endif
     Serial.begin(57600);
     
     DateTime dt0 (0, 1, 1, 0, 0, 0);
