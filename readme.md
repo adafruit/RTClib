@@ -7,8 +7,8 @@ To download. click the DOWNLOADS button to the right, and rename the uncompresse
 Place the RTClib folder in your *arduinosketchfolder*/libraries/ folder. 
 You may need to create the libraries subfolder if its your first library. Restart the IDE.
 
-Board              | Tested Works | Doesn't work | Not Tested | Notes
------------------- | ------------ | ------------ | ---------- | -----
+Board              | Tested Works | Doesn't Work | Not Tested | Notes
+------------------ | :----------: | :----------: | :--------: | -----
 Atmega328 @ 16MHz  |      X       |              |            |
 Atmega328 @ 12MHz  |              |              |      X     |
 Atmega32u4 @ 16MHz |      X       |              |            |
