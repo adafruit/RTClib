@@ -12,9 +12,9 @@ Board              | Tested Works | Doesn't Work | Not Tested  | Notes
 ATmega328 @ 16MHz  |      X       |              |             |
 ATmega328 @ 12MHz  |      X       |              |             |
 ATmega32u4 @ 16MHz |      X       |              |             |
-ATmega32u4 @ 8MHz  |      X       |              |             |
+ATmega32u4 @ 8MHz  |      X       |              |             | Use SDA/SCL on pins D3 & D2
 ESP8266            |      X       |              |             | Any two pins can be assigned as SDA/SCL
-ATmega2560 @ 16MHz |      X       |              |             | Use SDA/SCL on Pins 20 & 21
+ATmega2560 @ 16MHz |      X       |              |             | Use SDA/SCL on pins 20 & 21
 ATSAM3X8E          |      X       |              |             | Use SDA1 and SCL1           
 ATSAM21D           |      X       |              |             |
 ATtiny85 @ 16MHz   |              |              |      X      |
