@@ -7,18 +7,18 @@ To download. click the DOWNLOADS button to the right, and rename the uncompresse
 Place the RTClib folder in your *arduinosketchfolder*/libraries/ folder. 
 You may need to create the libraries subfolder if its your first library. Restart the IDE.
 
-Board              | Tested Works | Doesn't work | Not Tested | Notes
------------------- | ------------ | ------------ | ---------- | -----
-Atmega328 @ 16MHz  |      X       |              |            |
-Atmega328 @ 12MHz  |              |              |      X     |
-Atmega32u4 @ 16MHz |      X       |              |            |
-Atmega32u4 @ 8MHz  |              |              |      X     |
-ESP8266            |      X       |              |            | Any two pins can be assigned as SDA/SCL
-Atmega2560 @ 16MHz |      X       |              |            | Use SDA/SCL on Pins 20 & 21
-ATSAM3X8E          |      X       |              |            | Use SDA1 and SCL1           
-ATSAM21D           |      X       |              |            |
-ATtiny85 @ 16MHz   |              |              |      X     |
-ATtiny85 @ 8MHz    |              |              |      X     |
+Board              | Tested Works | Doesn't Work | Not Tested  | Notes
+------------------ | :----------: | :----------: | :---------: | -----
+ATmega328 @ 16MHz  |      X       |              |             |
+ATmega328 @ 12MHz  |      X       |              |             |
+ATmega32u4 @ 16MHz |      X       |              |             |
+ATmega32u4 @ 8MHz  |      X       |              |             |
+ESP8266            |      X       |              |             | Any two pins can be assigned as SDA/SCL
+ATmega2560 @ 16MHz |      X       |              |             | Use SDA/SCL on Pins 20 & 21
+ATSAM3X8E          |      X       |              |             | Use SDA1 and SCL1           
+ATSAM21D           |      X       |              |             |
+ATtiny85 @ 16MHz   |              |              |      X      |
+ATtiny85 @ 8MHz    |              |              |      X      |
 
   * ATmega328 @ 16MHz : Arduino UNO, Adafruit Pro Trinket 5V, Adafruit Metro 328, Adafruit Metro Mini
   * ATmega328 @ 12MHz : Adafruit Pro Trinket 3V
