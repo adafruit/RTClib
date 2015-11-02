@@ -41,9 +41,6 @@ void print_mode() {
 }
 
 void setup () {
-#ifdef ESP8266
-  Wire.pins(2, 14);   // ESP8266 can use any two pins, such as SDA to #2 and SCL to #14
-#endif
 
 #ifndef ESP8266
   while (!Serial); // for Leonardo/Micro/Zero

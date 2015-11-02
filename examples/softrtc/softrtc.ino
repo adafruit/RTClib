@@ -11,9 +11,6 @@
 RTC_Millis rtc;
 
 void setup () {
-#ifdef ESP8266
-  Wire.pins(2, 14);   // ESP8266 can use any two pins, such as SDA to #2 and SCL to #14
-#endif
     Serial.begin(57600);
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
