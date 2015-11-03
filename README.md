@@ -11,8 +11,8 @@ Board              | Tested Works | Doesn't Work | Not Tested  | Notes
 ------------------ | :----------: | :----------: | :---------: | -----
 ATmega328 @ 16MHz  |      X       |              |             |
 ATmega328 @ 12MHz  |      X       |              |             |
-ATmega32u4 @ 16MHz |      X       |              |             |
-ATmega32u4 @ 8MHz  |      X       |              |             | Use SDA/SCL on pins D3 & D2
+ATmega32u4 @ 16MHz |      X       |              |             | Use SDA/SCL on pins D2 & D3
+ATmega32u4 @ 8MHz  |      X       |              |             | Use SDA/SCL on pins D2 & D3
 ESP8266            |      X       |              |             | SDA/SCL default to pins 4& 5 but any two pins can be assigned as SDA/SCL using Wire.pins(SDA,SCL)
 ATmega2560 @ 16MHz |      X       |              |             | Use SDA/SCL on pins 20 & 21
 ATSAM3X8E          |      X       |              |             | Use SDA1 and SCL1           
