@@ -30,6 +30,7 @@ isrunning	KEYWORD2
 now	KEYWORD2
 readSqwPinMode	KEYWORD2
 writeSqwPinMode	KEYWORD2
+checkRollover	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

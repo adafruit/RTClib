@@ -74,15 +74,29 @@ public:
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
-// NOTE: this clock won't be correct once the millis() timer rolls over (>49d?)
 class RTC_Millis {
 public:
-    static void begin(const DateTime& dt) { adjust(dt); }
-    static void adjust(const DateTime& dt);
-    static DateTime now();
-
+    void checkRollover();
+	
+    boolean begin(void);
+    void adjust(const DateTime& dt);
+    uint8_t isrunning(void) {return 1;};
+    DateTime now();
+    Ds1307SqwPinMode readSqwPinMode();
+    void writeSqwPinMode(Ds1307SqwPinMode mode) {};
+    uint8_t readnvram(uint8_t address) {};
+    void readnvram(uint8_t* buf, uint8_t size, uint8_t address) {};
+    void writenvram(uint8_t address, uint8_t data) {};
+    void writenvram(uint8_t address, uint8_t* buf, uint8_t size) {};
+	
 protected:
-    static long offset;
+    long offset;
+// Support for millis rollover:
+// 1. Periodically compare current millis() with previosly captured millis
+// 2. When previus millis is greater than current, a rollover count is increased
+// 3. In calculating now(), use additional count of 2^32/1000 to compensate for rollovers
+    unsigned long prevMillis;
+    unsigned int  countRollovers;
 };
 
 #endif // _RTCLIB_H_

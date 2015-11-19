@@ -324,14 +324,37 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_Millis implementation
 
-long RTC_Millis::offset = 0;
+boolean RTC_Millis::begin(void) {
+  offset = 0;
+  adjust(DateTime(__DATE__,__TIME__));
+  return true;
+}
 
 void RTC_Millis::adjust(const DateTime& dt) {
     offset = dt.unixtime() - millis() / 1000;
+	prevMillis = millis();
+    countRollovers = 0;
 }
 
 DateTime RTC_Millis::now() {
-  return (uint32_t)(offset + millis() / 1000);
+  checkRollover();
+  return (uint32_t)(offset + millis() / 1000 + (countRollovers * 4294967L) + (countRollovers*296/1000) );
 }
 
+// checkRollover should be run periodically to ensure a rollover is captured.
+// Since rollovers happen once in ~43 days, "periodically" could be once a day, once a week, or even once a month!
+void RTC_Millis::checkRollover() {
+	if (prevMillis > millis()) countRollovers++;
+	prevMillis = millis();
+}
+
+
+Ds1307SqwPinMode RTC_Millis::readSqwPinMode() {
+  int mode;
+
+  mode = 0x80 | 0x12;
+
+  mode &= 0x93;
+  return static_cast<Ds1307SqwPinMode>(mode);
+}
 ////////////////////////////////////////////////////////////////////////////////
