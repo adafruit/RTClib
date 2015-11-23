@@ -2,7 +2,8 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-#if defined(ARDUINO_ARCH_SAMD)  // for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
+#if defined(ARDUINO_ARCH_SAMD)
+// for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
    #define Serial SerialUSB
 #endif
 
