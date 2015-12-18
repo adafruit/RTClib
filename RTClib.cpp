@@ -15,6 +15,9 @@
  #define Wire Wire1
 #endif
 
+#define PCF8523_ADDRESS 0x68
+#define PCF8523_CLKOUTCONTROL 0x0F
+
 #define DS1307_ADDRESS  0x68
 #define DS1307_CONTROL  0x07
 #define DS1307_NVRAM    0x08
@@ -335,3 +338,73 @@ DateTime RTC_Millis::now() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// RTC_PCF8563 implementation
+
+boolean RTC_PCF8523::begin(void) {
+  Wire.begin();
+  return true;
+}
+
+boolean RTC_PCF8523::isrunning(void) {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE((byte)0);
+  Wire.endTransmission();
+
+  Wire.requestFrom(PCF8523_ADDRESS, 1);
+  uint8_t ss = Wire._I2C_READ();
+  return !(ss & (1<<5));
+}
+
+void RTC_PCF8523::adjust(const DateTime& dt) {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE((byte)3); // start at location 3
+  Wire._I2C_WRITE(bin2bcd(dt.second()));
+  Wire._I2C_WRITE(bin2bcd(dt.minute()));
+  Wire._I2C_WRITE(bin2bcd(dt.hour()));
+  Wire._I2C_WRITE(bin2bcd(0));
+  Wire._I2C_WRITE(bin2bcd(dt.day()));
+  Wire._I2C_WRITE(bin2bcd(dt.month()));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire.endTransmission();
+}
+
+DateTime RTC_PCF8523::now() {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE((byte)3);	
+  Wire.endTransmission();
+
+  Wire.requestFrom(PCF8523_ADDRESS, 7);
+  uint8_t ss = bcd2bin(Wire._I2C_READ() & 0x7F);
+  uint8_t mm = bcd2bin(Wire._I2C_READ());
+  uint8_t hh = bcd2bin(Wire._I2C_READ());
+  Wire._I2C_READ();
+  uint8_t d = bcd2bin(Wire._I2C_READ());
+  uint8_t m = bcd2bin(Wire._I2C_READ());
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  
+  return DateTime (y, m, d, hh, mm, ss);
+}
+
+Pcf8523SqwPinMode RTC_PCF8523::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE(PCF8523_CLKOUTCONTROL);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)PCF8523_ADDRESS, (uint8_t)1);
+  mode = Wire._I2C_READ();
+
+  mode >>= 3;
+  mode &= 0x7;
+  return static_cast<Pcf8523SqwPinMode>(mode);
+}
+
+void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE(PCF8523_CLKOUTCONTROL);
+  Wire._I2C_WRITE(mode << 3);
+  Wire.endTransmission();
+}
