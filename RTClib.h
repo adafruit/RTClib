@@ -19,6 +19,7 @@ class TimeSpan;
 #define DS3231_ADDRESS  0x68
 #define DS3231_CONTROL  0x0E
 #define DS3231_STATUSREG 0x0F
+#define DS3231_TEMPERATUREREG	0x11
 
 #define SECONDS_PER_DAY 86400L
 
@@ -103,6 +104,7 @@ public:
     static DateTime now();
     static Ds3231SqwPinMode readSqwPinMode();
     static void writeSqwPinMode(Ds3231SqwPinMode mode);
+	static float getTemperature();		// in Celcius degree
 };
 
 
