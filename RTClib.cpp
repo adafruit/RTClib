@@ -350,7 +350,7 @@ DateTime RTC_Millis::now() {
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
-// RTC_PCF8563 implementation
+// RTC_PCF8523 implementation
 
 boolean RTC_PCF8523::begin(void) {
   Wire.begin();
@@ -425,6 +425,74 @@ void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
   Wire.endTransmission();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// RTC_PCF8563 implementation
+
+boolean RTC_PCF8563::begin(void) {
+  Wire.begin();
+  return true;
+}
+
+boolean RTC_PCF8563::initialized(void) {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE((byte)2);
+  Wire.endTransmission();
+
+  Wire.requestFrom(PCF8563_ADDRESS, 1);
+  uint8_t ss = Wire._I2C_READ();
+  return ((ss & 0x80) != 0x80);
+}
+
+
+void RTC_PCF8563::adjust(const DateTime& dt) {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE((byte)2); // 
+  Wire._I2C_WRITE(bin2bcd(dt.second()));
+  Wire._I2C_WRITE(bin2bcd(dt.minute()));
+  Wire._I2C_WRITE(bin2bcd(dt.hour()));
+  Wire._I2C_WRITE(bin2bcd(dt.day()));
+  Wire._I2C_WRITE(bin2bcd(0)); // skip weekdays
+  Wire._I2C_WRITE(bin2bcd(dt.month()));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire.endTransmission();
+}
+
+DateTime RTC_PCF8563::now() {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE((byte)2);	
+  Wire.endTransmission();
+
+  Wire.requestFrom(PCF8563_ADDRESS, 7);
+  uint8_t ss = bcd2bin(Wire._I2C_READ() & B01111111);
+  uint8_t mm = bcd2bin(Wire._I2C_READ() & B01111111);
+  uint8_t hh = bcd2bin(Wire._I2C_READ() & B00111111);
+  uint8_t d = bcd2bin(Wire._I2C_READ()  & B00111111);
+  Wire._I2C_READ();  // skip 'weekdays'
+  uint8_t m = bcd2bin(Wire._I2C_READ()  & B00011111);
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  
+  return DateTime (y, m, d, hh, mm, ss);
+}
+
+Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);
+  Wire.endTransmission();
+  
+  Wire.requestFrom((uint8_t)PCF8563_ADDRESS, (uint8_t)1);
+  mode = (Wire._I2C_READ() && B10000011);
+
+  return static_cast<Pcf8563SqwPinMode>(mode);
+}
+
+void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);
+  Wire._I2C_WRITE(mode);
+  Wire.endTransmission();
+}
 
 
 

@@ -7,6 +7,8 @@
 #include <Arduino.h>
 class TimeSpan;
 
+#define PCF8563_ADDRESS       0x51
+#define PCF8563_CLKOUTCONTROL 0x0D
 
 #define PCF8523_ADDRESS       0x68
 #define PCF8523_CLKOUTCONTROL 0x0F
@@ -119,6 +121,23 @@ public:
     Pcf8523SqwPinMode readSqwPinMode();
     void writeSqwPinMode(Pcf8523SqwPinMode mode);
 };
+
+// RTC based on the PCF8563 chip connected via I2C and the Wire library
+enum Pcf8563SqwPinMode { PCF8563_OFF = 0, PCF8563_SquareWave1HZ = B10000011, PCF8563_SquareWave32HZ = B10000010, 
+                         PCF8563_SquareWave1kHz = B10000001, PCF8563_SquareWave32kHz =B10000000 };
+
+class RTC_PCF8563 {
+public:
+    boolean begin(void);
+    boolean initialized(void);
+    void adjust(const DateTime& dt);
+    static DateTime now();
+
+    Pcf8563SqwPinMode readSqwPinMode();
+    void writeSqwPinMode(Pcf8563SqwPinMode mode);
+};
+
+
 
 // RTC using the internal millis() clock, has to be initialized before use
 // NOTE: this clock won't be correct once the millis() timer rolls over (>49d?)
