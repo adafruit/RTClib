@@ -1,6 +1,12 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
+//DEFINE YOU RTC_CHIP:
+#define RTC__DS1307 //works on DS3231 as well
+//#define RTC__MCP7940
+
+
+
 #include <Wire.h>
 #include "RTClib.h"
 #ifdef __AVR__
@@ -12,7 +18,20 @@
  #define WIRE Wire1
 #endif
 
-#define DS1307_ADDRESS  0x68
+
+#ifdef RTC__DS1307
+  #define RTC_ADDRESS  0x68
+  #define RTC_CLOCK_HIGH 0
+  #define RTC_BATT_HIGH 0
+#endif
+
+#ifdef RTC__MCP7940
+  #define RTC_ADDRESS  0x6F
+  #define RTC_CLOCK_HIGH 1
+  #define RTC_BATT_HIGH 1
+#endif
+
+
 #define DS1307_CONTROL  0x07
 #define DS1307_NVRAM    0x08
 #define SECONDS_PER_DAY 86400L
@@ -67,7 +86,7 @@ DateTime::DateTime (uint32_t t) {
     uint8_t leap;
     for (yOff = 0; ; ++yOff) {
         leap = yOff % 4 == 0;
-        if (days < 365 + leap)
+        if (days < (unsigned) 365 + leap)
             break;
         days -= 365 + leap;
     }
@@ -117,7 +136,7 @@ DateTime::DateTime (const char* date, const char* time) {
     yOff = conv2d(date + 9);
     // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
     switch (date[0]) {
-        case 'J': m = date[1] == 'a' ? 1 : m = date[2] == 'n' ? 6 : 7; break;
+        case 'J': m = date[1] == 'a' ? 1 : date[2] == 'n' ? 6 : 7; break;
         case 'F': m = 2; break;
         case 'A': m = date[2] == 'r' ? 4 : 8; break;
         case 'M': m = date[2] == 'r' ? 3 : 5; break;
@@ -142,7 +161,7 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
     yOff = conv2d(buff + 9);
     // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     switch (buff[0]) {
-        case 'J': m = buff[1] == 'a' ? 1 : m = buff[2] == 'n' ? 6 : 7; break;
+        case 'J': m = buff[1] == 'a' ? 1 : buff[2] == 'n' ? 6 : 7; break;
         case 'F': m = 2; break;
         case 'A': m = buff[2] == 'r' ? 4 : 8; break;
         case 'M': m = buff[2] == 'r' ? 3 : 5; break;
@@ -185,8 +204,8 @@ bool DateTime::summertime_EU(uint8_t tzHours) {
 // return value: returns true during Daylight Saving Time, false otherwise
   if (m<3 || m>10) return false; // no summertime in Jan, Feb, Nov, Dez
   if (m>3 && m<10) return true; // summertime in Apr, Mai, Jun, Jul, Aug, Sep
-  return (m==3  && (hh + 24 * d)>=(1 + tzHours + 24*(31 - (5 * (2000+yOff) /4 + 4) % 7)) || //spring
-          m==10 && (hh + 24 * d)< (1 + tzHours + 24*(31 - (5 * (2000+yOff) /4 + 1) % 7))); //autumn
+  return (((m==3)  && (hh + 24 * d)>=(1 + tzHours + 24*(31 - (5 * (2000+yOff) /4 + 4) % 7))) || //spring
+          ((m==10) && (hh + 24 * d)< (1 + tzHours + 24*(31 - (5 * (2000+yOff) /4 + 1) % 7)))); //autumn
 }
 
 DateTime DateTime::operator+(const TimeSpan& span) {
@@ -237,57 +256,62 @@ uint8_t RTC_DS1307::begin(void) {
 }
 
 uint8_t RTC_DS1307::isrunning(void) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(0);
   WIRE.endTransmission();
 
-  WIRE.requestFrom(DS1307_ADDRESS, 1);
+  WIRE.requestFrom(RTC_ADDRESS, 1);
   uint8_t ss = WIRE._I2C_READ();
   return !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  DateTime d = DateTime(dt);
+  if (use_summertime_EU && d.summertime_EU(0)) d = d-TimeSpan(3600);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(0);
-  WIRE._I2C_WRITE(bin2bcd(dt.second()));
-  WIRE._I2C_WRITE(bin2bcd(dt.minute()));
-  WIRE._I2C_WRITE(bin2bcd(dt.hour()));
-  WIRE._I2C_WRITE(bin2bcd(0));
-  WIRE._I2C_WRITE(bin2bcd(dt.day()));
-  WIRE._I2C_WRITE(bin2bcd(dt.month()));
-  WIRE._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  (RTC_CLOCK_HIGH) ? WIRE._I2C_WRITE(bin2bcd(d.second()) | 0x80)
+                   : WIRE._I2C_WRITE(bin2bcd(d.second()) & 0x7f);
+  WIRE._I2C_WRITE(bin2bcd(d.minute()));
+  WIRE._I2C_WRITE(bin2bcd(d.hour()));
+  
+  (RTC_BATT_HIGH) ? WIRE._I2C_WRITE(bin2bcd(0  | 0x08))
+                  : WIRE._I2C_WRITE(bin2bcd(0));
+
+  WIRE._I2C_WRITE(bin2bcd(d.day()));
+  WIRE._I2C_WRITE(bin2bcd(d.month()));
+  WIRE._I2C_WRITE(bin2bcd(d.year() - 2000));
   WIRE._I2C_WRITE(0);
   WIRE.endTransmission();
 }
 
 DateTime RTC_DS1307::now() {
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(0);	
   WIRE.endTransmission();
 
-  WIRE.requestFrom(DS1307_ADDRESS, 7);
+  WIRE.requestFrom(RTC_ADDRESS, 7);
   uint8_t ss = bcd2bin(WIRE._I2C_READ() & 0x7F);
   uint8_t mm = bcd2bin(WIRE._I2C_READ());
-  uint8_t hh = bcd2bin(WIRE._I2C_READ());
-  WIRE._I2C_READ();
+  uint8_t hh = bcd2bin(WIRE._I2C_READ());// & 0x3f);  // mask assumes 24hr clock
+  WIRE._I2C_READ(); //uint8_t wday = bcd2bin(WIRE._I2C_READ() & 0x07);
   uint8_t d = bcd2bin(WIRE._I2C_READ());
-  uint8_t m = bcd2bin(WIRE._I2C_READ());
+  uint8_t m = bcd2bin(WIRE._I2C_READ() & 0x1F); //exclude Leapyear on bit 6 on MCP7940 !!!
   uint16_t y = bcd2bin(WIRE._I2C_READ()) + 2000;
-  
   DateTime dt = DateTime(y, m, d, hh, mm, ss);
-  if (!use_summertime_EU || !dt.summertime_EU(0)) return dt;
-  return  dt + TimeSpan(3600);
+  if (use_summertime_EU && dt.summertime_EU(0)) return  dt + TimeSpan(3600);
+  return dt;
 }
 
 
 Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
   int mode;
 
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(DS1307_CONTROL);
   WIRE.endTransmission();
   
-  WIRE.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
+  WIRE.requestFrom((uint8_t)RTC_ADDRESS, (uint8_t)1);
   mode = WIRE._I2C_READ();
 
   mode &= 0x93;
@@ -295,7 +319,7 @@ Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
 }
 
 void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(DS1307_CONTROL);
   WIRE._I2C_WRITE(mode);
   WIRE.endTransmission();
@@ -303,11 +327,11 @@ void RTC_DS1307::writeSqwPinMode(Ds1307SqwPinMode mode) {
 
 void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
   int addrByte = DS1307_NVRAM + address;
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(addrByte);
   WIRE.endTransmission();
   
-  WIRE.requestFrom((uint8_t) DS1307_ADDRESS, size);
+  WIRE.requestFrom((uint8_t) RTC_ADDRESS, size);
   for (uint8_t pos = 0; pos < size; ++pos) {
     buf[pos] = WIRE._I2C_READ();
   }
@@ -315,7 +339,7 @@ void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
 
 void RTC_DS1307::writenvram(uint8_t address, uint8_t* buf, uint8_t size) {
   int addrByte = DS1307_NVRAM + address;
-  WIRE.beginTransmission(DS1307_ADDRESS);
+  WIRE.beginTransmission(RTC_ADDRESS);
   WIRE._I2C_WRITE(addrByte);
   for (uint8_t pos = 0; pos < size; ++pos) {
     WIRE._I2C_WRITE(buf[pos]);
