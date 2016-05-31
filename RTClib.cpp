@@ -262,7 +262,8 @@ uint8_t RTC_DS1307::isrunning(void) {
 
   WIRE.requestFrom(RTC_ADDRESS, 1);
   uint8_t ss = WIRE._I2C_READ();
-  return !(ss>>7);
+  return (RTC_CLOCK_HIGH) ?  (ss>>7)
+	                         : !(ss>>7);
 }
 
 void RTC_DS1307::adjust(const DateTime& dt) {
@@ -275,7 +276,7 @@ void RTC_DS1307::adjust(const DateTime& dt) {
   WIRE._I2C_WRITE(bin2bcd(d.minute()));
   WIRE._I2C_WRITE(bin2bcd(d.hour()));
   
-  (RTC_BATT_HIGH) ? WIRE._I2C_WRITE(bin2bcd(0  | 0x08))
+  (RTC_BATT_HIGH) ? WIRE._I2C_WRITE(bin2bcd(0) | 0x08)
                   : WIRE._I2C_WRITE(bin2bcd(0));
 
   WIRE._I2C_WRITE(bin2bcd(d.day()));
