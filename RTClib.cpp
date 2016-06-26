@@ -494,6 +494,73 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
   Wire.endTransmission();
 }
 
+void RTC_PCF8563::alarmSet(const DateTime& dt, boolean dayOfTheWeek) {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(0x09); 
+  Wire._I2C_WRITE(bin2bcd(dt.minute()));
+  Wire._I2C_WRITE(bin2bcd(dt.hour()));
+  Wire._I2C_WRITE(0x80); // skip 
+  if (dayOfTheWeek == true) Wire._I2C_WRITE(bin2bcd(dt.day()));
+  else Wire._I2C_WRITE(0x80); // skip
+  Wire.endTransmission();
+}
+
+void RTC_PCF8563::alarmDisable() {
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(0x09); 
+  Wire._I2C_WRITE(0x80);
+  Wire._I2C_WRITE(0x80);
+  Wire._I2C_WRITE(0x80); // skip 
+  Wire._I2C_WRITE(0x80);
+  Wire.endTransmission();
+}
+
+boolean RTC_PCF8563::alarmCheck(){
+ Wire.beginTransmission(PCF8563_ADDRESS);
+ Wire._I2C_WRITE(0x01);
+ Wire.endTransmission();
+ Wire.requestFrom(PCF8563_ADDRESS, 1);
+ uint8_t ctrlReg = Wire._I2C_READ();
+ uint8_t alrmFlag= ctrlReg & B00001000;
+ if (alrmFlag == B00001000) return(true);
+ else return(false);  
+}
+
+void RTC_PCF8563::alarmClear(){
+ setCntrlBit(3, 0 );
+}
+
+void RTC_PCF8563::alarmInterruptEnable(){
+ setCntrlBit(1, 1 );
+}
+
+void RTC_PCF8563::alarmInterruptDisable(){
+ setCntrlBit(1, 0 );
+}
+
+void RTC_PCF8563::setCntrlBit(uint8_t bitNum, uint8_t bit ){
+ Wire.beginTransmission(PCF8563_ADDRESS);
+ Wire._I2C_WRITE(0x01);
+ Wire.endTransmission();
+ Wire.requestFrom(PCF8563_ADDRESS, 1);
+ uint8_t ctrlReg = manipulateCtrlReg(Wire._I2C_READ(), bitNum, bit );
+ Wire.beginTransmission(PCF8563_ADDRESS);
+ Wire._I2C_WRITE(0x01);
+ Wire._I2C_WRITE(ctrlReg);
+ Wire.endTransmission();
+}
+
+uint8_t RTC_PCF8563::manipulateCtrlReg(uint8_t ctrlReg, uint8_t bitNum, uint8_t bit ){
+ if ((bitNum < 0) || (bitNum > 7)) bitNum = 0;
+ if ((bit < 0 ) || (bit > 1)) bit = 1;
+
+ uint8_t bitPattern = 1 << bitNum;
+
+ if (bit == 1) ctrlReg = ctrlReg | bitPattern; //add
+ else if ((bit == 0) && (ctrlReg & bitPattern) !=0) ctrlReg = ctrlReg - bitPattern; //subtract
+ 
+ return(ctrlReg);
+ }
 
 
 ////////////////////////////////////////////////////////////////////////////////

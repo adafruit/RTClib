@@ -128,13 +128,25 @@ enum Pcf8563SqwPinMode { PCF8563_OFF = 0, PCF8563_SquareWave1HZ = B10000011, PCF
 
 class RTC_PCF8563 {
 public:
+    static DateTime now();
     boolean begin(void);
     boolean initialized(void);
     void adjust(const DateTime& dt);
-    static DateTime now();
+    
 
     Pcf8563SqwPinMode readSqwPinMode();
     void writeSqwPinMode(Pcf8563SqwPinMode mode);
+    
+    void alarmSet(const DateTime& dt, boolean weekday); // set the alarm - only minute, hour and day are used
+    void alarmDisable(); // disable the alarm enable bits in the minute, hour and day and set clear minute, hour and day values
+    boolean alarmCheck(); // check if alarm is active in control register
+    void alarmClear(); // clear alarm flag in control registerPcf8563AlarmInterruptEnable
+    void alarmInterruptEnable(); // enable interrupt pin so that you can use it to triger another device to make sound for example
+    void alarmInterruptDisable();
+private:
+    uint8_t manipulateCtrlReg(uint8_t ctrlReg, uint8_t bitNum, uint8_t bit );
+    void setCntrlBit(uint8_t bitNum, uint8_t bit );
+
 };
 
 

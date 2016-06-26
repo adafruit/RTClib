@@ -31,6 +31,9 @@ void setup () {
     //rtc.adjust(DateTime(2016, 5, 6, 17, 16, 0));
     rtc.writeSqwPinMode(PCF8563_SquareWave1HZ); }
   
+    DateTime alarm ( rtc.now() + TimeSpan(60) );
+    rtc.alarmSet(alarm, false);
+    rtc.alarmInterruptEnable();
 }
 
 void loop () {
@@ -57,7 +60,7 @@ void loop () {
     Serial.print(now.unixtime() / 86400L);
     Serial.println("d");
     
-    // calculate a date which is 7 days and 30 seconds into the future
+    // calculate a date which is 2 minutes into the future
     DateTime future (now + TimeSpan(7,12,30,6));
     
     Serial.print(" now + 7d + 30s: ");
@@ -76,4 +79,11 @@ void loop () {
     
     Serial.println();
     delay(3000);
+    
+    if (rtc.alarmCheck()) {
+      rtc.alarmClear();
+      DateTime alarm ( rtc.now() + TimeSpan(60) );
+      rtc.alarmSet(alarm, false);
+      Serial.println("An alarm has occured and a new one is set");
+    }
 }
