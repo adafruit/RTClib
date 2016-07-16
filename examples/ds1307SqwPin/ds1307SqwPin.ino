@@ -12,7 +12,7 @@
 // this pull up the wave output will not work!
 
 #include <Wire.h>
-#include "RTClib.h"
+#include "RTClib.hpp"
 
 #if defined(ARDUINO_ARCH_SAMD)
 // for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
@@ -28,7 +28,7 @@ Ds1307SqwPinMode modes[] = {OFF, ON, SquareWave1HZ, SquareWave4kHz, SquareWave8k
 
 void print_mode() {
   Ds1307SqwPinMode mode = rtc.readSqwPinMode();
-  
+
   Serial.print("Sqw Pin Mode: ");
   switch(mode) {
   case OFF:             Serial.println("OFF");       break;

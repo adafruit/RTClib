@@ -2,7 +2,7 @@
 // Released to the public domain! Enjoy!
 
 #include <Wire.h>
-#include "RTClib.h"
+#include "RTClib.hpp"
 #ifdef __AVR__
  #include <avr/pgmspace.h>
 #elif defined(ESP8266)
