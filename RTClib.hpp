@@ -1,10 +1,10 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
-#ifndef _RTCLIB_HPP_
-#define _RTCLIB_HPP_
+#ifndef RTClib_hpp
+#define RTClib_hpp
 
-#include <Arduino.h>
+#include "Arduino.h"
 class TimeSpan;
 
 
