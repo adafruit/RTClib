@@ -7,12 +7,12 @@
 // number of days since 2000/01/01, valid for 2001..2099
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
     if (y >= 2000)
-        y -= 2000;
+    y -= 2000;
     uint16_t days = d;
     for (uint8_t i = 1; i < m; ++i)
-        days += pgm_read_byte(daysInMonth + i - 1);
+    days += pgm_read_byte(daysInMonth + i - 1);
     if (m > 2 && y % 4 == 0)
-        ++days;
+    ++days;
     return days + 365 * y + (y + 3) / 4 - 1;
 }
 
@@ -34,15 +34,15 @@ DateTime::DateTime (uint32_t t) {
     for (yOff = 0; ; ++yOff) {
         leap = yOff % 4 == 0;
         if (days < 365 + leap)
-            break;
+        break;
         days -= 365 + leap;
     }
     for (m = 1; ; ++m) {
         uint8_t daysPerMonth = pgm_read_byte(daysInMonth + m - 1);
         if (leap && m == 2)
-            ++daysPerMonth;
+        ++daysPerMonth;
         if (days < daysPerMonth)
-            break;
+        break;
         days -= daysPerMonth;
     }
     d = days + 1;
@@ -65,12 +65,12 @@ DateTime::DateTime (const DateTime& copy):
     hh(copy.hh),
     mm(copy.mm),
     ss(copy.ss)
-{}
+    {}
 
 static uint8_t conv2d(const char* p) {
     uint8_t v = 0;
     if ('0' <= *p && *p <= '9')
-        v = *p - '0';
+    v = *p - '0';
     return 10 * v + *++p - '0';
 }
 
@@ -129,60 +129,81 @@ uint8_t DateTime::dayOfTheWeek() const {
 }
 
 uint32_t DateTime::unixtime(void) const {
-  uint32_t t;
-  uint16_t days = date2days(yOff, m, d);
-  t = time2long(days, hh, mm, ss);
-  t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
+    uint32_t t;
+    uint16_t days = date2days(yOff, m, d);
+    t = time2long(days, hh, mm, ss);
+    t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
 
-  return t;
+    return t;
 }
 
 long DateTime::secondstime(void) const {
-  long t;
-  uint16_t days = date2days(yOff, m, d);
-  t = time2long(days, hh, mm, ss);
-  return t;
+    long t;
+    uint16_t days = date2days(yOff, m, d);
+    t = time2long(days, hh, mm, ss);
+    return t;
+}
+
+// ISO 8601 Timestamp (by @AxelTB)
+String DateTime::timestamp(timestampOpt opt) const
+{
+    char buffer[20];
+
+    switch(opt)
+    {
+        case TIMESTAMP_TIME:
+            sprintf(buffer, "%02d:%02d:%02d", hh, mm, ss);
+            break;
+        case TIMESTAMP_DATE:
+            sprintf(buffer, "%d-%02d-%02d", 2000+yOff, m, d);
+            break;
+        default:
+            sprintf(buffer, "%d-%02d-%02dT%02d:%02d:%02d",
+                    2000+yOff, m, d, hh, mm, ss);
+    }
+
+    return String(buffer);
 }
 
 DateTime DateTime::operator+(const TimeSpan& span) {
-  return DateTime(unixtime()+span.totalseconds());
+    return DateTime(unixtime()+span.totalseconds());
 }
 
 DateTime DateTime::operator-(const TimeSpan& span) {
-  return DateTime(unixtime()-span.totalseconds());
+    return DateTime(unixtime()-span.totalseconds());
 }
 
 TimeSpan DateTime::operator-(const DateTime& right) {
-  return TimeSpan(unixtime()-right.unixtime());
+    return TimeSpan(unixtime()-right.unixtime());
 }
 
 bool DateTime::operator<(const DateTime& right) const {
-  return unixtime() < right.unixtime();
+    return unixtime() < right.unixtime();
 }
 
 bool DateTime::operator==(const DateTime &right) const {
-  return unixtime() == right.unixtime();
+    return unixtime() == right.unixtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // TimeSpan implementation
 
 TimeSpan::TimeSpan (int32_t seconds):
-  _seconds(seconds)
+_seconds(seconds)
 {}
 
 TimeSpan::TimeSpan (int16_t days, int8_t hours, int8_t minutes, int8_t seconds):
-  _seconds((int32_t)days*86400L + (int32_t)hours*3600 + (int32_t)minutes*60 + seconds)
+_seconds((int32_t)days*86400L + (int32_t)hours*3600 + (int32_t)minutes*60 + seconds)
 {}
 
 TimeSpan::TimeSpan (const TimeSpan& copy):
-  _seconds(copy._seconds)
+_seconds(copy._seconds)
 {}
 
 TimeSpan TimeSpan::operator+(const TimeSpan& right) {
-  return TimeSpan(_seconds+right._seconds);
+    return TimeSpan(_seconds+right._seconds);
 }
 
 TimeSpan TimeSpan::operator-(const TimeSpan& right) {
-  return TimeSpan(_seconds-right._seconds);
+    return TimeSpan(_seconds-right._seconds);
 }
