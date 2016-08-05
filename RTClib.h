@@ -44,7 +44,7 @@ public:
     uint8_t dayOfTheWeek() const;
 
     // 32-bit times as seconds since 1/1/2000
-    long secondstime() const;   
+    long secondstime() const;
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
 
