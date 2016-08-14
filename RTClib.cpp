@@ -528,9 +528,35 @@ bool RTC_DS3231::setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode) {
 	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
 }
 
-void RTC_DS3231::disableAlarm1() {
+bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
 	uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
-	ctrl &= ~0x01; // AI1E
+	if (!(ctrl & 0x04)) {
+		return false;
+	}
+
+	uint8_t A2M2 = (alarm_mode & 0x01) << 7; // Minutes bit 7.
+	uint8_t A2M3 = (alarm_mode & 0x02) << 6; // Hour bit 7.
+	uint8_t A2M4 = (alarm_mode & 0x04) << 5; // Day/Date bit 7.
+	uint8_t DY_DT = (alarm_mode & 0x8) << 3; // Day/Date bit 6. Date when 0, day of week when 1.
+
+	Wire.beginTransmission(DS3231_ADDRESS);
+	Wire._I2C_WRITE(DS3231_ALARM2);
+	Wire._I2C_WRITE(bin2bcd(dt.minute()) | A2M2);
+	Wire._I2C_WRITE(bin2bcd(dt.hour()) | A2M3);
+	if (DY_DT) {
+		Wire._I2C_WRITE(bin2bcd(dt.dayOfTheWeek()) | A2M4 | DY_DT);
+	} else {
+		Wire._I2C_WRITE(bin2bcd(dt.day()) | A2M4 | DY_DT);
+	}
+	Wire.endTransmission();
+
+	ctrl |= 0x02; // AI2E
+	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+}
+
+void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
+	uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+	ctrl &= ~(1 << (alarm_num - 1));
 	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
 }
 
