@@ -2,20 +2,12 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-#if defined(ARDUINO_ARCH_SAMD)
-// for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
-   #define Serial SerialUSB
-#endif
-
 RTC_DS1307 rtc;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 void setup () {
-
-#ifndef ESP8266
   while (!Serial); // for Leonardo/Micro/Zero
-#endif
 
   Serial.begin(57600);
   if (! rtc.begin()) {
