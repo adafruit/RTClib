@@ -8,7 +8,9 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 
 void setup () {
 
-  while (!Serial); // for Leonardo/Micro/Zero
+  while (!Serial) {
+    delay(1);  // for Leonardo/Micro/Zero
+  }
 
   Serial.begin(57600);
   if (! rtc.begin()) {
