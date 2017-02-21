@@ -131,7 +131,7 @@ static uint8_t conv2d(const char* p) {
 DateTime::DateTime (const char* date, const char* time) {
     // sample input: date = "Dec 26 2009", time = "12:34:56"
     yOff = conv2d(date + 9);
-    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
+    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     switch (date[0]) {
         case 'J': m = date[1] == 'a' ? 1 : m = date[2] == 'n' ? 6 : 7; break;
         case 'F': m = 2; break;
@@ -174,7 +174,7 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
     ss = conv2d(buff + 6);
 }
 
-uint8_t DateTime::dayOfTheWeek() const {    
+uint8_t DateTime::dayOfTheWeek() const {
     uint16_t day = date2days(yOff, m, d);
     return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
 }
@@ -266,7 +266,7 @@ void RTC_DS1307::adjust(const DateTime& dt) {
 
 DateTime RTC_DS1307::now() {
   Wire.beginTransmission(DS1307_ADDRESS);
-  Wire._I2C_WRITE((byte)0);	
+  Wire._I2C_WRITE((byte)0);
   Wire.endTransmission();
 
   Wire.requestFrom(DS1307_ADDRESS, 7);
@@ -277,7 +277,7 @@ DateTime RTC_DS1307::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
-  
+
   return DateTime (y, m, d, hh, mm, ss);
 }
 
@@ -287,7 +287,7 @@ Ds1307SqwPinMode RTC_DS1307::readSqwPinMode() {
   Wire.beginTransmission(DS1307_ADDRESS);
   Wire._I2C_WRITE(DS1307_CONTROL);
   Wire.endTransmission();
-  
+
   Wire.requestFrom((uint8_t)DS1307_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
@@ -307,7 +307,7 @@ void RTC_DS1307::readnvram(uint8_t* buf, uint8_t size, uint8_t address) {
   Wire.beginTransmission(DS1307_ADDRESS);
   Wire._I2C_WRITE(addrByte);
   Wire.endTransmission();
-  
+
   Wire.requestFrom((uint8_t) DS1307_ADDRESS, size);
   for (uint8_t pos = 0; pos < size; ++pos) {
     buf[pos] = Wire._I2C_READ();
@@ -388,7 +388,7 @@ void RTC_PCF8523::adjust(const DateTime& dt) {
 
 DateTime RTC_PCF8523::now() {
   Wire.beginTransmission(PCF8523_ADDRESS);
-  Wire._I2C_WRITE((byte)3);	
+  Wire._I2C_WRITE((byte)3);
   Wire.endTransmission();
 
   Wire.requestFrom(PCF8523_ADDRESS, 7);
@@ -399,7 +399,7 @@ DateTime RTC_PCF8523::now() {
   Wire._I2C_READ();  // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
-  
+
   return DateTime (y, m, d, hh, mm, ss);
 }
 
@@ -409,7 +409,7 @@ Pcf8523SqwPinMode RTC_PCF8523::readSqwPinMode() {
   Wire.beginTransmission(PCF8523_ADDRESS);
   Wire._I2C_WRITE(PCF8523_CLKOUTCONTROL);
   Wire.endTransmission();
-  
+
   Wire.requestFrom((uint8_t)PCF8523_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
@@ -459,7 +459,7 @@ void RTC_DS3231::adjust(const DateTime& dt) {
 
 DateTime RTC_DS3231::now() {
   Wire.beginTransmission(DS3231_ADDRESS);
-  Wire._I2C_WRITE((byte)0);	
+  Wire._I2C_WRITE((byte)0);
   Wire.endTransmission();
 
   Wire.requestFrom(DS3231_ADDRESS, 7);
@@ -470,7 +470,7 @@ DateTime RTC_DS3231::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
-  
+
   return DateTime (y, m, d, hh, mm, ss);
 }
 
@@ -480,7 +480,7 @@ Ds3231SqwPinMode RTC_DS3231::readSqwPinMode() {
   Wire.beginTransmission(DS3231_ADDRESS);
   Wire._I2C_WRITE(DS3231_CONTROL);
   Wire.endTransmission();
-  
+
   Wire.requestFrom((uint8_t)DS3231_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
@@ -499,8 +499,88 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
     ctrl |= 0x04; // turn on INTCN
   } else {
     ctrl |= mode;
-  } 
+  }
   write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
 
   //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL), HEX);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// RTC_DS1339 implementation
+
+boolean RTC_DS1339::begin(void) {
+  Wire.begin();
+  return true;
+}
+
+bool RTC_DS1339::lostPower(void) {
+  // read Oscillator Stop Flag (OSF) bit from STATUS REGISTER
+  return (read_i2c_register(DS1339_ADDRESS, DS1339_STATUSREG) >> 7);
+}
+
+void RTC_DS1339::adjust(const DateTime& dt) {
+  Wire.beginTransmission(DS1339_ADDRESS);
+  Wire._I2C_WRITE((byte)0); // reset register pointer to 0
+  Wire._I2C_WRITE(bin2bcd(dt.second()));
+  Wire._I2C_WRITE(bin2bcd(dt.minute()));
+  Wire._I2C_WRITE(bin2bcd(dt.hour()));
+  Wire._I2C_WRITE(bin2bcd(0)); // day of the week
+  Wire._I2C_WRITE(bin2bcd(dt.day()));
+  Wire._I2C_WRITE(bin2bcd(dt.month()));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire.endTransmission();
+
+  uint8_t statreg = read_i2c_register(DS1339_ADDRESS, DS1339_STATUSREG);
+  statreg &= ~0x80; // clear the OSF(Oscillator Stop Flag)
+  write_i2c_register(DS1339_ADDRESS, DS1339_STATUSREG, statreg);
+}
+
+DateTime RTC_DS1339::now() {
+  Wire.beginTransmission(DS1339_ADDRESS);
+  Wire._I2C_WRITE((byte)0); // reset register pointer to 0
+  Wire.endTransmission();
+
+  Wire.requestFrom(DS1339_ADDRESS, 7); // request the 7 bytes (secs, min, hour, DoW(discard), date. month, year)
+  uint8_t ss = bcd2bin(Wire._I2C_READ() & 0x7F);
+  uint8_t mm = bcd2bin(Wire._I2C_READ());
+  uint8_t hh = bcd2bin(Wire._I2C_READ());
+  Wire._I2C_READ(); // discard day of the week
+  uint8_t d = bcd2bin(Wire._I2C_READ());
+  uint8_t m = bcd2bin(Wire._I2C_READ());
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+
+  return DateTime (y, m, d, hh, mm, ss);
+}
+
+Ds1339SqwPinMode RTC_DS1339::readSqwPinMode() {
+  int mode;
+
+  Wire.beginTransmission(DS1339_ADDRESS);
+  Wire._I2C_WRITE(DS1339_CONTROL);
+  Wire.endTransmission();
+
+  Wire.requestFrom((uint8_t)DS1339_ADDRESS, (uint8_t)1);
+  mode = Wire._I2C_READ();
+
+  if (mode & 0x04) {
+    mode = DS1339_OFF;
+  } else {
+    mode &= 0x18;
+  }
+  return static_cast<Ds1339SqwPinMode>(mode);
+}
+
+void RTC_DS1339::writeSqwPinMode(Ds1339SqwPinMode mode) {
+  uint8_t ctrl;
+  ctrl = read_i2c_register(DS1339_ADDRESS, DS1339_CONTROL);
+
+  ctrl &= ~0x04; // turn off INTCON
+  ctrl &= ~0x18; // set freq bits to 0
+
+  if (mode == DS1339_OFF) {
+    ctrl |= 0x04; // turn on INTCN
+  } else {
+    ctrl |= mode;
+  }
+  write_i2c_register(DS1339_ADDRESS, DS1339_CONTROL, ctrl);
 }

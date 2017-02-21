@@ -20,6 +20,10 @@ class TimeSpan;
 #define DS3231_CONTROL  0x0E
 #define DS3231_STATUSREG 0x0F
 
+#define DS1339_ADDRESS  0x68
+#define DS1339_CONTROL  0x0E
+#define DS1339_STATUSREG 0x0F
+
 #define SECONDS_PER_DAY 86400L
 
 #define SECONDS_FROM_1970_TO_2000 946684800
@@ -44,7 +48,7 @@ public:
     uint8_t dayOfTheWeek() const;
 
     // 32-bit times as seconds since 1/1/2000
-    long secondstime() const;   
+    long secondstime() const;
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
 
@@ -105,6 +109,18 @@ public:
     static void writeSqwPinMode(Ds3231SqwPinMode mode);
 };
 
+// RTC based on the DS1339 chip connected via I2C and the Wire library
+enum Ds1339SqwPinMode { DS1339_OFF = 0x04, DS1339_SquareWave1HZ = 0x00, DS1339_SquareWave4kHz = 0x08, DS1339_SquareWave8kHz = 0x10, DS1339_SquareWave32kHz = 0x18 };
+
+class RTC_DS1339 {
+public:
+    boolean begin(void);
+    static void adjust(const DateTime& dt);
+    bool lostPower(void);
+    static DateTime now();
+    static Ds1339SqwPinMode readSqwPinMode();
+    static void writeSqwPinMode(Ds1339SqwPinMode mode);
+};
 
 // RTC based on the PCF8523 chip connected via I2C and the Wire library
 enum Pcf8523SqwPinMode { PCF8523_OFF = 7, PCF8523_SquareWave1HZ = 6, PCF8523_SquareWave32HZ = 5, PCF8523_SquareWave1kHz = 4, PCF8523_SquareWave4kHz = 3, PCF8523_SquareWave8kHz = 2, PCF8523_SquareWave16kHz = 1, PCF8523_SquareWave32kHz = 0 };
