@@ -31,20 +31,67 @@
 
 static uint8_t read_i2c_register(uint8_t addr, uint8_t reg) {
   Wire.beginTransmission(addr);
-  Wire._I2C_WRITE((byte)reg);
+  Wire._I2C_WRITE((uint8_t)reg);
   Wire.endTransmission();
 
-  Wire.requestFrom(addr, (byte)1);
+  Wire.requestFrom(addr, (uint8_t)1);
   return Wire._I2C_READ();
+}
+
+// vals[] must be allocated for not less than howMany bytes!
+static uint8_t read_i2c_registers(uint8_t addr, uint8_t start, uint8_t howMany, uint8_t vals[]) {
+    uint8_t i,j=0,thisMuch;
+    memset(vals,0,howMany*sizeof(uint8_t));
+    Wire.beginTransmission(addr);
+    Wire._I2C_WRITE((uint8_t)start);
+    Wire.endTransmission();
+    Wire.requestFrom(addr, (uint8_t)howMany);
+    while(howMany>0) {
+        thisMuch=Wire.available(); // The slave may return less than requested
+        for(i=0;i<thisMuch;++i) {
+            vals[i+j]=Wire._I2C_READ();
+        }
+        j+=thisMuch;
+        if(thisMuch) howMany-=thisMuch;
+        else howMany=0;
+        if(howMany>0) Wire.requestFrom(addr, (uint8_t)howMany);
+    }
+    return j;
 }
 
 static void write_i2c_register(uint8_t addr, uint8_t reg, uint8_t val) {
   Wire.beginTransmission(addr);
-  Wire._I2C_WRITE((byte)reg);
-  Wire._I2C_WRITE((byte)val);
+  Wire._I2C_WRITE((uint8_t)reg);
+  Wire._I2C_WRITE((uint8_t)val);
   Wire.endTransmission();
 }
 
+// vals[] must be allocated for not less than howMany bytes!
+static void write_i2c_registers(uint8_t addr, uint8_t start, uint8_t howMany, uint8_t vals[]) {
+    uint8_t i;
+    Wire.beginTransmission(addr);
+    Wire._I2C_WRITE((uint8_t)start);
+    for(i=0;i<howMany;++i) {
+        Wire._I2C_WRITE((uint8_t)vals[i]);
+    }
+    Wire.endTransmission();
+}
+
+static uint8_t set_i2c_register_bit(uint8_t addr, uint8_t reg, uint8_t bitNum)
+{
+    uint8_t ss = read_i2c_register(addr,reg);
+    ss |= ((uint8_t)1 << bitNum);
+    write_i2c_register(addr,reg,ss);
+    return read_i2c_register(addr,reg);
+}
+
+static uint8_t clear_i2c_register_bit(uint8_t addr, uint8_t reg, uint8_t bitNum)
+{
+    uint8_t ss = read_i2c_register(addr, reg);
+    ss &= ~((uint8_t)1 << bitNum);
+    write_i2c_register(addr,reg,ss);
+    return read_i2c_register(addr,reg);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
@@ -425,8 +472,7 @@ void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
   Wire.endTransmission();
 }
 
-
-
+////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_DS3231 implementation
@@ -504,3 +550,198 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
 
   //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL), HEX);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// RTC_PCF85263 implementation
+
+bool RTC_PCF85263::begin(void)
+{
+    Wire.begin();
+    return true;
+}
+
+bool RTC_PCF85263::initialized(void)
+{
+    uint8_t ss = clear_i2c_register_bit(my_I2C_address, PCF85263_SECONDS, PCF85263_OS_BIT);
+    return !(ss & ((uint8_t)1 << PCF85263_OS_BIT)); // Check the OS bit
+}
+
+DateTime RTC_PCF85263::now()
+{
+    uint8_t vals[7];
+    read_i2c_registers(my_I2C_address,PCF85263_SECONDS,7,vals);
+    uint8_t ss = bcd2bin(vals[0] & ~((uint8_t)1 << PCF85263_OS_BIT)); // clear OS bit
+    uint8_t mm = bcd2bin(vals[1] & ~((uint8_t)1 << PCF85263_EMON_BIT)); // clear EMON bit
+    uint8_t hh = bcd2bin(vals[2]);
+    uint8_t d = bcd2bin(vals[3]);
+    // skip 'weekdays' = vals[4]
+    uint8_t m = bcd2bin(vals[5]);
+    uint16_t y = bcd2bin(vals[6]) + 2000;
+    return DateTime (y, m, d, hh, mm, ss);
+}
+
+void RTC_PCF85263::adjust(const DateTime& dt)
+{
+    // Enable STOP bit
+    set_i2c_register_bit(my_I2C_address,PCF85263_STOP,PCF85263_STOP_BIT);
+    
+    // Clear prescaler
+    write_i2c_register(my_I2C_address,PCF85263_RESET,PCF85263_PRESCALER_BITS);
+    
+    // Set date/time
+    uint8_t vals[7];
+    vals[0]=bin2bcd(dt.second());
+    vals[1]=bin2bcd(dt.minute());
+    vals[2]=bin2bcd(dt.hour());
+    vals[3]=bin2bcd(dt.day());
+    vals[4]=bin2bcd(dt.dayOfTheWeek());
+    vals[5]=bin2bcd(dt.month());
+    vals[6]=bin2bcd(dt.year() - 2000);
+    write_i2c_registers(my_I2C_address,PCF85263_SECONDS,7,vals);
+    
+    // Disable STOP bit
+    clear_i2c_register_bit(my_I2C_address,PCF85263_STOP,PCF85263_STOP_BIT);
+}
+
+Pcf85263SqwPinMode RTC_PCF85263::readSqwPinMode()
+{
+    uint8_t mode=read_i2c_register(my_I2C_address,PCF85263_FUNCTION);
+    mode &= 0x7;
+    return static_cast<Pcf85263SqwPinMode>(mode);
+}
+
+void RTC_PCF85263::writeSqwPinMode(Pcf85263SqwPinMode mode)
+{
+    uint8_t m=(uint8_t)mode;
+    m |= 0xF8 & read_i2c_register(my_I2C_address,PCF85263_FUNCTION);
+    write_i2c_register(my_I2C_address,PCF85263_FUNCTION,m);
+}
+
+void RTC_PCF85263::defaultBatteryMode()
+{
+    // set to battery switchover default mode:
+    // enabled, low refresh rate, switching at Vth level, Vth=1.5V
+    write_i2c_register(my_I2C_address,PCF85263_BATTSWITCH,0x00);
+}
+
+void RTC_PCF85263::disableCLKOUTenableINTA()
+{
+    // Disable CLK and enable interrupts on CLK/INTA pin
+    set_i2c_register_bit(my_I2C_address, PCF85263_PIN_IO, PCF85263_CLKPM_BIT);
+    set_i2c_register_bit(my_I2C_address, PCF85263_PIN_IO, PCF85263_INTA_OUT_BIT);
+}
+
+void RTC_PCF85263::setAlarm(uint8_t alarm,const DateTime& dt)
+{
+    uint8_t vals[5];
+    switch(alarm) {
+        case 1:
+        default:
+            vals[0]=bin2bcd(dt.second());
+            vals[1]=bin2bcd(dt.minute());
+            vals[2]=bin2bcd(dt.hour());
+            vals[3]=bin2bcd(dt.day());
+            vals[4]=bin2bcd(dt.month());
+            write_i2c_registers(my_I2C_address,PCF85263_ALARM1_SECONDS,5,vals);
+            break;
+        case 2:
+            vals[0]=bin2bcd(dt.minute());
+            vals[1]=bin2bcd(dt.hour());
+            vals[2]=bin2bcd(dt.dayOfTheWeek());
+            write_i2c_registers(my_I2C_address,PCF85263_ALARM2_MINUTES,3,vals);
+            break;
+    }
+}
+
+void RTC_PCF85263::setAlarm(uint8_t alarm,const uint8_t hour, const uint8_t minute)
+{
+    DateTime dt(0,0,0,hour,minute,0);
+    setAlarm(alarm,dt);
+}
+
+// mode should be composed of individual bits. For example
+// mode = (1 << PCF85263_ALARM2_MINUTES) | (1 << PCF85263_ALARM2_HOURS)
+// will enable hour and minute of alarm 2
+void RTC_PCF85263::enableAlarm(uint8_t mode)
+{
+    disableCLKOUTenableINTA();
+    write_i2c_register(my_I2C_address,PCF85263_ALARM_ENABLES,mode);
+    // Figure out the alarm number and set proper INTA bit(s)
+    if(mode & ((1 << PCF85263_ALARM1_SECONDS_BIT) |
+               (1 << PCF85263_ALARM1_MINUTES_BIT) |
+               (1 << PCF85263_ALARM1_HOURS_BIT) |
+               (1 << PCF85263_ALARM1_DAYS_BIT) |
+               (1 << PCF85263_ALARM1_MONTHS_BIT)))
+    {
+        set_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_A1IEA_BIT);
+    }
+    if(mode & ((1 << PCF85263_ALARM2_MINUTES_BIT) |
+                  (1 << PCF85263_ALARM2_HOURS_BIT) |
+                  (1 << PCF85263_ALARM2_DAY_OTW_BIT)))
+    {
+        set_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_A2IEA_BIT);
+    }
+}
+
+void RTC_PCF85263::disableAlarm(uint8_t alarm)
+{
+    switch(alarm) {
+        case 1:
+            clear_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_A1IEA_BIT);
+            break;
+        case 2:
+            clear_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_A2IEA_BIT);
+            break;
+        default:
+            break;
+    }
+}
+
+// mode should be composed of individual bits. For example
+// mode = (1 << PCF85263_INTA_PI_SECOND_BIT) | (1 << PCF85263_INTA_PI_MINUTE_BIT)
+// will set periodic interrupt every hour
+void RTC_PCF85263::setPeriodicInterrupt(PCF85263PeriodicIntMode mode)
+{
+    if((uint8_t)mode & (1 << PCF85263_INTA_PI_SECOND_BIT)) set_i2c_register_bit(my_I2C_address,PCF85263_FUNCTION,PCF85263_INTA_PI_SECOND_BIT);
+    if((uint8_t)mode & (1 << PCF85263_INTA_PI_MINUTE_BIT)) set_i2c_register_bit(my_I2C_address,PCF85263_FUNCTION,PCF85263_INTA_PI_MINUTE_BIT);
+}
+
+void RTC_PCF85263::enablePeriodicInterrupt()
+{
+    disableCLKOUTenableINTA();
+    set_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_PIEA_BIT);
+}
+
+void RTC_PCF85263::disablePeriodicInterrupt()
+{
+    clear_i2c_register_bit(my_I2C_address,PCF85263_INTA_ENABLES,PCF85263_INTA_PIEA_BIT);
+}
+
+// mode = 0 for normal 7pF, 1 for low 6pF, 2 for high 12.5 pF
+void RTC_PCF85263::setOscillatorCapacitance(uint8_t mode)
+{
+    switch(mode) {
+        case 0:
+        default:
+            clear_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_HIGH_CAPACITANCE_BIT);
+            clear_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_LOW_CAPACITANCE_BIT);
+            break;
+        case 1:
+            clear_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_HIGH_CAPACITANCE_BIT);
+            set_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_LOW_CAPACITANCE_BIT);
+            break;
+        case 2:
+            set_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_HIGH_CAPACITANCE_BIT);
+            clear_i2c_register_bit(my_I2C_address,PCF85263_OSCILLATOR,PCF85263_OSC_LOW_CAPACITANCE_BIT);
+            break;
+    }
+}
+
+void RTC_PCF85263::clearAllFlags()
+{
+    write_i2c_register(my_I2C_address,PCF85263_FLAGS,0x00);
+}
+
+////////////////////////////////////////////////////////////////////////////////
