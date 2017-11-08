@@ -55,7 +55,8 @@ void loop () {
     Serial.print(now.unixtime() / 86400L);
     Serial.println("d");
     
-    // calculate a date which is 7 days and 30 seconds into the future
+    // use TimeSpan() to calculate a date which is 7 days, 12 hours 30 minutes and 6 seconds into the future
+    // TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds)
     DateTime future (now + TimeSpan(7,12,30,6));
     
     Serial.print(" now + 7d + 30s: ");
