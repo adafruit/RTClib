@@ -113,6 +113,8 @@ class RTC_PCF8523 {
 public:
     boolean begin(void);
     void adjust(const DateTime& dt);
+    void setAlarm(uint8_t hh, uint8_t mm, uint8_t d);
+    static DateTime getAlarm();
     boolean initialized(void);
     static DateTime now();
 
