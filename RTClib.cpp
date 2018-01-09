@@ -386,6 +386,27 @@ void RTC_PCF8523::adjust(const DateTime& dt) {
   Wire.endTransmission();
 }
 
+void RTC_PCF8523::setAlarm(uint8_t hh, uint8_t mm, uint8_t d) {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE((byte)10); // start at location 10
+  Wire._I2C_WRITE(bin2bcd(mm));
+  Wire._I2C_WRITE(bin2bcd(hh));
+  Wire._I2C_WRITE(bin2bcd(d));
+  Wire.endTransmission();
+}
+
+DateTime RTC_PCF8523::getAlarm() {
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE((byte)10); 
+  Wire.endTransmission();
+
+  Wire.requestFrom(PCF8523_ADDRESS, 3);
+  uint8_t mm = bcd2bin(Wire._I2C_READ());
+  uint8_t hh = bcd2bin(Wire._I2C_READ());
+  uint8_t d = bcd2bin(Wire._I2C_READ());
+  return DateTime (2001, 1, d, hh, mm, 00);
+}
+
 DateTime RTC_PCF8523::now() {
   Wire.beginTransmission(PCF8523_ADDRESS);
   Wire._I2C_WRITE((byte)3);	
