@@ -403,8 +403,6 @@ boolean RTC_PCF8523::initialized(void) {
     return false;
 }
 
-}
-
 void RTC_PCF8523::adjust(const DateTime &dt) {
     Wire.beginTransmission(PCF8523_ADDRESS);
     Wire._I2C_WRITE((byte) 3); // start at location 3
