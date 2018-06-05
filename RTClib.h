@@ -121,7 +121,7 @@ public:
 };
 
 // RTC using the internal millis() clock, has to be initialized before use
-// NOTE: this clock won't be correct once the millis() timer rolls over (>49d?)
+// NOTE: this is immune to millis() rollover events
 class RTC_Millis {
 public:
     static void begin(const DateTime& dt) { adjust(dt); }
@@ -129,7 +129,8 @@ public:
     static DateTime now();
 
 protected:
-    static long offset;
+    static uint32_t lastUnix;
+    static uint32_t lastMillis;
 };
 
 #endif // _RTCLIB_H_

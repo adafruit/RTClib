@@ -337,14 +337,26 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_Millis implementation
 
-long RTC_Millis::offset = 0;
+// Alignment between the milis() timescale and the Unix timescale. These
+// two variables are updated on each call to now(), which prevents
+// rollover issues. Note that lastMillis is **not** the millis() value
+// of the last call to now(): it's the millis() value corresponding to
+// the last **full second** of Unix time.
+uint32_t RTC_Millis::lastMillis;
+uint32_t RTC_Millis::lastUnix;
 
 void RTC_Millis::adjust(const DateTime& dt) {
-    offset = dt.unixtime() - millis() / 1000;
+  lastMillis = millis();
+  lastUnix = dt.unixtime();
 }
 
+// Note that computing (millis() - lastMillis) is rollover-safe as long
+// as this method is called at least once every 49.7 days.
 DateTime RTC_Millis::now() {
-  return (uint32_t)(offset + millis() / 1000);
+  uint32_t elapsedSeconds = (millis() - lastMillis) / 1000;
+  lastMillis += elapsedSeconds * 1000;
+  lastUnix += elapsedSeconds;
+  return lastUnix;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
