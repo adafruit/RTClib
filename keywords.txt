@@ -21,7 +21,7 @@ day	KEYWORD2
 hour	KEYWORD2
 minute	KEYWORD2
 second	KEYWORD2
-dayOfWeek	KEYWORD2
+dayOfTheWeek	KEYWORD2
 secondstime	KEYWORD2
 unixtime	KEYWORD2
 begin	KEYWORD2
