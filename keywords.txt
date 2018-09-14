@@ -7,6 +7,7 @@
 #######################################
 
 DateTime	KEYWORD1
+TimeSpan	KEYWORD1
 RTC_DS1307	KEYWORD1
 RTC_Millis	KEYWORD1
 Ds1307SqwPinMode	KEYWORD1
