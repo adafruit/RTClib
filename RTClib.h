@@ -19,6 +19,8 @@ class TimeSpan;
 #define DS3231_ADDRESS  0x68
 #define DS3231_CONTROL  0x0E
 #define DS3231_STATUSREG 0x0F
+#define DS3231_TEMP_INT 0x11
+#define DS3231_TEMP_FRAC 0x12
 
 #define SECONDS_PER_DAY 86400L
 
@@ -44,7 +46,7 @@ public:
     uint8_t dayOfTheWeek() const;
 
     // 32-bit times as seconds since 1/1/2000
-    long secondstime() const;   
+    long secondstime() const;
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
 
@@ -101,6 +103,8 @@ public:
     static void adjust(const DateTime& dt);
     bool lostPower(void);
     static DateTime now();
+    static float getTemp();
+    static float measureTemp();
     static Ds3231SqwPinMode readSqwPinMode();
     static void writeSqwPinMode(Ds3231SqwPinMode mode);
 };
