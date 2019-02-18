@@ -1,8 +1,14 @@
 // Code by JeeLabs http://news.jeelabs.org/code/
 // Released to the public domain! Enjoy!
 
-#include <Wire.h>
 #include "RTClib.h"
+
+#ifdef USE_SBWIRE //Uncomment this definition in RTClib.h to avoid Wire library lockups
+#include <SBWire.h>
+#else
+#include <Wire.h>
+#endif // USE_SBWIRE
+
 #ifdef __AVR__
  #include <avr/pgmspace.h>
 #elif defined(ESP8266)
