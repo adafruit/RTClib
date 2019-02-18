@@ -83,9 +83,9 @@ DateTime::DateTime (uint32_t t) {
     uint8_t leap;
     for (yOff = 0; ; ++yOff) {
         leap = yOff % 4 == 0;
-        if (days < 365 + leap)
+        if (days < 365U + leap)
             break;
-        days -= 365 + leap;
+        days -= 365U + leap;
     }
     for (m = 1; ; ++m) {
         uint8_t daysPerMonth = pgm_read_byte(daysInMonth + m - 1);
