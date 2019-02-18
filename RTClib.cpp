@@ -433,7 +433,11 @@ void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
 
 boolean RTC_DS3231::begin(void) {
   Wire.begin();
-  return true;
+
+  //02/16/19 gfp added to make begin() a bit more useful
+  Wire.beginTransmission(DS3231_ADDRESS);
+  int iLastError = Wire.endTransmission();
+  return (iLastError == 0x00);
 }
 
 bool RTC_DS3231::lostPower(void) {
