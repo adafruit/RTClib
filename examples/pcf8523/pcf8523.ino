@@ -1,4 +1,4 @@
-// Date and time functions using a DS1307 RTC connected via I2C and Wire lib
+// Date and time functions using a PCF8523 RTC connected via I2C and Wire lib
 #include <Wire.h>
 #include "RTClib.h"
 
@@ -55,7 +55,7 @@ void loop () {
     // calculate a date which is 7 days, 12 hours and 30 seconds into the future
     DateTime future (now + TimeSpan(7,12,30,6));
     
-    Serial.print(" now + 7d + 30s: ");
+    Serial.print(" now + 7d + 12h + 30m + 6s: ");
     Serial.print(future.year(), DEC);
     Serial.print('/');
     Serial.print(future.month(), DEC);
