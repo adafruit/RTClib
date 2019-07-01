@@ -11,6 +11,7 @@ class TimeSpan;
 #define PCF8523_ADDRESS       0x68
 #define PCF8523_CLKOUTCONTROL 0x0F
 #define PCF8523_CONTROL_3     0x02
+#define PCF8523_OFFSET        0x0E
 
 #define DS1307_ADDRESS  0x68
 #define DS1307_CONTROL  0x07
@@ -117,6 +118,8 @@ public:
 // RTC based on the PCF8523 chip connected via I2C and the Wire library
 enum Pcf8523SqwPinMode { PCF8523_OFF = 7, PCF8523_SquareWave1HZ = 6, PCF8523_SquareWave32HZ = 5, PCF8523_SquareWave1kHz = 4, PCF8523_SquareWave4kHz = 3, PCF8523_SquareWave8kHz = 2, PCF8523_SquareWave16kHz = 1, PCF8523_SquareWave32kHz = 0 };
 
+enum Pcf8523OffsetMode { PCF8523_TwoHours = 0x00, PCF8523_OneMinute = 0x80 };
+
 class RTC_PCF8523 {
 public:
     boolean begin(void);
@@ -126,6 +129,7 @@ public:
 
     Pcf8523SqwPinMode readSqwPinMode();
     void writeSqwPinMode(Pcf8523SqwPinMode mode);
+    void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 };
 
 // RTC using the internal millis() clock, has to be initialized before use

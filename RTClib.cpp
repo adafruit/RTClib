@@ -465,6 +465,16 @@ void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
   Wire.endTransmission();
 }
 
+void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
+  uint8_t reg = (uint8_t) offset & 0x7F;
+  reg |= mode;
+
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  Wire._I2C_WRITE(PCF8523_OFFSET);
+  Wire._I2C_WRITE(reg);
+  Wire.endTransmission();
+}
+
 
 
 
