@@ -59,6 +59,12 @@ public:
     DateTime operator+(const TimeSpan& span);
     DateTime operator-(const TimeSpan& span);
     TimeSpan operator-(const DateTime& right);
+    bool operator<(const DateTime& right) const;
+    bool operator>(const DateTime& right) const  { return right < *this; }
+    bool operator<=(const DateTime& right) const { return !(*this > right); }
+    bool operator>=(const DateTime& right) const { return !(*this < right); }
+    bool operator==(const DateTime& right) const;
+    bool operator!=(const DateTime& right) const { return !(*this == right); }
 
 protected:
     uint8_t yOff, m, d, hh, mm, ss;
