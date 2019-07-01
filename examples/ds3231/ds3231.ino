@@ -72,6 +72,10 @@ void loop () {
     Serial.print(future.second(), DEC);
     Serial.println();
     
+    Serial.print("Temperature: ");
+    Serial.print(rtc.getTemperature());
+    Serial.println(" C");
+    
     Serial.println();
     delay(3000);
 }

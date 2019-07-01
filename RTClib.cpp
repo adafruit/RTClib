@@ -532,3 +532,22 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
 
   //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL), HEX);
 }
+
+float RTC_DS3231::getTemperature()
+{
+  uint8_t msb, lsb;
+  Wire.beginTransmission(DS3231_ADDRESS);
+  Wire._I2C_WRITE(DS3231_TEMPERATUREREG);
+  Wire.endTransmission();
+  
+  Wire.requestFrom(DS3231_ADDRESS, 2);
+  msb = Wire._I2C_READ();
+  lsb = Wire._I2C_READ();
+  
+//  Serial.print("msb=");
+//  Serial.print(msb,HEX);
+//  Serial.print(", lsb=");
+//  Serial.println(lsb,HEX);
+
+  return (float) msb + (lsb >> 6) * 0.25f;
+}
