@@ -10,6 +10,7 @@ DateTime	KEYWORD1
 TimeSpan	KEYWORD1
 RTC_DS1307	KEYWORD1
 RTC_Millis	KEYWORD1
+RTC_Micros	KEYWORD1
 Ds1307SqwPinMode	KEYWORD1
 
 #######################################
@@ -27,6 +28,7 @@ secondstime	KEYWORD2
 unixtime	KEYWORD2
 begin	KEYWORD2
 adjust	KEYWORD2
+adjustDrift	KEYWORD2
 isrunning	KEYWORD2
 now	KEYWORD2
 readSqwPinMode	KEYWORD2

@@ -388,6 +388,32 @@ DateTime RTC_Millis::now() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// RTC_Micros implementation
+
+// Number of microseconds reported by micros() per "true" (calibrated)
+// second.
+uint32_t RTC_Micros::microsPerSecond = 1000000;
+
+// The timing logic is identical to RTC_Millis.
+uint32_t RTC_Micros::lastMicros;
+uint32_t RTC_Micros::lastUnix;
+
+void RTC_Micros::adjust(const DateTime& dt) {
+  lastMicros = micros();
+  lastUnix = dt.unixtime();
+}
+
+// A positive adjustment makes the clock faster.
+void RTC_Micros::adjustDrift(int ppm) {
+  microsPerSecond = 1000000 - ppm;
+}
+
+DateTime RTC_Micros::now() {
+  uint32_t elapsedSeconds = (micros() - lastMicros) / microsPerSecond;
+  lastMicros += elapsedSeconds * microsPerSecond;
+  lastUnix += elapsedSeconds;
+  return lastUnix;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // RTC_PCF8563 implementation

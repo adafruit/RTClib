@@ -145,4 +145,22 @@ protected:
     static uint32_t lastMillis;
 };
 
+// RTC using the internal micros() clock, has to be initialized before
+// use. Unlike RTC_Millis, this can be tuned in order to compensate for
+// the natural drift of the system clock. Note that now() has to be
+// called more frequently than the micros() rollover period, which is
+// approximately 71.6 minutes.
+class RTC_Micros {
+public:
+    static void begin(const DateTime& dt) { adjust(dt); }
+    static void adjust(const DateTime& dt);
+    static void adjustDrift(int ppm);
+    static DateTime now();
+
+protected:
+    static uint32_t microsPerSecond;
+    static uint32_t lastUnix;
+    static uint32_t lastMicros;
+};
+
 #endif // _RTCLIB_H_
