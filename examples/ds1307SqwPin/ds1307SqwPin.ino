@@ -23,21 +23,21 @@ RTC_DS1307 rtc;
 
 int mode_index = 0;
 
-Ds1307SqwPinMode modes[] = {OFF, ON, SquareWave1HZ, SquareWave4kHz, SquareWave8kHz, SquareWave32kHz};
+Ds1307SqwPinMode modes[] = { DS1307_OFF, DS1307_ON, DS1307_SquareWave1HZ, DS1307_SquareWave4kHz, DS1307_SquareWave8kHz, DS1307_SquareWave32kHz};
 
 
 void print_mode() {
   Ds1307SqwPinMode mode = rtc.readSqwPinMode();
-  
+
   Serial.print("Sqw Pin Mode: ");
   switch(mode) {
-  case OFF:             Serial.println("OFF");       break;
-  case ON:              Serial.println("ON");        break;
-  case SquareWave1HZ:   Serial.println("1Hz");       break;
-  case SquareWave4kHz:  Serial.println("4.096kHz");  break;
-  case SquareWave8kHz:  Serial.println("8.192kHz");  break;
-  case SquareWave32kHz: Serial.println("32.768kHz"); break;
-  default:              Serial.println("UNKNOWN");   break;
+  case DS1307_OFF:              Serial.println("OFF");       break;
+  case DS1307_ON:               Serial.println("ON");        break;
+  case DS1307_SquareWave1HZ:    Serial.println("1Hz");       break;
+  case DS1307_SquareWave4kHz:   Serial.println("4.096kHz");  break;
+  case DS1307_SquareWave8kHz:   Serial.println("8.192kHz");  break;
+  case DS1307_SquareWave32kHz:  Serial.println("32.768kHz"); break;
+  default:                      Serial.println("UNKNOWN");   break;
   }
 }
 
