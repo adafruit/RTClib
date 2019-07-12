@@ -11,7 +11,6 @@
 // You must connect a pull up resistor (~10kohm) from the SQW pin up to VCC.  Without
 // this pull up the wave output will not work!
 
-#include <Wire.h>
 #include "RTClib.h"
 
 #if defined(ARDUINO_ARCH_SAMD)

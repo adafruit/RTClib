@@ -1,5 +1,5 @@
 /* Timestamp functions using a DS1307 RTC connected via I2C and Wire lib
-** 
+**
 ** Useful for file name
 **		` SD.open(time.timestamp()+".log", FILE_WRITE) `
 **
@@ -8,18 +8,12 @@
 ** Last Edit:
 */
 
-#include <Wire.h>
 #include "RTClib.h"
 
 RTC_DS1307 rtc;
 
 void setup() {
    Serial.begin(57600);
-#ifdef AVR
-  Wire.begin();
-#else
-  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
-#endif
   rtc.begin();
 
   if (! rtc.isrunning()) {
@@ -35,18 +29,18 @@ void setup() {
 
 void loop() {
  DateTime time = rtc.now();
- 
+
  //Full Timestamp
  Serial.println(String("DateTime::TIMESTAMP_FULL:\t")+time.timestamp(DateTime::TIMESTAMP_FULL));
- 
+
  //Date Only
  Serial.println(String("DateTime::TIMESTAMP_DATE:\t")+time.timestamp(DateTime::TIMESTAMP_DATE));
- 
+
  //Full Timestamp
  Serial.println(String("DateTime::TIMESTAMP_TIME:\t")+time.timestamp(DateTime::TIMESTAMP_TIME));
- 
+
  Serial.println("\n");
- 
+
  //Delay 5s
  delay(5000);
 }
