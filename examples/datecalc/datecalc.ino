@@ -1,12 +1,6 @@
 // Simple date conversions and calculations
 
-#include <Wire.h>
 #include "RTClib.h"
-
-#if defined(ARDUINO_ARCH_SAMD)
-// for Zero, output on USB Serial console, remove line below if using programming port to program the Zero!
-   #define Serial SerialUSB
-#endif
 
 void showDate(const char* txt, const DateTime& dt) {
     Serial.print(txt);
@@ -22,13 +16,13 @@ void showDate(const char* txt, const DateTime& dt) {
     Serial.print(dt.minute(), DEC);
     Serial.print(':');
     Serial.print(dt.second(), DEC);
-    
+
     Serial.print(" = ");
     Serial.print(dt.unixtime());
     Serial.print("s / ");
     Serial.print(dt.unixtime() / 86400L);
     Serial.print("d since 1970");
-    
+
     Serial.println();
 }
 
@@ -54,7 +48,7 @@ void setup () {
   while (!Serial); // for Leonardo/Micro/Zero
 #endif
     Serial.begin(57600);
-    
+
     DateTime dt0 (0, 1, 1, 0, 0, 0);
     showDate("dt0", dt0);
 
