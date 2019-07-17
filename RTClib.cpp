@@ -15,6 +15,23 @@
   please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
+  @section classes Available classes
+
+  This library provides the following classes:
+
+  - Classes for manipulating dates, times and durations:
+    - DateTime represents a specific point in time; this is the data
+      type used for setting and reading the supported RTCs
+    - TimeSpan represents the length of a time interval
+  - Interfacing specific RTC chips:
+    - RTC_DS1307
+    - RTC_DS3231
+    - RTC_PCF8523
+  - RTC emulated in software; do not expect much accuracy out of these:
+    - RTC_Millis is based on `millis()`
+    - RTC_Micros is based on `micros()`; its drift rate can be tuned by
+      the user
+
   @section license License
 
   Original library by JeeLabs http://news.jeelabs.org/code/, released to the public domain.
