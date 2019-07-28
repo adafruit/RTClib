@@ -279,6 +279,50 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
 
 /**************************************************************************/
 /*!
+    @brief  Allow to format date and time in different paterns
+    @return string formated based on format string patern like: YYMMDD
+*/
+/**************************************************************************/
+
+char* DateTime::format(char* ret){
+		for(int i=0;i<strlen(ret)-1;i++){
+		if(ret[i] == 'h' && ret[i+1] == 'h'){
+			ret[i] = '0'+hh/10;
+			ret[i+1] = '0'+hh%10;
+		}
+		if(ret[i] == 'm' && ret[i+1] == 'm'){
+			ret[i] = '0'+mm/10;
+			ret[i+1] = '0'+mm%10;
+		}
+		if(ret[i] == 's' && ret[i+1] == 's'){
+			ret[i] = '0'+ss/10;
+			ret[i+1] = '0'+ss%10;
+		}
+		if(ret[i] == 'D' && ret[i+1] == 'D'){
+			ret[i] = '0'+d/10;
+			ret[i+1] = '0'+d%10;
+		}
+		if(ret[i] == 'M' && ret[i+1] == 'M'){
+			ret[i] = '0'+m/10;
+			ret[i+1] = '0'+m%10;
+		}
+		if(ret[i] == 'Y'&& ret[i+3] == 'Y'){
+			ret[i] = '2';
+			ret[i+1] = '0';
+			ret[i+2] = '0'+(yOff/10)%10;
+			ret[i+3] = '0'+yOff%10;
+		}else
+		if(ret[i] == 'Y'&& ret[i+1] == 'Y'){
+			ret[i] = '0'+(yOff/10)%10;
+			ret[i+1] = '0'+yOff%10;
+		}
+
+	}
+	return ret;
+}
+
+/**************************************************************************/
+/*!
     @brief  Return the day of the week for this object, from 0-6.
     @return Day of week 0-6 starting with Sunday, e.g. Sunday = 0, Saturday = 6
 */
