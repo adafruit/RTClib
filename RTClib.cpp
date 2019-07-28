@@ -280,7 +280,8 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
 /**************************************************************************/
 /*!
     @brief  Allow to format date and time in different paterns
-    @return string formated based on format string patern like: YYMMDD
+    @param ret Format string, e.g. "YYMMDD hh:mm:ss"
+    @return string formated based on format string: 190728 13:12:11
 */
 /**************************************************************************/
 
