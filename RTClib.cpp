@@ -279,47 +279,51 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
 
 /**************************************************************************/
 /*!
-    @brief  Allow to format date and time in different paterns
-    @param ret Format string, e.g. "YYMMDD hh:mm:ss"
-    @return string formated based on format string: 190728 13:12:11
+    @brief  Return DateTime in based on user defined format.
+    @param buffer: array of char for holding the format description and the formatted DateTime. 
+                   Before calling this method, the buffer should be initialized by the user with 
+                   a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite 
+                   the buffer with the formatted date and/or time.
+    @return a pointer to the provided buffer. This is returned for convenience, 
+            in order to enable idioms such as Serial.println(now.toString(buffer));
 */
 /**************************************************************************/
 
-char* DateTime::format(char* ret){
-		for(int i=0;i<strlen(ret)-1;i++){
-		if(ret[i] == 'h' && ret[i+1] == 'h'){
-			ret[i] = '0'+hh/10;
-			ret[i+1] = '0'+hh%10;
+char* DateTime::toString(char* buffer){
+		for(int i=0;i<strlen(buffer)-1;i++){
+		if(buffer[i] == 'h' && buffer[i+1] == 'h'){
+			buffer[i] = '0'+hh/10;
+			buffer[i+1] = '0'+hh%10;
 		}
-		if(ret[i] == 'm' && ret[i+1] == 'm'){
-			ret[i] = '0'+mm/10;
-			ret[i+1] = '0'+mm%10;
+		if(buffer[i] == 'm' && buffer[i+1] == 'm'){
+			buffer[i] = '0'+mm/10;
+			buffer[i+1] = '0'+mm%10;
 		}
-		if(ret[i] == 's' && ret[i+1] == 's'){
-			ret[i] = '0'+ss/10;
-			ret[i+1] = '0'+ss%10;
+		if(buffer[i] == 's' && buffer[i+1] == 's'){
+			buffer[i] = '0'+ss/10;
+			buffer[i+1] = '0'+ss%10;
 		}
-		if(ret[i] == 'D' && ret[i+1] == 'D'){
-			ret[i] = '0'+d/10;
-			ret[i+1] = '0'+d%10;
+		if(buffer[i] == 'D' && buffer[i+1] == 'D'){
+			buffer[i] = '0'+d/10;
+			buffer[i+1] = '0'+d%10;
 		}
-		if(ret[i] == 'M' && ret[i+1] == 'M'){
-			ret[i] = '0'+m/10;
-			ret[i+1] = '0'+m%10;
+		if(buffer[i] == 'M' && buffer[i+1] == 'M'){
+			buffer[i] = '0'+m/10;
+			buffer[i+1] = '0'+m%10;
 		}
-		if(ret[i] == 'Y'&& ret[i+3] == 'Y'){
-			ret[i] = '2';
-			ret[i+1] = '0';
-			ret[i+2] = '0'+(yOff/10)%10;
-			ret[i+3] = '0'+yOff%10;
+		if(buffer[i] == 'Y'&& buffer[i+3] == 'Y'){
+			buffer[i] = '2';
+			buffer[i+1] = '0';
+			buffer[i+2] = '0'+(yOff/10)%10;
+			buffer[i+3] = '0'+yOff%10;
 		}else
-		if(ret[i] == 'Y'&& ret[i+1] == 'Y'){
-			ret[i] = '0'+(yOff/10)%10;
-			ret[i+1] = '0'+yOff%10;
+		if(buffer[i] == 'Y'&& buffer[i+1] == 'Y'){
+			buffer[i] = '0'+(yOff/10)%10;
+			buffer[i+1] = '0'+yOff%10;
 		}
 
 	}
-	return ret;
+	return buffer;
 }
 
 /**************************************************************************/
