@@ -303,10 +303,38 @@ char* DateTime::toString(char* buffer){
 			buffer[i] = '0'+ss/10;
 			buffer[i+1] = '0'+ss%10;
 		}
+    if(buffer[i] == 'D' && buffer[i+2] =='D'){
+      uint8_t day = dayOfTheWeek();
+      switch (day) {
+        case 0: buffer[i]= 'S'; buffer[i+1]= 'u'; buffer[i+2]= 'n'; break;
+        case 1: buffer[i]= 'M'; buffer[i+1]= 'o'; buffer[i+2]= 'n'; break;
+        case 2: buffer[i]= 'T'; buffer[i+1]= 'u'; buffer[i+2]= 'e'; break;
+        case 3: buffer[i]= 'W'; buffer[i+1]= 'e'; buffer[i+2]= 'd'; break;
+        case 4: buffer[i]= 'T'; buffer[i+1]= 'h'; buffer[i+2]= 'u'; break;
+        case 5: buffer[i]= 'F'; buffer[i+1]= 'r'; buffer[i+2]= 'i'; break;
+        case 6: buffer[i]= 'S'; buffer[i+1]= 'a'; buffer[i+2]= 't'; break;
+      }
+    }else
 		if(buffer[i] == 'D' && buffer[i+1] == 'D'){
 			buffer[i] = '0'+d/10;
 			buffer[i+1] = '0'+d%10;
 		}
+    if(buffer[i] == 'M' && buffer[i+2] =='M'){
+      switch (m) {
+        case 1: buffer[i]= 'J'; buffer[i+1]= 'a'; buffer[i+2]= 'n'; break;
+        case 2: buffer[i]= 'F'; buffer[i+1]= 'e'; buffer[i+2]= 'b'; break;
+        case 3: buffer[i]= 'M'; buffer[i+1]= 'a'; buffer[i+2]= 'r'; break;
+        case 4: buffer[i]= 'A'; buffer[i+1]= 'p'; buffer[i+2]= 'r'; break;
+        case 5: buffer[i]= 'M'; buffer[i+1]= 'a'; buffer[i+2]= 'y'; break;
+        case 6: buffer[i]= 'J'; buffer[i+1]= 'u'; buffer[i+2]= 'n'; break;
+        case 7: buffer[i]= 'J'; buffer[i+1]= 'u'; buffer[i+2]= 'l'; break;
+        case 8: buffer[i]= 'A'; buffer[i+1]= 'u'; buffer[i+2]= 'g'; break;
+        case 9: buffer[i]= 'S'; buffer[i+1]= 'e'; buffer[i+2]= 'p'; break;
+        case 10: buffer[i]= 'O'; buffer[i+1]= 'c'; buffer[i+2]= 't'; break;
+        case 11: buffer[i]= 'N'; buffer[i+1]= 'o'; buffer[i+2]= 'v'; break;
+        case 12: buffer[i]= 'D'; buffer[i+1]= 'e'; buffer[i+2]= 'c'; break;
+      }
+    }else
 		if(buffer[i] == 'M' && buffer[i+1] == 'M'){
 			buffer[i] = '0'+m/10;
 			buffer[i+1] = '0'+m%10;

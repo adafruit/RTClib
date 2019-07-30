@@ -19,7 +19,7 @@ void setup() {
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
-    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));  
   }    
 }
 
@@ -34,7 +34,9 @@ void loop() {
   //YYYY - the year as four digit number
   //YY - the year as two digit number (00-99)
   //MM - the month as number with a leading zero (01-12)
+  //MMM - the abbreviated English month name ('Jan' to 'Dec')
   //DD - the day as number with a leading zero (01 to 31)
+  //DDD - the abbreviated English day name ('Mon' to 'Sun')
   
    char buf1[] = "hh:mm";
    Serial.println(now.toString(buf1));
@@ -42,7 +44,7 @@ void loop() {
    char buf2[] = "YYMMDD-hh:mm:ss";
    Serial.println(now.toString(buf2));
    
-   char buf3[] = "Today is: DD.MM.YYYY";
+   char buf3[] = "Today is DDD, MMM DD YYYY";
    Serial.println(now.toString(buf3));
    
    char buf4[] = "MM-DD-YYYY";
