@@ -57,6 +57,7 @@ public:
   DateTime (const DateTime& copy);
   DateTime (const char* date, const char* time);
   DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time);
+  char* toString(char* buffer);
 
   /*!
       @brief  Return the year, stored as an offset from 2000

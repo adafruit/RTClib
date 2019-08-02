@@ -34,6 +34,7 @@ now	KEYWORD2
 readSqwPinMode	KEYWORD2
 writeSqwPinMode	KEYWORD2
 timestamp	KEYWORD2
+toString	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
