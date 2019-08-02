@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a75e22d94bd5ab883ec56e6581e04a2d7">DateTime</a> (const __FlashStringHelper *date, const __FlashStringHelper *time)</td></tr>
 <tr class="memdesc:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenient constructor for using "the compiler's time": This version will save RAM by using PROGMEM to store it by using the F macro. <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> now (F(<b>DATE</b>), F(<b>TIME</b>));.  <a href="#a75e22d94bd5ab883ec56e6581e04a2d7">More...</a><br /></td></tr>
 <tr class="separator:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b">toString</a> (char *buffer)</td></tr>
+<tr class="memdesc:a3753bf2ae254315a56f7ee38ff0b188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> in based on user defined format.  <a href="#a3753bf2ae254315a56f7ee38ff0b188b">More...</a><br /></td></tr>
+<tr class="separator:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a04bc8f3d3452bf8fcc5f1e82d86d7fe8">year</a> () const</td></tr>
 <tr class="memdesc:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the year, stored as an offset from 2000.  <a href="#a04bc8f3d3452bf8fcc5f1e82d86d7fe8">More...</a><br /></td></tr>
 <tr class="separator:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -394,6 +397,33 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3753bf2ae254315a56f7ee38ff0b188b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3753bf2ae254315a56f7ee38ff0b188b">&#9670;&nbsp;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * DateTime::toString </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> in based on user defined format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>array of char for holding the format description and the formatted <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a>. Before calling this method, the buffer should be initialized by the user with a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite the buffer with the formatted date and/or time. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the provided buffer. This is returned for convenience, in order to enable idioms such as Serial.println(now.toString(buffer)); </dd></dl>
+
+</div>
+</div>
 <a id="a04bc8f3d3452bf8fcc5f1e82d86d7fe8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a04bc8f3d3452bf8fcc5f1e82d86d7fe8">&#9670;&nbsp;</a></span>year()</h2>
 
