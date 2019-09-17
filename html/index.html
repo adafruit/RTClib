@@ -67,6 +67,27 @@ Introduction</h1>
 <p>This is a fork of JeeLab's fantastic real time clock library for Arduino.</p>
 <p>For details on using this library with an RTC module like the DS1307, PCF8523, or DS3231, see the guide at: <a href="https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview">https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview</a></p>
 <p>Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!</p>
+<h1><a class="anchor" id="classes"></a>
+Available classes</h1>
+<p>This library provides the following classes:</p>
+<ul>
+<li>Classes for manipulating dates, times and durations:<ul>
+<li><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> represents a specific point in time; this is the data type used for setting and reading the supported RTCs</li>
+<li><a class="el" href="class_time_span.html" title="Timespan which can represent changes in time with seconds accuracy. ">TimeSpan</a> represents the length of a time interval</li>
+</ul>
+</li>
+<li>Interfacing specific RTC chips:<ul>
+<li><a class="el" href="class_r_t_c___d_s1307.html" title="RTC based on the DS1307 chip connected via I2C and the Wire library. ">RTC_DS1307</a></li>
+<li><a class="el" href="class_r_t_c___d_s3231.html" title="RTC based on the DS3231 chip connected via I2C and the Wire library. ">RTC_DS3231</a></li>
+<li><a class="el" href="class_r_t_c___p_c_f8523.html" title="RTC based on the PCF8523 chip connected via I2C and the Wire library. ">RTC_PCF8523</a></li>
+</ul>
+</li>
+<li>RTC emulated in software; do not expect much accuracy out of these:<ul>
+<li><a class="el" href="class_r_t_c___millis.html" title="RTC using the internal millis() clock, has to be initialized before use. NOTE: this is immune to mill...">RTC_Millis</a> is based on <code>millis()</code></li>
+<li><a class="el" href="class_r_t_c___micros.html" title="RTC using the internal micros() clock, has to be initialized before use. Unlike RTC_Millis, this can be tuned in order to compensate for the natural drift of the system clock. Note that now() has to be called more frequently than the micros() rollover period, which is approximately 71.6 minutes. ">RTC_Micros</a> is based on <code>micros()</code>; its drift rate can be tuned by the user</li>
+</ul>
+</li>
+</ul>
 <h1><a class="anchor" id="license"></a>
 License</h1>
 <p>Original library by JeeLabs <a href="http://news.jeelabs.org/code/,">http://news.jeelabs.org/code/,</a> released to the public domain.</p>
