@@ -31,6 +31,9 @@ class TimeSpan;
 #define PCF8523_CONTROL_1 0x00     ///< Control and status register 1
 #define PCF8523_CONTROL_2 0x01     ///< Control and status register 2
 #define PCF8523_CONTROL_3 0x02     ///< Control and status register 3
+#define PCF8523_TIMER_A_FREQ  0x10  ///< Timer A frequency divider register
+#define PCF8523_TIMER_A_VALUE 0x11  ///< Timer A count value register
+#define PCF8523_TIMER_B_FREQ  0x12  ///< Timer B frequency divider register
 #define PCF8523_TIMER_B_FRCTL 0x12 ///< Timer B source clock frequency control
 #define PCF8523_TIMER_B_VALUE 0x13 ///< Timer B value (number clock periods)
 #define PCF8523_OFFSET 0x0E        ///< Offset register
@@ -350,6 +353,42 @@ enum Pcf8523OffsetMode {
   PCF8523_OneMinute = 0x80 /**< Offset made every minute */
 };
 
+/** Clock division frequencies for PCF8523 timers, in hardware order */
+enum Pcf8523FrequencyDivision {
+  PCF8523_Freq_4kHz,   // 4.096kHz divider
+  PCF8523_Freq_64Hz,   // 64Hz divider
+  PCF8523_Freq_second, // 1Hz (one second) divider
+  PCF8523_Freq_minute, // 1/60Hz (one minute) divider
+  PCF8523_Freq_hour    // 1/3600Hz (one hour) divider
+};
+
+/** Timers and interrupts that can be set or read */
+enum Pcf8523Timer {
+  PCF8523_Timer_Countdown_A,
+  PCF8523_Timer_WDT_A,
+  PCF8523_Timer_Countdown_B
+};
+
+/** Current state of an interrupt */
+typedef struct {
+  /** whether the timer has gone off */
+  bool irupt_flag;
+  /** whether the flag state is tied to the interrupt pin state */
+  bool irupt_enabled;
+} Pcf8523IruptState;
+
+/** Current state of a timer */
+typedef struct {
+  /** whether the timer is running */
+  bool enabled;
+  /** the current value of the timer */
+  uint8_t value;
+  /** the clock divider used */
+  Pcf8523FrequencyDivision freq;
+  /** the timer's interrupt state */
+  Pcf8523IruptState irupt_state;
+} Pcf8523TimerState;
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
@@ -372,6 +411,11 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+
+  void write_timer(Pcf8523Timer timer, Pcf8523TimerState *src);
+  void read_timer(Pcf8523Timer timer, Pcf8523TimerState *dest);
+  void write_irupt(Pcf8523Timer irupt, Pcf8523IruptState *src);
+  void read_irupt(Pcf8523Timer irupt, Pcf8523IruptState *dest);
 };
 
 /**************************************************************************/
