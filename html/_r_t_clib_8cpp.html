@@ -82,7 +82,7 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a07f7414a12e65e2a192193542b7f13da"><td class="memItemLeft" align="right" valign="top">const uint8_t daysInMonth []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8cpp.html#a07f7414a12e65e2a192193542b7f13da">PROGMEM</a> = { 31,28,31,30,31,30,31,31,30,31,30,31 }</td></tr>
+<tr class="memitem:a07f7414a12e65e2a192193542b7f13da"><td class="memItemLeft" align="right" valign="top">const uint8_t daysInMonth []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8cpp.html#a07f7414a12e65e2a192193542b7f13da">PROGMEM</a> = { 31,28,31,30,31,30,31,31,30,31,30 }</td></tr>
 <tr class="separator:a07f7414a12e65e2a192193542b7f13da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -93,11 +93,11 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const uint8_t daysInMonth [] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 }</td>
+          <td class="memname">const uint8_t daysInMonth [] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of days in each month </p>
+<p>Number of days in each month, from January to November. December is not needed. Omitting it avoids an incompatibility with Paul Stoffregen's Time library. C.f. <a href="https://github.com/adafruit/RTClib/issues/114">https://github.com/adafruit/RTClib/issues/114</a> </p>
 
 </div>
 </div>
