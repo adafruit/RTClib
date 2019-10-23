@@ -943,13 +943,15 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 
 /**************************************************************************/
 /*!
-    @brief  Start I2C for the DS3231
-    @return True
+    @brief  Start I2C for the DS3231 and test succesful connection
+    @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
 boolean RTC_DS3231::begin(void) {
   Wire.begin();
-  return true;
+  Wire.beginTransmission (DS3231_ADDRESS);
+  if (Wire.endTransmission() == 0) return true;												
+  return false;
 }
 
 /**************************************************************************/
