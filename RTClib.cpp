@@ -1104,6 +1104,7 @@ bool RTC_DS3231::setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode) {
 
 	ctrl |= 0x01; // AI1E
 	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+	return true;
 }
 
 bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
@@ -1130,6 +1131,7 @@ bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
 
 	ctrl |= 0x02; // AI2E
 	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+	return true;
 }
 
 void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
