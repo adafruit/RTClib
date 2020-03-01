@@ -1082,7 +1082,7 @@ float RTC_DS3231::getTemperature()
 /*!
     @brief  Set alarm 1 for DS3231
 	@param 	dt DateTime object
-	@param 	alarm_mode, see Ds3231Alarm1Mode enum
+	@param 	alarm_mode Desired mode, see Ds3231Alarm1Mode enum
     @return False if control register is not set, otherwise true
 */
 /**************************************************************************/
@@ -1119,7 +1119,7 @@ bool RTC_DS3231::setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode) {
 /*!
     @brief  Set alarm 2 for DS3231
 	@param 	dt DateTime object
-	@param 	alarm_mode, see Ds3231Alarm2Mode enum
+	@param 	alarm_mode Desired mode, see Ds3231Alarm2Mode enum
     @return False if control register is not set, otherwise true
 */
 /**************************************************************************/
@@ -1153,7 +1153,7 @@ bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
 /**************************************************************************/
 /*!
     @brief  Disable alarm
-	@param 	alarm_num, alarm number to disable
+	@param 	alarm_num Alarm number to disable
 */
 /**************************************************************************/
 void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
@@ -1165,7 +1165,7 @@ void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
 /**************************************************************************/
 /*!
     @brief  Clear status of alarm
-	@param 	alarm_num, alarm number to clear
+	@param 	alarm_num Alarm number to clear
 */
 /**************************************************************************/
 void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
@@ -1177,7 +1177,7 @@ void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
 /**************************************************************************/
 /*!
     @brief  Get status of alarm
-	@param 	alarm_num, alarm number to disable
+	@param 	alarm_num Alarm number to check status of
 	@return True if alarm has been fired otherwise false
 */
 /**************************************************************************/
