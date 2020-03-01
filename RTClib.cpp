@@ -1078,6 +1078,14 @@ float RTC_DS3231::getTemperature()
   return (float) msb + (lsb >> 6) * 0.25f;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Set alarm 1 for DS3231
+	@param 	dt DateTime object
+	@param 	alarm_mode, see Ds3231Alarm1Mode enum
+    @return False if control register is not set, otherwise true
+*/
+/**************************************************************************/
 bool RTC_DS3231::setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode) {
 	uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
 	if (!(ctrl & 0x04)) {
@@ -1107,6 +1115,14 @@ bool RTC_DS3231::setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode) {
 	return true;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Set alarm 2 for DS3231
+	@param 	dt DateTime object
+	@param 	alarm_mode, see Ds3231Alarm2Mode enum
+    @return False if control register is not set, otherwise true
+*/
+/**************************************************************************/
 bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
 	uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
 	if (!(ctrl & 0x04)) {
@@ -1134,18 +1150,37 @@ bool RTC_DS3231::setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode) {
 	return true;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Disable alarm
+	@param 	alarm_num, alarm number to disable
+*/
+/**************************************************************************/
 void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
 	uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
 	ctrl &= ~(1 << (alarm_num - 1));
 	write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Clear status of alarm
+	@param 	alarm_num, alarm number to clear
+*/
+/**************************************************************************/
 void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
 	uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
 	status &= ~(0x1 << (alarm_num - 1));
 	write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Get status of alarm
+	@param 	alarm_num, alarm number to disable
+	@return True if alarm has been fired otherwise false
+*/
+/**************************************************************************/
 bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 	uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
 	return (status >> (alarm_num - 1)) & 0x1;
