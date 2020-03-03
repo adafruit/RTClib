@@ -127,6 +127,18 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a8076305a342fb38bb70a8dc3555993ae">DS3231_ADDRESS</a>&#160;&#160;&#160;0x68</td></tr>
 <tr class="memdesc:a8076305a342fb38bb70a8dc3555993ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C address for DS3231. <br /></td></tr>
 <tr class="separator:a8076305a342fb38bb70a8dc3555993ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a702f90628f57f4fae86f4958a9a8ada3"><td class="memItemLeft" align="right" valign="top"><a id="a702f90628f57f4fae86f4958a9a8ada3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a702f90628f57f4fae86f4958a9a8ada3">DS3231_TIME</a>&#160;&#160;&#160;0x00</td></tr>
+<tr class="memdesc:a702f90628f57f4fae86f4958a9a8ada3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time register. <br /></td></tr>
+<tr class="separator:a702f90628f57f4fae86f4958a9a8ada3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae686654358c903a88f4f1b58a03a9b1e"><td class="memItemLeft" align="right" valign="top"><a id="ae686654358c903a88f4f1b58a03a9b1e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ae686654358c903a88f4f1b58a03a9b1e">DS3231_ALARM1</a>&#160;&#160;&#160;0x07</td></tr>
+<tr class="memdesc:ae686654358c903a88f4f1b58a03a9b1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alarm 1 register. <br /></td></tr>
+<tr class="separator:ae686654358c903a88f4f1b58a03a9b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="memItemLeft" align="right" valign="top"><a id="aaddd22823b5cb6dfe38bf2293c04eaa2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#aaddd22823b5cb6dfe38bf2293c04eaa2">DS3231_ALARM2</a>&#160;&#160;&#160;0x0B</td></tr>
+<tr class="memdesc:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alarm 2 register. <br /></td></tr>
+<tr class="separator:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9d0b2aca525ae194ad728b90fdbad98"><td class="memItemLeft" align="right" valign="top"><a id="aa9d0b2aca525ae194ad728b90fdbad98"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#aa9d0b2aca525ae194ad728b90fdbad98">DS3231_CONTROL</a>&#160;&#160;&#160;0x0E</td></tr>
 <tr class="memdesc:aa9d0b2aca525ae194ad728b90fdbad98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control register. <br /></td></tr>
@@ -170,6 +182,27 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:a4d86e80b3d359f4d9ee94d64f9734ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dbe1ce2f8afb1c70ee1bef0eb84c297"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a0dbe1ce2f8afb1c70ee1bef0eb84c297">Ds3231Alarm1Mode</a> { <br />
+&#160;&#160;<b>DS3231_A1_PerSecond</b> = 0x0F, 
+<b>DS3231_A1_Second</b> = 0x0E, 
+<b>DS3231_A1_Minute</b> = 0x0C, 
+<b>DS3231_A1_Hour</b> = 0x08, 
+<br />
+&#160;&#160;<b>DS3231_A1_Date</b> = 0x00, 
+<b>DS3231_A1_Day</b> = 0x10
+<br />
+ }</td></tr>
+<tr class="separator:a0dbe1ce2f8afb1c70ee1bef0eb84c297"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf9692bbba5b3b3adbb6939fe05c0cb3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#abf9692bbba5b3b3adbb6939fe05c0cb3">Ds3231Alarm2Mode</a> { <br />
+&#160;&#160;<b>DS3231_A2_PerMinute</b> = 0x7, 
+<b>DS3231_A2_Minute</b> = 0x6, 
+<b>DS3231_A2_Hour</b> = 0x4, 
+<b>DS3231_A2_Date</b> = 0x0, 
+<br />
+&#160;&#160;<b>DS3231_A2_Day</b> = 0x8
+<br />
+ }</td></tr>
+<tr class="separator:abf9692bbba5b3b3adbb6939fe05c0cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab06ba706f2d9f1e59b1ce1fe3048c54c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c">Pcf8523SqwPinMode</a> { <br />
 &#160;&#160;<b>PCF8523_OFF</b> = 7, 
 <b>PCF8523_SquareWave1HZ</b> = 6, 
@@ -257,6 +290,36 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>DS3231 SQW pin mode settings </p>
+
+</div>
+</div>
+<a id="a0dbe1ce2f8afb1c70ee1bef0eb84c297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dbe1ce2f8afb1c70ee1bef0eb84c297">&#9670;&nbsp;</a></span>Ds3231Alarm1Mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_r_t_clib_8h.html#a0dbe1ce2f8afb1c70ee1bef0eb84c297">Ds3231Alarm1Mode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>DS3231 Alarm modes for alarm 1 </p>
+
+</div>
+</div>
+<a id="abf9692bbba5b3b3adbb6939fe05c0cb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf9692bbba5b3b3adbb6939fe05c0cb3">&#9670;&nbsp;</a></span>Ds3231Alarm2Mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_r_t_clib_8h.html#abf9692bbba5b3b3adbb6939fe05c0cb3">Ds3231Alarm2Mode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>DS3231 Alarm modes for alarm 2 </p>
 
 </div>
 </div>
