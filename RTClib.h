@@ -34,6 +34,9 @@ class TimeSpan;
 #define DS1307_NVRAM          0x08  ///< Start of RAM registers - 56 bytes, 0x08 to 0x3f
 
 #define DS3231_ADDRESS        0x68  ///< I2C address for DS3231
+#define DS3231_TIME           0x00  ///< Time register
+#define DS3231_ALARM1         0x07  ///< Alarm 1 register
+#define DS3231_ALARM2         0x0B  ///< Alarm 2 register
 #define DS3231_CONTROL        0x0E  ///< Control register
 #define DS3231_STATUSREG      0x0F  ///< Status register
 #define DS3231_TEMPERATUREREG	0x11  ///< Temperature register (high byte - low byte is at 0x12), 10-bit temperature value
@@ -239,6 +242,24 @@ enum Ds3231SqwPinMode {
   DS3231_SquareWave8kHz = 0x18  // 8kHz square wave
 };
 
+/** DS3231 Alarm modes for alarm 1 */
+enum Ds3231Alarm1Mode { 
+  DS3231_A1_PerSecond = 0x0F, 
+  DS3231_A1_Second = 0x0E, 
+  DS3231_A1_Minute = 0x0C, 
+  DS3231_A1_Hour = 0x08, 
+  DS3231_A1_Date = 0x00, 
+  DS3231_A1_Day = 0x10
+};
+/** DS3231 Alarm modes for alarm 2 */
+enum Ds3231Alarm2Mode { 
+  DS3231_A2_PerMinute = 0x7, 
+  DS3231_A2_Minute = 0x6, 
+  DS3231_A2_Hour = 0x4, 
+  DS3231_A2_Date = 0x0, 
+  DS3231_A2_Day = 0x8 
+};
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
@@ -252,6 +273,11 @@ public:
   static DateTime now();
   static Ds3231SqwPinMode readSqwPinMode();
   static void writeSqwPinMode(Ds3231SqwPinMode mode);
+  bool setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode);
+  bool setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode);
+  void disableAlarm(uint8_t alarm_num);
+  void clearAlarm(uint8_t alarm_num);
+  bool alarmFired(uint8_t alarm_num);
   static float getTemperature();  // in Celcius degree
 };
 
