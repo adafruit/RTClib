@@ -1061,7 +1061,8 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
 /**************************************************************************/
 float RTC_DS3231::getTemperature()
 {
-  uint8_t msb, lsb;
+  uint8_t lsb;
+  int8_t msb;
   Wire.beginTransmission(DS3231_ADDRESS);
   Wire._I2C_WRITE(DS3231_TEMPERATUREREG);
   Wire.endTransmission();
