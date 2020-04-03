@@ -86,6 +86,16 @@ public:
   */
   uint8_t hour() const        { return hh; }
   /*!
+      @brief  Return hours reformatted into 12-Hour time
+      @return uint8_t hours
+  */
+  uint8_t twelveHour() const;
+  /*!
+     @brief  Return whether the current time is PM
+     @return uint8_t False = AM, True = PM
+  */
+  uint8_t isPM() const;
+  /*!
       @brief  Return minutes
       @return uint8_t minutes
   */

@@ -494,6 +494,40 @@ char* DateTime::to12hrString(char* buffer) {
 
 /**************************************************************************/
 /*!
+      @brief  Return hours reformatted into 12-Hour time
+      @return uint8_t hours
+*/
+/**************************************************************************/
+uint8_t DateTime::twelveHour() const {
+    if (hh == 0 || hh == 12) { //midnight or noon
+        return 12;
+    }
+    else
+        if (hh > 12) { //1 o'clock or later
+            return hh - 12;
+        }
+    else { //morning
+        return hh;
+    }
+}
+
+/**************************************************************************/
+/*!
+   @brief  Return whether the current time is PM
+   @return uint8_t False = AM, True = PM
+*/
+/**************************************************************************/
+uint8_t DateTime::isPM() const {
+    if (hh < 12) { //morning
+        return false;
+    }
+    else if (hh >= 12) { //evening
+        return true;
+    }
+}
+
+/**************************************************************************/
+/*!
     @brief  Return the day of the week for this object, from 0-6.
     @return Day of week 0-6 starting with Sunday, e.g. Sunday = 0, Saturday = 6
 */
