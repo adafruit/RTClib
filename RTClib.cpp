@@ -513,21 +513,6 @@ uint8_t DateTime::twelveHour() const {
 
 /**************************************************************************/
 /*!
-   @brief  Return whether the current time is PM
-   @return uint8_t False = AM, True = PM
-*/
-/**************************************************************************/
-uint8_t DateTime::isPM() const {
-    if (hh < 12) { //morning
-        return false;
-    }
-    else if (hh >= 12) { //evening
-        return true;
-    }
-}
-
-/**************************************************************************/
-/*!
     @brief  Return the day of the week for this object, from 0-6.
     @return Day of week 0-6 starting with Sunday, e.g. Sunday = 0, Saturday = 6
 */

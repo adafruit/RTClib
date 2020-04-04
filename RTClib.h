@@ -91,10 +91,10 @@ public:
   */
   uint8_t twelveHour() const;
   /*!
-     @brief  Return whether the current time is PM
-     @return uint8_t False = AM, True = PM
+      @brief  Return whether the current time is PM
+      @return uint8_t False = AM, True = PM
   */
-  uint8_t isPM() const;
+  uint8_t isPM() const        { return hh >= 12; }
   /*!
       @brief  Return minutes
       @return uint8_t minutes
