@@ -211,44 +211,6 @@ DateTime::DateTime (uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uin
 
 /**************************************************************************/
 /*!
-    @brief  DateTime constructor from 12 Hour Y-M-D H:M:S
-    @param year Year, 2 or 4 digits (year 2000 or higher)
-    @param month Month 1-12
-    @param day Day 1-31
-    @param hour 1-12
-    @param isPM False = AM, True = PM
-    @param min 0-59
-    @param sec 0-59
-*/
-/**************************************************************************/
-DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t isPM, uint8_t min, uint8_t sec) {
-    if (year >= 2000)
-        year -= 2000;
-    yOff = year;
-    m = month;
-    d = day;
-    if (isPM) {
-        if (hour == 12) { //noon
-            hh = 12;
-        }
-        else {
-            hh = hour + 12;
-        }
-    }
-    else {
-        if (hour == 12) { //midnight
-            hh = 0;
-        }
-        else {
-            hh = hour;
-        }
-    }
-    mm = min;
-    ss = sec;
-}
-
-/**************************************************************************/
-/*!
     @brief  DateTime copy constructor using a member initializer list
     @param copy DateTime object to copy
 */

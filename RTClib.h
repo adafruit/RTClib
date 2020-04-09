@@ -57,8 +57,6 @@ public:
   DateTime (uint32_t t = SECONDS_FROM_1970_TO_2000);
   DateTime (uint16_t year, uint8_t month, uint8_t day,
               uint8_t hour = 0, uint8_t min = 0, uint8_t sec = 0);
-  DateTime(uint16_t year, uint8_t month, uint8_t day,
-              uint8_t hour, uint8_t isPM, uint8_t min, uint8_t sec);
   DateTime (const DateTime& copy);
   DateTime (const char* date, const char* time);
   DateTime (const __FlashStringHelper* date, const __FlashStringHelper* time);
@@ -255,21 +253,21 @@ enum Ds3231SqwPinMode {
 };
 
 /** DS3231 Alarm modes for alarm 1 */
-enum Ds3231Alarm1Mode { 
-  DS3231_A1_PerSecond = 0x0F, 
-  DS3231_A1_Second = 0x0E, 
-  DS3231_A1_Minute = 0x0C, 
-  DS3231_A1_Hour = 0x08, 
-  DS3231_A1_Date = 0x00, 
+enum Ds3231Alarm1Mode {
+  DS3231_A1_PerSecond = 0x0F,
+  DS3231_A1_Second = 0x0E,
+  DS3231_A1_Minute = 0x0C,
+  DS3231_A1_Hour = 0x08,
+  DS3231_A1_Date = 0x00,
   DS3231_A1_Day = 0x10
 };
 /** DS3231 Alarm modes for alarm 2 */
-enum Ds3231Alarm2Mode { 
-  DS3231_A2_PerMinute = 0x7, 
-  DS3231_A2_Minute = 0x6, 
-  DS3231_A2_Hour = 0x4, 
-  DS3231_A2_Date = 0x0, 
-  DS3231_A2_Day = 0x8 
+enum Ds3231Alarm2Mode {
+  DS3231_A2_PerMinute = 0x7,
+  DS3231_A2_Minute = 0x6,
+  DS3231_A2_Hour = 0x4,
+  DS3231_A2_Date = 0x0,
+  DS3231_A2_Day = 0x8
 };
 
 /**************************************************************************/
