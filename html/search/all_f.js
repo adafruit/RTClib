@@ -4,5 +4,6 @@ var searchData=
   ['timestamp',['timestamp',['../class_date_time.html#a7fda98373c9162c3b7c6fa304256a380',1,'DateTime']]],
   ['timestampopt',['timestampOpt',['../class_date_time.html#a3f65aa183f72c285a03f7dd04321285a',1,'DateTime']]],
   ['tostring',['toString',['../class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b',1,'DateTime']]],
-  ['totalseconds',['totalseconds',['../class_time_span.html#acf4206e0878c620da06035ac1684dd87',1,'TimeSpan']]]
+  ['totalseconds',['totalseconds',['../class_time_span.html#acf4206e0878c620da06035ac1684dd87',1,'TimeSpan']]],
+  ['twelvehour',['twelveHour',['../class_date_time.html#a5738404586a60d787aaaa4735913e9c7',1,'DateTime']]]
 ];

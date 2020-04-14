@@ -113,6 +113,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac17441fb0c669bcf3be5de278335e8d0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ac17441fb0c669bcf3be5de278335e8d0">hour</a> () const</td></tr>
 <tr class="memdesc:ac17441fb0c669bcf3be5de278335e8d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hours.  <a href="#ac17441fb0c669bcf3be5de278335e8d0">More...</a><br /></td></tr>
 <tr class="separator:ac17441fb0c669bcf3be5de278335e8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5738404586a60d787aaaa4735913e9c7"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a5738404586a60d787aaaa4735913e9c7">twelveHour</a> () const</td></tr>
+<tr class="memdesc:a5738404586a60d787aaaa4735913e9c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hours reformatted into 12-Hour time.  <a href="#a5738404586a60d787aaaa4735913e9c7">More...</a><br /></td></tr>
+<tr class="separator:a5738404586a60d787aaaa4735913e9c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c11137c3e56e1b7cc7a6dccee755b8e"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a0c11137c3e56e1b7cc7a6dccee755b8e">isPM</a> () const</td></tr>
+<tr class="memdesc:a0c11137c3e56e1b7cc7a6dccee755b8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the current time is PM.  <a href="#a0c11137c3e56e1b7cc7a6dccee755b8e">More...</a><br /></td></tr>
+<tr class="separator:a0c11137c3e56e1b7cc7a6dccee755b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dac4d21cf40f1b6f1ec5973024709ed"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a8dac4d21cf40f1b6f1ec5973024709ed">minute</a> () const</td></tr>
 <tr class="memdesc:a8dac4d21cf40f1b6f1ec5973024709ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return minutes.  <a href="#a8dac4d21cf40f1b6f1ec5973024709ed">More...</a><br /></td></tr>
 <tr class="separator:a8dac4d21cf40f1b6f1ec5973024709ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -416,7 +422,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Return <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> in based on user defined format. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buffer</td><td>array of char for holding the format description and the formatted <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a>. Before calling this method, the buffer should be initialized by the user with a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite the buffer with the formatted date and/or time. </td></tr>
+    <tr><td class="paramname">buffer</td><td>array of char for holding the format description and the formatted <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a>. Before calling this method, the buffer should be initialized by the user with a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite the buffer with the formatted date and/or time. Use the "AP" tag to return "AM" or "PM" and 12-Hour time. </td></tr>
   </table>
   </dd>
 </dl>
@@ -533,6 +539,54 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 <p>Return hours. </p>
 <dl class="section return"><dt>Returns</dt><dd>uint8_t hours </dd></dl>
+
+</div>
+</div>
+<a id="a5738404586a60d787aaaa4735913e9c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5738404586a60d787aaaa4735913e9c7">&#9670;&nbsp;</a></span>twelveHour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t DateTime::twelveHour </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return hours reformatted into 12-Hour time. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint8_t hours </dd></dl>
+
+</div>
+</div>
+<a id="a0c11137c3e56e1b7cc7a6dccee755b8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c11137c3e56e1b7cc7a6dccee755b8e">&#9670;&nbsp;</a></span>isPM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t DateTime::isPM </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return whether the current time is PM. </p>
+<dl class="section return"><dt>Returns</dt><dd>uint8_t False = AM, True = PM </dd></dl>
 
 </div>
 </div>
