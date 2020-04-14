@@ -301,20 +301,48 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
 /**************************************************************************/
 /*!
     @brief  Return DateTime in based on user defined format.
-    @param buffer: array of char for holding the format description and the formatted DateTime. 
-                   Before calling this method, the buffer should be initialized by the user with 
-                   a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite 
-                   the buffer with the formatted date and/or time.
-    @return a pointer to the provided buffer. This is returned for convenience, 
+    @param buffer: array of char for holding the format description and the formatted DateTime.
+                   Before calling this method, the buffer should be initialized by the user with
+                   a format string, e.g. "YYYY-MM-DD hh:mm:ss". The method will overwrite
+                   the buffer with the formatted date and/or time. Use the "AP" tag to
+                   return "AM" or "PM" and 12-Hour time.
+    @return a pointer to the provided buffer. This is returned for convenience,
             in order to enable idioms such as Serial.println(now.toString(buffer));
 */
 /**************************************************************************/
 
 char* DateTime::toString(char* buffer){
-		for(int i=0;i<strlen(buffer)-1;i++){
+    uint8_t apTag = (strstr(buffer, "ap") != nullptr) || (strstr(buffer, "AP") != nullptr);
+    uint8_t hourReformatted, isPM;
+    if(apTag) { //12 Hour Mode
+        if(hh == 0) { //midnight
+            isPM = false;
+            hourReformatted = 12;
+        }
+        else if(hh == 12) { //noon
+            isPM = true;
+            hourReformatted = 12;
+        }
+        else if(hh < 12) { //morning
+            isPM = false;
+            hourReformatted = hh;
+        }
+        else { //1 o'clock or after
+            isPM = true;
+            hourReformatted = hh - 12;
+        }
+    }
+
+	for(int i=0;i<strlen(buffer)-1;i++){
 		if(buffer[i] == 'h' && buffer[i+1] == 'h'){
-			buffer[i] = '0'+hh/10;
-			buffer[i+1] = '0'+hh%10;
+            if (!apTag) { //24 Hour Mode
+                buffer[i] = '0' + hh / 10;
+                buffer[i + 1] = '0' + hh % 10;
+            }
+            else { //12 Hour Mode
+                buffer[i] = '0' + hourReformatted / 10;
+                buffer[i + 1] = '0' + hourReformatted % 10;
+            }
 		}
 		if(buffer[i] == 'm' && buffer[i+1] == 'm'){
 			buffer[i] = '0'+mm/10;
@@ -324,28 +352,28 @@ char* DateTime::toString(char* buffer){
 			buffer[i] = '0'+ss/10;
 			buffer[i+1] = '0'+ss%10;
 		}
-    if(buffer[i] == 'D' && buffer[i+1] =='D' && buffer[i+2] =='D'){
-      static PROGMEM const char day_names[] = "SunMonTueWedThuFriSat";
-      const char *p = &day_names[3*dayOfTheWeek()];
-      buffer[i] = pgm_read_byte(p);
-      buffer[i+1] = pgm_read_byte(p+1);
-      buffer[i+2] = pgm_read_byte(p+2);
-    }else
-		if(buffer[i] == 'D' && buffer[i+1] == 'D'){
-			buffer[i] = '0'+d/10;
-			buffer[i+1] = '0'+d%10;
-		}
-    if(buffer[i] == 'M' && buffer[i+1] =='M' && buffer[i+2] =='M'){
-      static PROGMEM const char month_names[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
-      const char *p = &month_names[3*(m-1)];
-      buffer[i] = pgm_read_byte(p);
-      buffer[i+1] = pgm_read_byte(p+1);
-      buffer[i+2] = pgm_read_byte(p+2);      
-    }else
-		if(buffer[i] == 'M' && buffer[i+1] == 'M'){
-			buffer[i] = '0'+m/10;
-			buffer[i+1] = '0'+m%10;
-		}
+        if(buffer[i] == 'D' && buffer[i+1] =='D' && buffer[i+2] =='D'){
+            static PROGMEM const char day_names[] = "SunMonTueWedThuFriSat";
+            const char *p = &day_names[3*dayOfTheWeek()];
+            buffer[i] = pgm_read_byte(p);
+            buffer[i+1] = pgm_read_byte(p+1);
+            buffer[i+2] = pgm_read_byte(p+2);
+        }else
+		    if(buffer[i] == 'D' && buffer[i+1] == 'D'){
+			    buffer[i] = '0'+d/10;
+			    buffer[i+1] = '0'+d%10;
+		    }
+        if(buffer[i] == 'M' && buffer[i+1] =='M' && buffer[i+2] =='M'){
+            static PROGMEM const char month_names[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
+            const char *p = &month_names[3*(m-1)];
+            buffer[i] = pgm_read_byte(p);
+            buffer[i+1] = pgm_read_byte(p+1);
+            buffer[i+2] = pgm_read_byte(p+2);
+        }else
+		    if(buffer[i] == 'M' && buffer[i+1] == 'M'){
+			    buffer[i] = '0'+m/10;
+			    buffer[i+1] = '0'+m%10;
+		    }
 		if(buffer[i] == 'Y'&& buffer[i+1] == 'Y'&& buffer[i+2] == 'Y'&& buffer[i+3] == 'Y'){
 			buffer[i] = '2';
 			buffer[i+1] = '0';
@@ -356,9 +384,47 @@ char* DateTime::toString(char* buffer){
 			buffer[i] = '0'+(yOff/10)%10;
 			buffer[i+1] = '0'+yOff%10;
 		}
-
+        if (buffer[i] == 'A' && buffer[i + 1] == 'P') {
+            if (isPM) {
+                buffer[i] = 'P';
+                buffer[i + 1] = 'M';
+            }
+            else {
+                buffer[i] = 'A';
+                buffer[i + 1] = 'M';
+            }
+        } else
+            if(buffer[i] == 'a' && buffer[i + 1] == 'p') {
+                if(isPM) {
+                    buffer[i] = 'p';
+                    buffer[i + 1] = 'm';
+                }
+                else {
+                    buffer[i] = 'a';
+                    buffer[i + 1] = 'm';
+                }
+            }
 	}
 	return buffer;
+}
+
+/**************************************************************************/
+/*!
+      @brief  Return hours reformatted into 12-Hour time
+      @return uint8_t hours
+*/
+/**************************************************************************/
+uint8_t DateTime::twelveHour() const {
+    if (hh == 0 || hh == 12) { //midnight or noon
+        return 12;
+    }
+    else
+        if (hh > 12) { //1 o'clock or later
+            return hh - 12;
+        }
+    else { //morning
+        return hh;
+    }
 }
 
 /**************************************************************************/
@@ -950,7 +1016,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 boolean RTC_DS3231::begin(void) {
   Wire.begin();
   Wire.beginTransmission (DS3231_ADDRESS);
-  if (Wire.endTransmission() == 0) return true;												
+  if (Wire.endTransmission() == 0) return true;
   return false;
 }
 

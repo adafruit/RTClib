@@ -83,6 +83,16 @@ public:
   */
   uint8_t hour() const        { return hh; }
   /*!
+      @brief  Return hours reformatted into 12-Hour time
+      @return uint8_t hours
+  */
+  uint8_t twelveHour() const;
+  /*!
+      @brief  Return whether the current time is PM
+      @return uint8_t False = AM, True = PM
+  */
+  uint8_t isPM() const        { return hh >= 12; }
+  /*!
       @brief  Return minutes
       @return uint8_t minutes
   */
@@ -243,21 +253,21 @@ enum Ds3231SqwPinMode {
 };
 
 /** DS3231 Alarm modes for alarm 1 */
-enum Ds3231Alarm1Mode { 
-  DS3231_A1_PerSecond = 0x0F, 
-  DS3231_A1_Second = 0x0E, 
-  DS3231_A1_Minute = 0x0C, 
-  DS3231_A1_Hour = 0x08, 
-  DS3231_A1_Date = 0x00, 
+enum Ds3231Alarm1Mode {
+  DS3231_A1_PerSecond = 0x0F,
+  DS3231_A1_Second = 0x0E,
+  DS3231_A1_Minute = 0x0C,
+  DS3231_A1_Hour = 0x08,
+  DS3231_A1_Date = 0x00,
   DS3231_A1_Day = 0x10
 };
 /** DS3231 Alarm modes for alarm 2 */
-enum Ds3231Alarm2Mode { 
-  DS3231_A2_PerMinute = 0x7, 
-  DS3231_A2_Minute = 0x6, 
-  DS3231_A2_Hour = 0x4, 
-  DS3231_A2_Date = 0x0, 
-  DS3231_A2_Day = 0x8 
+enum Ds3231Alarm2Mode {
+  DS3231_A2_PerMinute = 0x7,
+  DS3231_A2_Minute = 0x6,
+  DS3231_A2_Hour = 0x4,
+  DS3231_A2_Date = 0x0,
+  DS3231_A2_Day = 0x8
 };
 
 /**************************************************************************/
