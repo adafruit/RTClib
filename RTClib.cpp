@@ -148,8 +148,8 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
     @return Number of seconds total
 */
 /**************************************************************************/
-static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
-    return ((days * 24L + h) * 60 + m) * 60 + s;
+static uint32_t time2ulong(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
+    return ((days * 24UL + h) * 60 + m) * 60 + s;
 }
 
 
@@ -447,7 +447,7 @@ uint8_t DateTime::dayOfTheWeek() const {
 uint32_t DateTime::unixtime(void) const {
   uint32_t t;
   uint16_t days = date2days(yOff, m, d);
-  t = time2long(days, hh, mm, ss);
+  t = time2ulong(days, hh, mm, ss);
   t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
 
   return t;
@@ -459,10 +459,10 @@ uint32_t DateTime::unixtime(void) const {
     @return The object as seconds since 2000-01-01
 */
 /**************************************************************************/
-long DateTime::secondstime(void) const {
-  long t;
+uint32_t DateTime::secondstime(void) const {
+  uint32_t t;
   uint16_t days = date2days(yOff, m, d);
-  t = time2long(days, hh, mm, ss);
+  t = time2ulong(days, hh, mm, ss);
   return t;
 }
 
