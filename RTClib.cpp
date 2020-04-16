@@ -213,10 +213,10 @@ DateTime::DateTime (uint32_t t) {
 /**************************************************************************/
 /*!
     @brief  Constructor from (year, month, day, hour, minute, second).
-
-    It is the responsibility of the user to ensure that the arguments are
-    valid.
-
+    @warning If the provided parameters are not valid (e.g. 31 February),
+           the constructed DateTime will be invalid.
+    @see   The `isValid()` method can be used to test whether the
+           constructed DateTime is valid.
     @param year Either the full year (range: 2000--2099) or the offset from
         year 2000 (range: 0--99).
     @param month Month number (1--12).
@@ -336,6 +336,19 @@ DateTime::DateTime (const __FlashStringHelper* date, const __FlashStringHelper* 
     hh = conv2d(buff);
     mm = conv2d(buff + 3);
     ss = conv2d(buff + 6);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Check whether this DateTime is valid.
+    @return true if valid, false if not.
+*/
+/**************************************************************************/
+bool DateTime::isValid() const {
+    if (yOff >= 100) return false;
+    DateTime other(unixtime());
+    return yOff==other.yOff && m==other.m && d==other.d
+           && hh==other.hh && mm==other.mm && ss==other.ss;
 }
 
 /**************************************************************************/
