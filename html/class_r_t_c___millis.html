@@ -81,7 +81,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:adcf4a13317d9b785ae79613b3429a46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current date/time of the <a class="el" href="class_r_t_c___millis.html" title="RTC using the internal millis() clock, has to be initialized before use. NOTE: this is immune to mill...">RTC_Millis</a> clock.  <a href="#adcf4a13317d9b785ae79613b3429a46a">More...</a><br /></td></tr>
 <tr class="separator:adcf4a13317d9b785ae79613b3429a46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac263a7087f8603199eb45cdc7c3c146"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146">now</a> ()</td></tr>
-<tr class="memdesc:aac263a7087f8603199eb45cdc7c3c146"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> object containing the current date/time. Note that computing (millis() - lastMillis) is rollover-safe as long as this method is called at least once every 49.7 days.  <a href="#aac263a7087f8603199eb45cdc7c3c146">More...</a><br /></td></tr>
+<tr class="memdesc:aac263a7087f8603199eb45cdc7c3c146"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object containing the current date/time. Note that computing (millis() - lastMillis) is rollover-safe as long as this method is called at least once every 49.7 days.  <a href="#aac263a7087f8603199eb45cdc7c3c146">More...</a><br /></td></tr>
 <tr class="separator:aac263a7087f8603199eb45cdc7c3c146"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
@@ -124,7 +124,7 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 <p>Start the RTC. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dt</td><td><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> object with the date/time to set </td></tr>
+    <tr><td class="paramname">dt</td><td><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object with the date/time to set </td></tr>
   </table>
   </dd>
 </dl>
@@ -158,7 +158,7 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 <p>Set the current date/time of the <a class="el" href="class_r_t_c___millis.html" title="RTC using the internal millis() clock, has to be initialized before use. NOTE: this is immune to mill...">RTC_Millis</a> clock. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dt</td><td><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> object with the desired date and time </td></tr>
+    <tr><td class="paramname">dt</td><td><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object with the desired date and time </td></tr>
   </table>
   </dd>
 </dl>
@@ -188,8 +188,8 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 </table>
 </div><div class="memdoc">
 
-<p>Return a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> object containing the current date/time. Note that computing (millis() - lastMillis) is rollover-safe as long as this method is called at least once every 49.7 days. </p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap second handling!). See http://en...">DateTime</a> object containing current time </dd></dl>
+<p>Return a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object containing the current date/time. Note that computing (millis() - lastMillis) is rollover-safe as long as this method is called at least once every 49.7 days. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object containing current time </dd></dl>
 
 </div>
 </div>
