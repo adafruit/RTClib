@@ -44,9 +44,8 @@ STM32F2            |             |             |     X       |
 Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
 # Dependencies
- * [Adafruit BusIO](https://github.com/adafruit/Adafruit_BusIO)
- * [Adafruit Unified Sensor Driver](https://github.com/adafruit/Adafruit_Sensor)
- * [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library)
+ * [TinyWireM](https://github.com/adafruit/TinyWireM)
+ * [OneWire](https://github.com/PaulStoffregen/OneWire)
 
 # Contributing
 
