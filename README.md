@@ -1,18 +1,12 @@
-# Adafruit RTClib [![Build Status](https://travis-ci.com/adafruit/RTClib.svg?branch=master)](https://travis-ci.com/adafruit/RTClib)
+# RTClib [![Build Status](https://github.com/adafruit/RTClib/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/RTClib/actions)[![Documentation](assets/doxygen-badge.svg)](http://adafruit.github.io/RTClib/html/index.html)
 
 This is a fork of JeeLab's fantastic real time clock library for Arduino.
-
-For a tutorial on using this library with an RTC module like the DS1307, PCF8523, or DS3231, see the guide at: https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview
-
-For the detailed API documentation, see https://adafruit.github.io/RTClib/html/index.html
 
 Works great with Adafruit RTC breakouts:
 
 - [DS3231 Precision RTC](https://www.adafruit.com/product/3013)
 - [PCF8523 RTC](https://www.adafruit.com/product/3295)
 - [DS1307 RTC](https://www.adafruit.com/product/3296)
-
-To install, use the Arduino Library Manager to search for "RTClib", find "RTClib by Adafruit" and install the library.
 
 Please note that dayOfTheWeek() ranges from 0 to 6 inclusive with 0 being 'Sunday'.
 
@@ -47,3 +41,29 @@ STM32F2            |             |             |     X       |
   * ATtiny85 @ 8MHz : Adafruit Gemma, Arduino Gemma, Adafruit Trinket 3V
 
 <!-- END COMPATIBILITY TABLE -->
+Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
+
+# Dependencies
+ * [TinyWireM](https://github.com/adafruit/TinyWireM)
+ * [OneWire](https://github.com/PaulStoffregen/OneWire)
+
+# Contributing
+
+Contributions are welcome! Please read our [Code of Conduct](https://github.com/adafruit/RTClib/blob/master/CODE_OF_CONDUCT.md>)
+before contributing to help this project stay welcoming.
+
+## Documentation and doxygen
+For the detailed API documentation, see https://adafruit.github.io/RTClib/html/index.html
+Documentation is produced by doxygen. Contributions should include documentation for any new code added.
+
+Some examples of how to use doxygen can be found in these guide pages:
+
+https://learn.adafruit.com/the-well-automated-arduino-library/doxygen
+
+https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips
+
+Written by JeeLabs
+MIT license, check license.txt for more information
+All text above must be included in any redistribution
+
+To install, use the Arduino Library Manager and search for "RTClib" and install the library.
