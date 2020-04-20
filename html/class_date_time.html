@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a75e22d94bd5ab883ec56e6581e04a2d7">DateTime</a> (const __FlashStringHelper *date, const __FlashStringHelper *time)</td></tr>
 <tr class="memdesc:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory friendly constructor for generating the build time.  <a href="#a75e22d94bd5ab883ec56e6581e04a2d7">More...</a><br /></td></tr>
 <tr class="separator:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a21b2a59fbde555e5c5688d44e9d95aec">isValid</a> () const</td></tr>
+<tr class="memdesc:a21b2a59fbde555e5c5688d44e9d95aec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether this <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is valid.  <a href="#a21b2a59fbde555e5c5688d44e9d95aec">More...</a><br /></td></tr>
+<tr class="separator:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b">toString</a> (char *buffer)</td></tr>
 <tr class="memdesc:a3753bf2ae254315a56f7ee38ff0b188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> as a string in a user-defined format.  <a href="#a3753bf2ae254315a56f7ee38ff0b188b">More...</a><br /></td></tr>
 <tr class="separator:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -305,7 +308,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div><div class="memdoc">
 
 <p>Constructor from (year, month, day, hour, minute, second). </p>
-<p>It is the responsibility of the user to ensure that the arguments are valid.</p>
+<dl class="section warning"><dt>Warning</dt><dd>If the provided parameters are not valid (e.g. 31 February), the constructed <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> will be invalid. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>The <code><a class="el" href="class_date_time.html#a21b2a59fbde555e5c5688d44e9d95aec" title="Check whether this DateTime is valid. ">isValid()</a></code> method can be used to test whether the constructed <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is valid. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">year</td><td>Either the full year (range: 2000&ndash;2099) or the offset from year 2000 (range: 0&ndash;99). </td></tr>
@@ -422,6 +426,26 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a21b2a59fbde555e5c5688d44e9d95aec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21b2a59fbde555e5c5688d44e9d95aec">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DateTime::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check whether this <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is valid. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if valid, false if not. </dd></dl>
+
+</div>
+</div>
 <a id="a3753bf2ae254315a56f7ee38ff0b188b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3753bf2ae254315a56f7ee38ff0b188b">&#9670;&nbsp;</a></span>toString()</h2>
 
