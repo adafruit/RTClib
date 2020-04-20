@@ -374,10 +374,11 @@ DateTime::DateTime(const __FlashStringHelper *date,
 */
 /**************************************************************************/
 bool DateTime::isValid() const {
-    if (yOff >= 100) return false;
-    DateTime other(unixtime());
-    return yOff==other.yOff && m==other.m && d==other.d
-           && hh==other.hh && mm==other.mm && ss==other.ss;
+  if (yOff >= 100)
+    return false;
+  DateTime other(unixtime());
+  return yOff == other.yOff && m == other.m && d == other.d && hh == other.hh &&
+         mm == other.mm && ss == other.ss;
 }
 
 /**************************************************************************/

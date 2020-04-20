@@ -74,6 +74,7 @@ public:
   DateTime(const DateTime &copy);
   DateTime(const char *date, const char *time);
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
+  bool isValid() const;
   char *toString(char *buffer);
 
   /*!
