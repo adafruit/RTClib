@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Adafruit RTClib: RTC_Millis Class Reference</title>
+<title>RTClib: RTC_Millis Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Adafruit RTClib
+   <div id="projectname">RTClib
    </div>
   </td>
  </tr>
@@ -86,12 +86,9 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
-<tr class="memitem:a0b1337ab8374f16ed4baa243781a2bcd"><td class="memItemLeft" align="right" valign="top"><a id="a0b1337ab8374f16ed4baa243781a2bcd"></a>
-static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___millis.html#a0b1337ab8374f16ed4baa243781a2bcd">lastUnix</a></td></tr>
-<tr class="memdesc:a0b1337ab8374f16ed4baa243781a2bcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unix time from the previous call to <a class="el" href="class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146" title="Return a DateTime object containing the current date/time. Note that computing (millis() - lastMillis...">now()</a> - prevents rollover issues. <br /></td></tr>
+<tr class="memitem:a0b1337ab8374f16ed4baa243781a2bcd"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___millis.html#a0b1337ab8374f16ed4baa243781a2bcd">lastUnix</a></td></tr>
 <tr class="separator:a0b1337ab8374f16ed4baa243781a2bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bff2877c276d3389ca26551aff56aed"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___millis.html#a3bff2877c276d3389ca26551aff56aed">lastMillis</a></td></tr>
-<tr class="memdesc:a3bff2877c276d3389ca26551aff56aed"><td class="mdescLeft">&#160;</td><td class="mdescRight">the millis() value corresponding to the last <b>full second</b> of Unix time  <a href="#a3bff2877c276d3389ca26551aff56aed">More...</a><br /></td></tr>
 <tr class="separator:a3bff2877c276d3389ca26551aff56aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -194,6 +191,29 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0b1337ab8374f16ed4baa243781a2bcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b1337ab8374f16ed4baa243781a2bcd">&#9670;&nbsp;</a></span>lastUnix</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t RTC_Millis::lastUnix</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unix time from the previous call to <a class="el" href="class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146" title="Return a DateTime object containing the current date/time. Note that computing (millis() - lastMillis...">now()</a> - prevents rollover issues </p>
+
+</div>
+</div>
 <a id="a3bff2877c276d3389ca26551aff56aed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3bff2877c276d3389ca26551aff56aed">&#9670;&nbsp;</a></span>lastMillis</h2>
 
@@ -213,8 +233,7 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>the millis() value corresponding to the last <b>full second</b> of Unix time </p>
+<p>the millis() value corresponding to the last <b>full second</b> of Unix time</p>
 <p>Alignment between the milis() timescale and the Unix timescale. These two variables are updated on each call to <a class="el" href="class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146" title="Return a DateTime object containing the current date/time. Note that computing (millis() - lastMillis...">now()</a>, which prevents rollover issues. Note that lastMillis is <b>not</b> the millis() value of the last call to <a class="el" href="class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146" title="Return a DateTime object containing the current date/time. Note that computing (millis() - lastMillis...">now()</a>: it's the millis() value corresponding to the last <b>full second</b> of Unix time. </p>
 
 </div>

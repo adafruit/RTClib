@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Adafruit RTClib: RTC_Micros Class Reference</title>
+<title>RTClib: RTC_Micros Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Adafruit RTClib
+   <div id="projectname">RTClib
    </div>
   </td>
  </tr>
@@ -90,14 +90,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
 <tr class="memitem:a32eaa7a8966753129e6ab948e834bae1"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___micros.html#a32eaa7a8966753129e6ab948e834bae1">microsPerSecond</a> = 1000000</td></tr>
-<tr class="memdesc:a32eaa7a8966753129e6ab948e834bae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of microseconds reported by micros() per "true" (calibrated) second.  <a href="#a32eaa7a8966753129e6ab948e834bae1">More...</a><br /></td></tr>
 <tr class="separator:a32eaa7a8966753129e6ab948e834bae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea50e960ad63464f2817fab6188030d5"><td class="memItemLeft" align="right" valign="top"><a id="aea50e960ad63464f2817fab6188030d5"></a>
-static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___micros.html#aea50e960ad63464f2817fab6188030d5">lastUnix</a></td></tr>
-<tr class="memdesc:aea50e960ad63464f2817fab6188030d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unix time from the previous call to <a class="el" href="class_r_t_c___micros.html#a1fc42a118907796cc95af60ab243c5bd" title="Get the current date/time from the RTC_Micros clock. ">now()</a> - prevents rollover issues. <br /></td></tr>
+<tr class="memitem:aea50e960ad63464f2817fab6188030d5"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___micros.html#aea50e960ad63464f2817fab6188030d5">lastUnix</a></td></tr>
 <tr class="separator:aea50e960ad63464f2817fab6188030d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc3ad51cda73fd1b56c17f590322bf01"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___micros.html#acc3ad51cda73fd1b56c17f590322bf01">lastMicros</a></td></tr>
-<tr class="memdesc:acc3ad51cda73fd1b56c17f590322bf01"><td class="mdescLeft">&#160;</td><td class="mdescRight">micros() value corresponding to the last full second of Unix time  <a href="#acc3ad51cda73fd1b56c17f590322bf01">More...</a><br /></td></tr>
 <tr class="separator:acc3ad51cda73fd1b56c17f590322bf01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -253,9 +249,31 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Number of microseconds reported by micros() per "true" (calibrated) second</p>
+<p>Number of microseconds reported by micros() per "true" (calibrated) second. </p>
 
-<p>Number of microseconds reported by micros() per "true" (calibrated) second. </p>
-<p>Number of microseconds reported by micros() per "true" (calibrated) second. </p>
+</div>
+</div>
+<a id="aea50e960ad63464f2817fab6188030d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea50e960ad63464f2817fab6188030d5">&#9670;&nbsp;</a></span>lastUnix</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t RTC_Micros::lastUnix</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unix time from the previous call to <a class="el" href="class_r_t_c___micros.html#a1fc42a118907796cc95af60ab243c5bd" title="Get the current date/time from the RTC_Micros clock. ">now()</a> - prevents rollover issues </p>
 
 </div>
 </div>
@@ -278,8 +296,7 @@ static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>micros() value corresponding to the last full second of Unix time </p>
+<p>micros() value corresponding to the last full second of Unix time</p>
 <p>The timing logic is identical to <a class="el" href="class_r_t_c___millis.html" title="RTC using the internal millis() clock, has to be initialized before use. NOTE: this is immune to mill...">RTC_Millis</a>. </p>
 
 </div>
