@@ -1160,7 +1160,7 @@ bool RTC_DS3231::lostPower(void) {
 /**************************************************************************/
 void RTC_DS3231::adjust(const DateTime &dt) {
   Wire.beginTransmission(DS3231_ADDRESS);
-  Wire._I2C_WRITE(DS3231_TIME); // start at location 0
+  Wire._I2C_WRITE((byte)DS3231_TIME); // start at location 0
   Wire._I2C_WRITE(bin2bcd(dt.second()));
   Wire._I2C_WRITE(bin2bcd(dt.minute()));
   Wire._I2C_WRITE(bin2bcd(dt.hour()));
