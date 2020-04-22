@@ -45,7 +45,6 @@ Adafruit invests time and resources providing this open source code, please supp
 
 # Dependencies
  * [TinyWireM](https://github.com/adafruit/TinyWireM)
- * [OneWire](https://github.com/PaulStoffregen/OneWire)
 
 # Contributing
 
