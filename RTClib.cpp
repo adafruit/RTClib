@@ -35,7 +35,7 @@
 
   @section license License
 
-  Original library by JeeLabs http://news.jeelabs.org/code/, released to the
+  Original library by JeeLabs https://jeelabs.org/pub/docs/rtclib/, released to the
   public domain.
 
   This version: MIT (see LICENSE)
