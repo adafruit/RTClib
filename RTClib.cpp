@@ -1193,7 +1193,7 @@ DateTime RTC_DS3231::now() {
   uint8_t hh = bcd2bin(Wire._I2C_READ());
   Wire._I2C_READ();
   uint8_t d = bcd2bin(Wire._I2C_READ());
-  uint8_t m = bcd2bin(Wire._I2C_READ());
+  uint8_t m = bcd2bin(Wire._I2C_READ() & 0x7F);
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
 
   return DateTime(y, m, d, hh, mm, ss);
