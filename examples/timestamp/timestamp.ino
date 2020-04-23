@@ -13,7 +13,12 @@
 RTC_DS1307 rtc;
 
 void setup() {
-   Serial.begin(57600);
+  Serial.begin(57600);
+
+#ifndef ESP8266
+  while (!Serial); // wait for serial port to connect. Needed for native USB
+#endif
+
   rtc.begin();
 
   if (! rtc.isrunning()) {
