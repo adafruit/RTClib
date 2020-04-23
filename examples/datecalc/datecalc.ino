@@ -43,11 +43,11 @@ void showTimeSpan(const char* txt, const TimeSpan& ts) {
 }
 
 void setup () {
+    Serial.begin(57600);
 
 #ifndef ESP8266
-  while (!Serial); // for Leonardo/Micro/Zero
+    while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
-    Serial.begin(57600);
 
     DateTime dt0 (0, 1, 1, 0, 0, 0);
     showDate("dt0", dt0);

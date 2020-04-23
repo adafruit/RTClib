@@ -6,6 +6,11 @@ RTC_Millis rtc;
 
 void setup () {
     Serial.begin(57600);
+
+#ifndef ESP8266
+    while (!Serial); // wait for serial port to connect. Needed for native USB
+#endif
+
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
     // This line sets the RTC with an explicit date & time, for example to set

@@ -6,14 +6,11 @@ RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 void setup () {
+  Serial.begin(57600);
 
 #ifndef ESP8266
-  while (!Serial); // for Leonardo/Micro/Zero
+  while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
-
-  Serial.begin(9600);
-
-  delay(3000); // wait for console opening
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -28,7 +25,7 @@ void setup () {
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
   }
-  
+
   // If you need to set the time of the uncomment line 34 or 37
   // following line sets the RTC to the date & time this sketch was compiled
   // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
