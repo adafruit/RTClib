@@ -1215,7 +1215,10 @@ Ds3231SqwPinMode RTC_DS3231::readSqwPinMode() {
   Wire.requestFrom((uint8_t)DS3231_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
-  mode &= 0x93;
+  mode &= 0x1C;
+  if (mode & 0x04) {
+      mode = DS3231_OFF;
+  }
   return static_cast<Ds3231SqwPinMode>(mode);
 }
 
