@@ -1217,7 +1217,7 @@ Ds3231SqwPinMode RTC_DS3231::readSqwPinMode() {
 
   mode &= 0x1C;
   if (mode & 0x04) {
-      mode = DS3231_OFF;
+    mode = DS3231_OFF;
   }
   return static_cast<Ds3231SqwPinMode>(mode);
 }
