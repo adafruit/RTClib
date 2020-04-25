@@ -17,7 +17,7 @@ void setup () {
     while (1);
   }
 
-  if (! rtc.initialized()) {
+  if (! rtc.initialized() || rtc.lostPower()) {
     Serial.println("RTC is NOT initialized, let's set the time!");
     // When time needs to be set on a new device, or after a power loss, the
     // following line sets the RTC to the date & time this sketch was compiled
