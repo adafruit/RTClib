@@ -25,7 +25,7 @@
 #include <Arduino.h>
 class TimeSpan;
 
-#define USE_SBWIRE //uncomment this to use SBWire, which fixes Wire library lockup problems
+//#define USE_SBWIRE //uncomment this to use SBWire, which fixes Wire library lockup problems
 
 
 /** Registers */
