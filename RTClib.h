@@ -25,8 +25,8 @@
 #include <Arduino.h>
 class TimeSpan;
 
-//#define USE_SBWIRE //uncomment this to use SBWire, which fixes Wire library lockup problems
-
+//uncomment next line to use SBWire, which fixes Wire library lockup problems
+//#define USE_SBWIRE 
 
 /** Registers */
 #define PCF8523_ADDRESS 0x68       ///< I2C address for PCF8523
