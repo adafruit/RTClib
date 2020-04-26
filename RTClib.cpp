@@ -46,7 +46,7 @@
 #ifdef __AVR_ATtiny85__
 #include <TinyWireM.h>
 #define Wire TinyWireM
-#elif defined USE_SBWIRE //Uncomment #define in RTClib.h to fix I2C lockups
+#elif defined USE_SBWIRE // Uncomment #define in RTClib.h to fix I2C lockups
 #include <SBWire.h>
 #else
 #include <Wire.h>
