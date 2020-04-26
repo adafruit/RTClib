@@ -25,6 +25,9 @@
 #include <Arduino.h>
 class TimeSpan;
 
+#define USE_SBWIRE //uncomment this to use SBWire, which fixes Wire library lockup problems
+
+
 /** Registers */
 #define PCF8523_ADDRESS 0x68       ///< I2C address for PCF8523
 #define PCF8523_CLKOUTCONTROL 0x0F ///< Timer and CLKOUT control register

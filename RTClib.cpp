@@ -41,15 +41,17 @@
   This version: MIT (see LICENSE)
 */
 /**************************************************************************/
+#include "RTClib.h"
 
 #ifdef __AVR_ATtiny85__
 #include <TinyWireM.h>
 #define Wire TinyWireM
+#elif defined USE_SBWIRE //Uncomment this definition in RTClib.h to avoid Wire library lockups
+#include <SBWire.h>
 #else
 #include <Wire.h>
 #endif
 
-#include "RTClib.h"
 #ifdef __AVR__
 #include <avr/pgmspace.h>
 #elif defined(ESP8266)
