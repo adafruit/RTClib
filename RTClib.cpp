@@ -1020,7 +1020,7 @@ boolean RTC_PCF8523::initialized(void) {
 
   Wire.requestFrom(PCF8523_ADDRESS, 1);
   uint8_t ss = Wire._I2C_READ();
-  return ((ss & 0xE0) != 0xE0);
+  return ((ss & 0xE0) != 0xE0); // 0xE0 = standby mode, set after power out
 }
 
 /**************************************************************************/
