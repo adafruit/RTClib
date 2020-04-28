@@ -1006,8 +1006,11 @@ boolean RTC_PCF8523::begin(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Check the status register Oscillator Stop Flag to see if the PCF8523
+    @brief  Check the status register Oscillator Stop flag to see if the PCF8523
    stopped due to power loss
+    @details When battery or external power is first applied, the PCF8523's
+   crystal oscillator takes up to 2s to stabilize. During this time adjust()
+   cannot clear the 'OS' flag. See datasheet OS flag section for details.
     @return True if the bit is set (oscillator is or has stopped) and false only
    after the bit is cleared, for instance with adjust()
 */
