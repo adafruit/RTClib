@@ -999,11 +999,24 @@ DateTime RTC_Micros::now() {
     @return True
 */
 /**************************************************************************/
-////////////////////////////////////////////////////////////////////////////////
-// RTC_PCF8563 implementation
 boolean RTC_PCF8523::begin(void) {
   Wire.begin();
   return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Check the status register Oscillator Stop flag to see if the PCF8523
+   stopped due to power loss
+    @details When battery or external power is first applied, the PCF8523's
+   crystal oscillator takes up to 2s to stabilize. During this time adjust()
+   cannot clear the 'OS' flag. See datasheet OS flag section for details.
+    @return True if the bit is set (oscillator is or has stopped) and false only
+   after the bit is cleared, for instance with adjust()
+*/
+/**************************************************************************/
+boolean RTC_PCF8523::lostPower(void) {
+  return (read_i2c_register(PCF8523_ADDRESS, PCF8523_STATUSREG) >> 7);
 }
 
 /**************************************************************************/

@@ -30,6 +30,7 @@ class TimeSpan;
 #define PCF8523_CLKOUTCONTROL 0x0F ///< Timer and CLKOUT control register
 #define PCF8523_CONTROL_3 0x02     ///< Control and status register 3
 #define PCF8523_OFFSET 0x0E        ///< Offset register
+#define PCF8523_STATUSREG 0x03     ///< Status register
 
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
@@ -331,6 +332,7 @@ class RTC_PCF8523 {
 public:
   boolean begin(void);
   void adjust(const DateTime &dt);
+  boolean lostPower(void);
   boolean initialized(void);
   static DateTime now();
 
