@@ -1193,6 +1193,9 @@ void RTC_PCF8523::enableCountdownTimer(PCF8523TimerClockFreq clkFreq,
 /*!
     @overload
     @brief  Enable Countdown Timer using default interrupt low pulse width.
+    @param clkFreq One of the PCF8523's Timer Source Clock Frequencies.
+   See the #PCF8523TimerClockFreq enum for options and associated time ranges.
+    @param numPeriods The number of clkFreq periods (1-255) to count down.
 */
 /**************************************************************************/
 void RTC_PCF8523::enableCountdownTimer(PCF8523TimerClockFreq clkFreq,
