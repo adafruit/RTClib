@@ -51,17 +51,17 @@ void setup () {
   // countdown period, then it will be released to be pulled HIGH again.
   pinMode(timerInterruptPin, INPUT_PULLUP);
 
-  Serial.println("\nStarting PCF8523 Countdown Timer example.");
-  Serial.print("Configured to expect PCF8523 INT/SQW pin connected to input pin: ");
+  Serial.println(F("\nStarting PCF8523 Countdown Timer example."));
+  Serial.print(F("Configured to expect PCF8523 INT/SQW pin connected to input pin: "));
   Serial.println(timerInterruptPin);
-  Serial.println("This example will not work without the interrupt pin connected!\n\n");
+  Serial.println(F("This example will not work without the interrupt pin connected!\n\n"));
 
   // Timer configuration is not cleared on an RTC reset due to battery backup!
   rtc.deconfigureAllTimers();
 
-  Serial.println("First, use the PCF8523's 'Countdown Timer' with an interrupt.");
-  Serial.println("Set the countdown for 10 seconds and we'll let it run for 2 rounds.");
-  Serial.println("Starting Countdown Timer now...");
+  Serial.println(F("First, use the PCF8523's 'Countdown Timer' with an interrupt."));
+  Serial.println(F("Set the countdown for 10 seconds and we'll let it run for 2 rounds."));
+  Serial.println(F("Starting Countdown Timer now..."));
 
   // These are the PCF8523's built-in "Timer Source Clock Frequencies".
   // They are predefined time periods you choose as your base unit of time,
@@ -101,12 +101,12 @@ void setup () {
   attachInterrupt(digitalPinToInterrupt(timerInterruptPin), countdownOver, FALLING);
 
   // This message proves we're not blocked while counting down!
-  Serial.println("  While we're waiting, a word of caution:");
-  Serial.println("  When starting a new countdown timer, the first time period is not of fixed");
-  Serial.println("  duration. The amount of inaccuracy for the first time period is up to one full");
-  Serial.println("  clock frequency. Example: just the first second of the first round of a new");
-  Serial.println("  countdown based on PCF8523_FrequencySecond may be off by as much as 1 second!");
-  Serial.println("  For critical timing, consider starting actions on the first interrupt.");
+  Serial.println(F("  While we're waiting, a word of caution:"));
+  Serial.println(F("  When starting a new countdown timer, the first time period is not of fixed"));
+  Serial.println(F("  duration. The amount of inaccuracy for the first time period is up to one full"));
+  Serial.println(F("  clock frequency. Example: just the first second of the first round of a new"));
+  Serial.println(F("  countdown based on PCF8523_FrequencySecond may be off by as much as 1 second!"));
+  Serial.println(F("  For critical timing, consider starting actions on the first interrupt."));
 }
 
 // Triggered by the PCF8523 Countdown Timer interrupt at the end of a countdown
@@ -125,33 +125,33 @@ void toggleLed () {
 
 void loop () {
   if (countdownInterruptTriggered && numCountdownInterrupts == 1) {
-    Serial.println("1st countdown interrupt triggered. Accurate timekeeping starts now.");
+    Serial.println(F("1st countdown interrupt triggered. Accurate timekeeping starts now."));
     countdownInterruptTriggered = false; // don't come in here again
   } else if (countdownInterruptTriggered && numCountdownInterrupts == 2) {
-    Serial.println("2nd countdown interrupt triggered. Disabling countdown and detaching interrupt.\n\n");
+    Serial.println(F("2nd countdown interrupt triggered. Disabling countdown and detaching interrupt.\n\n"));
     rtc.disableCountdownTimer();
     detachInterrupt(digitalPinToInterrupt(timerInterruptPin));
     delay(2000);
 
 
-    Serial.println("Now, set up the PCF8523's 'Second Timer' to toggle the built-in LED at 1Hz...");
+    Serial.println(F("Now, set up the PCF8523's 'Second Timer' to toggle the built-in LED at 1Hz..."));
     attachInterrupt(digitalPinToInterrupt(timerInterruptPin), toggleLed, FALLING);
     rtc.enableSecondTimer();
-    Serial.println("Look for the built-in LED to flash 1 second ON, 1 second OFF, repeat. ");
-    Serial.println("Meanwhile this program will use delay() to block code execution briefly");
-    Serial.println("before moving on to the last example. Notice the LED keeps blinking!\n\n");
+    Serial.println(F("Look for the built-in LED to flash 1 second ON, 1 second OFF, repeat. "));
+    Serial.println(F("Meanwhile this program will use delay() to block code execution briefly"));
+    Serial.println(F("before moving on to the last example. Notice the LED keeps blinking!\n\n"));
     delay(20000); // less accurate, blocks execution here. Meanwhile Second Timer keeps running.
     rtc.disableSecondTimer();
     detachInterrupt(digitalPinToInterrupt(timerInterruptPin));
 
 
-    Serial.println("Lastly, set up a Countdown Timer that works without attaching an interrupt...");
+    Serial.println(F("Lastly, set up a Countdown Timer that works without attaching an interrupt..."));
     rtc.enableCountdownTimer(PCF8523_Frequency64Hz, 32, PCF8523_LowPulse8x64Hz);
-    Serial.println("Look for the LED to turn on every 1/2 second and stay lit for 1/8th of a second.");
-    Serial.println("The countdown was set to a source clock frequency of 64 Hz (1/64th of a second)");
-    Serial.println("for a length of 32 time periods. 32 * 1/64th of a second is 1/2 of a second.");
-    Serial.println("The low pulse duration was set to 125 ms, or 1/8th of a second.");
-    Serial.println("The loop() keeps the built-in LED set to the opposite state of the INT/SQW pin.");
+    Serial.println(F("Look for the LED to turn on every 1/2 second and stay lit for 1/8th of a second."));
+    Serial.println(F("The countdown was set to a source clock frequency of 64 Hz (1/64th of a second)"));
+    Serial.println(F("for a length of 32 time periods. 32 * 1/64th of a second is 1/2 of a second."));
+    Serial.println(F("The low pulse duration was set to 125 ms, or 1/8th of a second."));
+    Serial.println(F("The loop() keeps the built-in LED set to the opposite state of the INT/SQW pin."));
 
 
     countdownInterruptTriggered = false; // don't come in here again
