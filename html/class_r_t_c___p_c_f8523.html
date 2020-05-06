@@ -87,13 +87,32 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa2f261383ef95f88108405f5d7ae4e2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check control register 3 to see if we've run <a class="el" href="class_r_t_c___p_c_f8523.html#a58c717aba56f84fd4be51cdcf88fb470" title="Set the date and time, set battery switchover mode. ">adjust()</a> yet (setting the date/time and battery switchover mode)  <a href="#aa2f261383ef95f88108405f5d7ae4e2f">More...</a><br /></td></tr>
 <tr class="separator:aa2f261383ef95f88108405f5d7ae4e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8d6c49c65fa7b509f76380a33b282ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c">Pcf8523SqwPinMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#ae8d6c49c65fa7b509f76380a33b282ca">readSqwPinMode</a> ()</td></tr>
-<tr class="memdesc:ae8d6c49c65fa7b509f76380a33b282ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the mode of the SQW pin on the PCF8523.  <a href="#ae8d6c49c65fa7b509f76380a33b282ca">More...</a><br /></td></tr>
+<tr class="memdesc:ae8d6c49c65fa7b509f76380a33b282ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the mode of the INT/SQW pin on the PCF8523.  <a href="#ae8d6c49c65fa7b509f76380a33b282ca">More...</a><br /></td></tr>
 <tr class="separator:ae8d6c49c65fa7b509f76380a33b282ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afac1866e69541cfb93251dee683f0e63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#afac1866e69541cfb93251dee683f0e63">writeSqwPinMode</a> (<a class="el" href="_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c">Pcf8523SqwPinMode</a> mode)</td></tr>
-<tr class="memdesc:afac1866e69541cfb93251dee683f0e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the SQW pin mode on the PCF8523.  <a href="#afac1866e69541cfb93251dee683f0e63">More...</a><br /></td></tr>
+<tr class="memdesc:afac1866e69541cfb93251dee683f0e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the INT/SQW pin mode on the PCF8523.  <a href="#afac1866e69541cfb93251dee683f0e63">More...</a><br /></td></tr>
 <tr class="separator:afac1866e69541cfb93251dee683f0e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebd5623666c6809e747570fe4c36a4f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#aebd5623666c6809e747570fe4c36a4f3">enableSecondTimer</a> (void)</td></tr>
+<tr class="memdesc:aebd5623666c6809e747570fe4c36a4f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the Second Timer (1Hz) Interrupt on the PCF8523.  <a href="#aebd5623666c6809e747570fe4c36a4f3">More...</a><br /></td></tr>
+<tr class="separator:aebd5623666c6809e747570fe4c36a4f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6101663e87ffc018721c0a9a12107550"><td class="memItemLeft" align="right" valign="top"><a id="a6101663e87ffc018721c0a9a12107550"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a6101663e87ffc018721c0a9a12107550">disableSecondTimer</a> (void)</td></tr>
+<tr class="memdesc:a6101663e87ffc018721c0a9a12107550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the Second Timer (1Hz) Interrupt on the PCF8523. <br /></td></tr>
+<tr class="separator:a6101663e87ffc018721c0a9a12107550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54045d4b13deaa90aa7075c735a93634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a54045d4b13deaa90aa7075c735a93634">enableCountdownTimer</a> (<a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a> clkFreq, uint8_t numPeriods, uint8_t lowPulseWidth)</td></tr>
+<tr class="memdesc:a54045d4b13deaa90aa7075c735a93634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the Countdown Timer Interrupt on the PCF8523.  <a href="#a54045d4b13deaa90aa7075c735a93634">More...</a><br /></td></tr>
+<tr class="separator:a54045d4b13deaa90aa7075c735a93634"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f20e1ea2efc9c4b76e8d49534fa229"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#ac6f20e1ea2efc9c4b76e8d49534fa229">enableCountdownTimer</a> (<a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a> clkFreq, uint8_t numPeriods)</td></tr>
+<tr class="memdesc:ac6f20e1ea2efc9c4b76e8d49534fa229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Countdown Timer using default interrupt low pulse width.  <a href="#ac6f20e1ea2efc9c4b76e8d49534fa229">More...</a><br /></td></tr>
+<tr class="separator:ac6f20e1ea2efc9c4b76e8d49534fa229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f25e43db2c61ed164d4520c2a1a563b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a8f25e43db2c61ed164d4520c2a1a563b">disableCountdownTimer</a> (void)</td></tr>
+<tr class="memdesc:a8f25e43db2c61ed164d4520c2a1a563b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the Countdown Timer Interrupt on the PCF8523.  <a href="#a8f25e43db2c61ed164d4520c2a1a563b">More...</a><br /></td></tr>
+<tr class="separator:a8f25e43db2c61ed164d4520c2a1a563b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ef4eb0f08c838b2ca645d35dab79e78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a7ef4eb0f08c838b2ca645d35dab79e78">deconfigureAllTimers</a> (void)</td></tr>
+<tr class="memdesc:a7ef4eb0f08c838b2ca645d35dab79e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop all timers, clear their flags and settings on the PCF8523.  <a href="#a7ef4eb0f08c838b2ca645d35dab79e78">More...</a><br /></td></tr>
+<tr class="separator:a7ef4eb0f08c838b2ca645d35dab79e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">calibrate</a> (<a class="el" href="_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351f">Pcf8523OffsetMode</a> mode, int8_t offset)</td></tr>
-<tr class="memdesc:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use an offset to calibrate the PCF8523. This can be used for:  <a href="#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">More...</a><br /></td></tr>
+<tr class="memdesc:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use an offset to calibrate the PCF8523.  <a href="#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">More...</a><br /></td></tr>
 <tr class="separator:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -237,8 +256,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Read the mode of the SQW pin on the PCF8523. </p>
-<dl class="section return"><dt>Returns</dt><dd>SQW pin mode as a Pcf8523SqwPinMode enum </dd></dl>
+<p>Read the mode of the INT/SQW pin on the PCF8523. </p>
+<dl class="section return"><dt>Returns</dt><dd>SQW pin mode as a <a class="el" href="_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c">Pcf8523SqwPinMode</a> enum </dd></dl>
 
 </div>
 </div>
@@ -258,13 +277,161 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Set the SQW pin mode on the PCF8523. </p>
+<p>Set the INT/SQW pin mode on the PCF8523. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>The mode to set, see the Pcf8523SqwPinMode enum for options </td></tr>
+    <tr><td class="paramname">mode</td><td>The mode to set, see the <a class="el" href="_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c">Pcf8523SqwPinMode</a> enum for options </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aebd5623666c6809e747570fe4c36a4f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebd5623666c6809e747570fe4c36a4f3">&#9670;&nbsp;</a></span>enableSecondTimer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_PCF8523::enableSecondTimer </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable the Second Timer (1Hz) Interrupt on the PCF8523. </p>
+<p>The INT/SQW pin will pull low for a brief pulse once per second. </p>
+
+</div>
+</div>
+<a id="a54045d4b13deaa90aa7075c735a93634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54045d4b13deaa90aa7075c735a93634">&#9670;&nbsp;</a></span>enableCountdownTimer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_PCF8523::enableCountdownTimer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a>&#160;</td>
+          <td class="paramname"><em>clkFreq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numPeriods</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>lowPulseWidth</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable the Countdown Timer Interrupt on the PCF8523. </p>
+<p>The INT/SQW pin will be pulled low at the end of a specified countdown period ranging from 244 microseconds to 10.625 days. Uses PCF8523 Timer B. Any existing CLKOUT square wave, configured with <a class="el" href="class_r_t_c___p_c_f8523.html#afac1866e69541cfb93251dee683f0e63" title="Set the INT/SQW pin mode on the PCF8523. ">writeSqwPinMode()</a>, will halt. The interrupt low pulse width is adjustable from 3/64ths (default) to 14/64ths of a second. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clkFreq</td><td>One of the PCF8523's Timer Source Clock Frequencies. See the <a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a> enum for options and associated time ranges. </td></tr>
+    <tr><td class="paramname">numPeriods</td><td>The number of clkFreq periods (1-255) to count down. </td></tr>
+    <tr><td class="paramname">lowPulseWidth</td><td>Optional: the length of time for the interrupt pin low pulse. See the <a class="el" href="_r_t_clib_8h.html#a97f6a2ddb89ca74aaee6a64185ea67fb">PCF8523TimerIntPulse</a> enum for options. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac6f20e1ea2efc9c4b76e8d49534fa229"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6f20e1ea2efc9c4b76e8d49534fa229">&#9670;&nbsp;</a></span>enableCountdownTimer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_PCF8523::enableCountdownTimer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a>&#160;</td>
+          <td class="paramname"><em>clkFreq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>numPeriods</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable Countdown Timer using default interrupt low pulse width. </p>
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clkFreq</td><td>One of the PCF8523's Timer Source Clock Frequencies. See the <a class="el" href="_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05">PCF8523TimerClockFreq</a> enum for options and associated time ranges. </td></tr>
+    <tr><td class="paramname">numPeriods</td><td>The number of clkFreq periods (1-255) to count down. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f25e43db2c61ed164d4520c2a1a563b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f25e43db2c61ed164d4520c2a1a563b">&#9670;&nbsp;</a></span>disableCountdownTimer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_PCF8523::disableCountdownTimer </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Disable the Countdown Timer Interrupt on the PCF8523. </p>
+<p>For simplicity, this function strictly disables Timer B by setting TBC to 0. The datasheet describes TBC as the Timer B on/off switch. Timer B is the only countdown timer implemented at this time. The following flags have no effect while TBC is off, they are <em>not</em> cleared:</p><ul>
+<li>TBM: Timer B will still be set to pulsed mode.</li>
+<li>CTBIE: Timer B interrupt would be triggered if TBC were on.</li>
+<li>CTBF: Timer B flag indicates that interrupt was triggered. Though typically used for non-pulsed mode, user may wish to query this later. </li>
+</ul>
+
+</div>
+</div>
+<a id="a7ef4eb0f08c838b2ca645d35dab79e78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ef4eb0f08c838b2ca645d35dab79e78">&#9670;&nbsp;</a></span>deconfigureAllTimers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_PCF8523::deconfigureAllTimers </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stop all timers, clear their flags and settings on the PCF8523. </p>
+<p>This includes the Countdown Timer, Second Timer, and any CLKOUT square wave configured with <a class="el" href="class_r_t_c___p_c_f8523.html#afac1866e69541cfb93251dee683f0e63" title="Set the INT/SQW pin mode on the PCF8523. ">writeSqwPinMode()</a>. </p>
 
 </div>
 </div>
@@ -294,13 +461,13 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Use an offset to calibrate the PCF8523. This can be used for: </p>
-<ul>
+<p>Use an offset to calibrate the PCF8523. </p>
+<p>This can be used for:</p><ul>
 <li>Aging adjustment</li>
 <li>Temperature compensation</li>
 <li>Accuracy tuning <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>The offset mode to use, once every two hours or once every minute. See the Pcf8523OffsetMode enum. </td></tr>
+    <tr><td class="paramname">mode</td><td>The offset mode to use, once every two hours or once every minute. See the <a class="el" href="_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351f">Pcf8523OffsetMode</a> enum. </td></tr>
     <tr><td class="paramname">offset</td><td>Offset value from -64 to +63. See the datasheet for exact ppm values. </td></tr>
   </table>
   </dd>

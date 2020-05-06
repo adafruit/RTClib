@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['second',['second',['../class_date_time.html#adacdb3c0984bc73c2b48e5d1995a6c01',1,'DateTime']]],
-  ['seconds',['seconds',['../class_time_span.html#ad1860591ff7f8c021c6bbadcc6d9ec02',1,'TimeSpan']]],
-  ['seconds_5ffrom_5f1970_5fto_5f2000',['SECONDS_FROM_1970_TO_2000',['../_r_t_clib_8h.html#a1a4c3c6b78fa47471646f18b572ddd46',1,'RTClib.h']]],
-  ['seconds_5fper_5fday',['SECONDS_PER_DAY',['../_r_t_clib_8h.html#a427ffe4394306d962b8972b3bc952e1c',1,'RTClib.h']]],
-  ['secondstime',['secondstime',['../class_date_time.html#a15a271a5c566550e3feae2b9624430f0',1,'DateTime']]],
-  ['setalarm1',['setAlarm1',['../class_r_t_c___d_s3231.html#ad12211e56637221b0c6b956bfe764404',1,'RTC_DS3231']]],
-  ['setalarm2',['setAlarm2',['../class_r_t_c___d_s3231.html#a686299444985b8c36d12a7ce32c9add6',1,'RTC_DS3231']]],
-  ['ss',['ss',['../class_date_time.html#a38da3481e6355fcf8ceb4c57eb9db0ce',1,'DateTime']]]
+  ['readnvram',['readnvram',['../class_r_t_c___d_s1307.html#a8f4a3e283213c783130cc65e17903ec2',1,'RTC_DS1307::readnvram(uint8_t address)'],['../class_r_t_c___d_s1307.html#a78396f959fc306db28df2fcfb3ed6878',1,'RTC_DS1307::readnvram(uint8_t *buf, uint8_t size, uint8_t address)']]],
+  ['readsqwpinmode',['readSqwPinMode',['../class_r_t_c___d_s1307.html#ac2aee07ab819353d18f94a01a7a40da2',1,'RTC_DS1307::readSqwPinMode()'],['../class_r_t_c___d_s3231.html#a461204c0b4dec27b6a1e9ffedc148940',1,'RTC_DS3231::readSqwPinMode()'],['../class_r_t_c___p_c_f8523.html#ae8d6c49c65fa7b509f76380a33b282ca',1,'RTC_PCF8523::readSqwPinMode()']]],
+  ['rtc_5fds1307',['RTC_DS1307',['../class_r_t_c___d_s1307.html',1,'']]],
+  ['rtc_5fds3231',['RTC_DS3231',['../class_r_t_c___d_s3231.html',1,'']]],
+  ['rtc_5fmicros',['RTC_Micros',['../class_r_t_c___micros.html',1,'']]],
+  ['rtc_5fmillis',['RTC_Millis',['../class_r_t_c___millis.html',1,'']]],
+  ['rtc_5fpcf8523',['RTC_PCF8523',['../class_r_t_c___p_c_f8523.html',1,'']]],
+  ['rtclib_2ecpp',['RTClib.cpp',['../_r_t_clib_8cpp.html',1,'']]],
+  ['rtclib_2eh',['RTClib.h',['../_r_t_clib_8h.html',1,'']]]
 ];

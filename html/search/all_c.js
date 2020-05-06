@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['pcf8523_5faddress',['PCF8523_ADDRESS',['../_r_t_clib_8h.html#ad25274a8c8a482383c086226b505ec27',1,'RTClib.h']]],
-  ['pcf8523_5fclkoutcontrol',['PCF8523_CLKOUTCONTROL',['../_r_t_clib_8h.html#a67871d89f1920336a3236bc9242d9adc',1,'RTClib.h']]],
-  ['pcf8523_5fcontrol_5f3',['PCF8523_CONTROL_3',['../_r_t_clib_8h.html#ac7ccab90cfcb90f39c7ffee193e8aa5f',1,'RTClib.h']]],
-  ['pcf8523_5foffset',['PCF8523_OFFSET',['../_r_t_clib_8h.html#a5d912786bf7684920de9c17d2332b9be',1,'RTClib.h']]],
-  ['pcf8523_5fstatusreg',['PCF8523_STATUSREG',['../_r_t_clib_8h.html#afc73dd7806192e16dcae13315f88bfb4',1,'RTClib.h']]],
-  ['pcf8523offsetmode',['Pcf8523OffsetMode',['../_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351f',1,'RTClib.h']]],
-  ['pcf8523sqwpinmode',['Pcf8523SqwPinMode',['../_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c',1,'RTClib.h']]],
-  ['progmem',['PROGMEM',['../_r_t_clib_8cpp.html#a07f7414a12e65e2a192193542b7f13da',1,'RTClib.cpp']]]
+  ['operator_21_3d',['operator!=',['../class_date_time.html#aa64131ebd35cb40ed616b111ea501760',1,'DateTime']]],
+  ['operator_2b',['operator+',['../class_date_time.html#ae043350a8bfa362aabbc9f5ee658b4e6',1,'DateTime::operator+()'],['../class_time_span.html#af1dad98bdfcf07cf668e18509fbca8d4',1,'TimeSpan::operator+()']]],
+  ['operator_2d',['operator-',['../class_date_time.html#acbdcc7a6b55924552e72696d9e5bbb98',1,'DateTime::operator-(const TimeSpan &amp;span)'],['../class_date_time.html#a005fb6b5723a393da66e821a93cec5a5',1,'DateTime::operator-(const DateTime &amp;right)'],['../class_time_span.html#afe69b3603f24bcbeb16a20e5f97af79b',1,'TimeSpan::operator-()']]],
+  ['operator_3c',['operator&lt;',['../class_date_time.html#a6f1288d0205e97f86dfecfc7fd7b4e60',1,'DateTime']]],
+  ['operator_3c_3d',['operator&lt;=',['../class_date_time.html#af9da2ce38916caa365f24a38f5834b47',1,'DateTime']]],
+  ['operator_3d_3d',['operator==',['../class_date_time.html#a0c68b136471b6f8daf575ce399ca619c',1,'DateTime']]],
+  ['operator_3e',['operator&gt;',['../class_date_time.html#a0cbf838febb24c433bd517cbb75a3e8c',1,'DateTime']]],
+  ['operator_3e_3d',['operator&gt;=',['../class_date_time.html#a380536b7398afa1f7dcff9df9054fcbb',1,'DateTime']]]
 ];

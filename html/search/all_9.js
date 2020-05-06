@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['m',['m',['../class_date_time.html#a04c79ec05511462bc6a015e5b1088609',1,'DateTime']]],
-  ['microspersecond',['microsPerSecond',['../class_r_t_c___micros.html#a32eaa7a8966753129e6ab948e834bae1',1,'RTC_Micros']]],
-  ['minute',['minute',['../class_date_time.html#a8dac4d21cf40f1b6f1ec5973024709ed',1,'DateTime']]],
-  ['minutes',['minutes',['../class_time_span.html#ac6590f801d688a3fffff68df6707ed0b',1,'TimeSpan']]],
-  ['mm',['mm',['../class_date_time.html#af2cbffff9349832135c3280a18d21510',1,'DateTime']]],
-  ['month',['month',['../class_date_time.html#a10d35aa20ebb179cdb4b61f90dfcfe74',1,'DateTime']]]
+  ['lastmicros',['lastMicros',['../class_r_t_c___micros.html#acc3ad51cda73fd1b56c17f590322bf01',1,'RTC_Micros']]],
+  ['lastmillis',['lastMillis',['../class_r_t_c___millis.html#a3bff2877c276d3389ca26551aff56aed',1,'RTC_Millis']]],
+  ['lastunix',['lastUnix',['../class_r_t_c___millis.html#a0b1337ab8374f16ed4baa243781a2bcd',1,'RTC_Millis::lastUnix()'],['../class_r_t_c___micros.html#aea50e960ad63464f2817fab6188030d5',1,'RTC_Micros::lastUnix()']]],
+  ['lostpower',['lostPower',['../class_r_t_c___d_s3231.html#a097dc15a79ec077073969432b1abcb88',1,'RTC_DS3231::lostPower()'],['../class_r_t_c___p_c_f8523.html#a47962a5ca20578497496df2ee979ca43',1,'RTC_PCF8523::lostPower()']]]
 ];

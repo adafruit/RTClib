@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['now',['now',['../class_r_t_c___d_s1307.html#a9f5f5dbcce65b67e00b50808a45a4249',1,'RTC_DS1307::now()'],['../class_r_t_c___d_s3231.html#adc740b28876022b852e0f33842632fab',1,'RTC_DS3231::now()'],['../class_r_t_c___p_c_f8523.html#a5c61a02e752fd1f49fe17ed44f0506f9',1,'RTC_PCF8523::now()'],['../class_r_t_c___millis.html#aac263a7087f8603199eb45cdc7c3c146',1,'RTC_Millis::now()'],['../class_r_t_c___micros.html#a1fc42a118907796cc95af60ab243c5bd',1,'RTC_Micros::now()']]]
+  ['m',['m',['../class_date_time.html#a04c79ec05511462bc6a015e5b1088609',1,'DateTime']]],
+  ['microspersecond',['microsPerSecond',['../class_r_t_c___micros.html#a32eaa7a8966753129e6ab948e834bae1',1,'RTC_Micros']]],
+  ['minute',['minute',['../class_date_time.html#a8dac4d21cf40f1b6f1ec5973024709ed',1,'DateTime']]],
+  ['minutes',['minutes',['../class_time_span.html#ac6590f801d688a3fffff68df6707ed0b',1,'TimeSpan']]],
+  ['mm',['mm',['../class_date_time.html#af2cbffff9349832135c3280a18d21510',1,'DateTime']]],
+  ['month',['month',['../class_date_time.html#a10d35aa20ebb179cdb4b61f90dfcfe74',1,'DateTime']]]
 ];

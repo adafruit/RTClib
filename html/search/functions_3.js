@@ -4,5 +4,8 @@ var searchData=
   ['day',['day',['../class_date_time.html#a6e653eaef31e4956ee9bf67b4874a9a8',1,'DateTime']]],
   ['dayoftheweek',['dayOfTheWeek',['../class_date_time.html#a958229f0d6a46d092658028d25a9e65c',1,'DateTime']]],
   ['days',['days',['../class_time_span.html#a50f71a2e56d605b32b19ca86cce15d39',1,'TimeSpan']]],
-  ['disablealarm',['disableAlarm',['../class_r_t_c___d_s3231.html#a9f5191fed61fd8a4716572d43f300a5a',1,'RTC_DS3231']]]
+  ['deconfigurealltimers',['deconfigureAllTimers',['../class_r_t_c___p_c_f8523.html#a7ef4eb0f08c838b2ca645d35dab79e78',1,'RTC_PCF8523']]],
+  ['disablealarm',['disableAlarm',['../class_r_t_c___d_s3231.html#a9f5191fed61fd8a4716572d43f300a5a',1,'RTC_DS3231']]],
+  ['disablecountdowntimer',['disableCountdownTimer',['../class_r_t_c___p_c_f8523.html#a8f25e43db2c61ed164d4520c2a1a563b',1,'RTC_PCF8523']]],
+  ['disablesecondtimer',['disableSecondTimer',['../class_r_t_c___p_c_f8523.html#a6101663e87ffc018721c0a9a12107550',1,'RTC_PCF8523']]]
 ];
