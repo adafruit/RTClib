@@ -755,13 +755,16 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
 
 /**************************************************************************/
 /*!
-    @brief  Startup for the DS1307
-    @return Always true
+    @brief  Start I2C for the DS1307 and test succesful connection
+    @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
 boolean RTC_DS1307::begin(void) {
   Wire.begin();
-  return true;
+  Wire.beginTransmission(DS1307_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  return false;
 }
 
 /**************************************************************************/
@@ -995,13 +998,16 @@ DateTime RTC_Micros::now() {
 
 /**************************************************************************/
 /*!
-    @brief  Start using the PCF8523
-    @return True
+    @brief  Start I2C for the PCF8523 and test succesful connection
+    @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
 boolean RTC_PCF8523::begin(void) {
   Wire.begin();
-  return true;
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  return false;
 }
 
 /**************************************************************************/
