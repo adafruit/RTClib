@@ -75,7 +75,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a330980156bc1716fbaa04f2fbb3c6648"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a330980156bc1716fbaa04f2fbb3c6648">begin</a> (void)</td></tr>
-<tr class="memdesc:a330980156bc1716fbaa04f2fbb3c6648"><td class="mdescLeft">&#160;</td><td class="mdescRight">Startup for the DS1307.  <a href="#a330980156bc1716fbaa04f2fbb3c6648">More...</a><br /></td></tr>
+<tr class="memdesc:a330980156bc1716fbaa04f2fbb3c6648"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start I2C for the DS1307 and test succesful connection.  <a href="#a330980156bc1716fbaa04f2fbb3c6648">More...</a><br /></td></tr>
 <tr class="separator:a330980156bc1716fbaa04f2fbb3c6648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ec6f600f705edfef43bd798dce9946f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a0ec6f600f705edfef43bd798dce9946f">isrunning</a> (void)</td></tr>
 <tr class="memdesc:a0ec6f600f705edfef43bd798dce9946f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the DS1307 running? Check the Clock Halt bit in register 0.  <a href="#a0ec6f600f705edfef43bd798dce9946f">More...</a><br /></td></tr>
@@ -127,8 +127,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Startup for the DS1307. </p>
-<dl class="section return"><dt>Returns</dt><dd>Always true </dd></dl>
+<p>Start I2C for the DS1307 and test succesful connection. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if Wire can find DS1307 or false otherwise. </dd></dl>
 
 </div>
 </div>
