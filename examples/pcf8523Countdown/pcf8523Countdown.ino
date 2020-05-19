@@ -41,8 +41,8 @@ void setup () {
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
-    Serial.flush(); // ensure above text prints with nRF52 native USB Serial
-    while (1);
+    Serial.flush();
+    abort();
   }
 
   pinMode(LED_BUILTIN, OUTPUT);
