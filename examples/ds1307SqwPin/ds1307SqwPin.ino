@@ -44,7 +44,8 @@ void setup () {
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
-    while (1);
+    Serial.flush();
+    abort();
   }
 
   print_mode();
