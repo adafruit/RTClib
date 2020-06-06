@@ -1525,9 +1525,9 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 /**************************************************************************/
 void RTC_DS3231::enable32K(void) {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
-  status |= (0x1 << 3);
+  status |= (0x1 << 0x03);
   write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
-  //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
 }
 
 /**************************************************************************/
@@ -1537,9 +1537,9 @@ void RTC_DS3231::enable32K(void) {
 /**************************************************************************/
 void RTC_DS3231::disable32K(void) {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
-  status &= ~(0x1 << 3);
+  status &= ~(0x1 << 0x03);
   write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
-  //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
 }
 
 /**************************************************************************/
@@ -1550,5 +1550,5 @@ void RTC_DS3231::disable32K(void) {
 /**************************************************************************/
 bool RTC_DS3231::status32K(void) {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
-  return (status >> (uint8_t) 0x03) & 0x1;
+  return (status >> 0x03) & 0x1;
 }
