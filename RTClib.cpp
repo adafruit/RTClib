@@ -1517,3 +1517,38 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
   return (status >> (alarm_num - 1)) & 0x1;
 }
+
+/**************************************************************************/
+/*!
+    @brief  Enable 32KHz Output
+        @param 	None
+/**************************************************************************/
+void RTC_DS3231::enable32K(void) {
+  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  status |= (0x1 << 3);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
+  //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable 32KHz Output
+        @param 	None
+/**************************************************************************/
+void RTC_DS3231::disable32K(void) {
+  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  status &= ~(0x1 << 3);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
+  //Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get status of 32KHz Output
+        @return True if enabled otherwise false
+*/
+/**************************************************************************/
+bool RTC_DS3231::status32K(void) {
+  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  return (status >> (uint8_t) 0x03) & 0x1;
+}
