@@ -1521,6 +1521,8 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 /**************************************************************************/
 /*!
     @brief  Enable 32KHz Output
+    @details The 32kHz output is enabled by default. It requires an external
+    pull-up resistor to function correctly
 */
 /**************************************************************************/
 void RTC_DS3231::enable32K(void) {
@@ -1548,7 +1550,7 @@ void RTC_DS3231::disable32K(void) {
     @return True if enabled otherwise false
 */
 /**************************************************************************/
-bool RTC_DS3231::status32K(void) {
+bool RTC_DS3231::isEnabled32K(void) {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
   return (status >> 0x03) & 0x1;
 }
