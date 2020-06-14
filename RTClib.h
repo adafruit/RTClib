@@ -58,6 +58,9 @@ class TimeSpan;
 #define SECONDS_FROM_1970_TO_2000                                              \
   946684800 ///< Unixtime for 2000-01-01 00:00:00, useful for initialization
 
+// bit pattern for disabling the CLKOUT function
+#define PCF8523_CLKOUT_DIS ((0x7) << 3)
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -410,9 +413,6 @@ const Pcf8523TimerDetails timer_details_table[] = {
   // Timer B
   { PCF8523_CLKOUTCONTROL, bit(0), bit(0), PCF8523_TIMER_B_VALUE, PCF8523_TIMER_B_FREQ, PCF8523_CONTROL_2, bit(5), bit(0) }
 };
-
-// bit pattern for disabling the CLKOUT function
-#define CLKOUT_DIS ((0x7) << 3)
 
 /**************************************************************************/
 /*!

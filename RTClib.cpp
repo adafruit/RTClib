@@ -1357,7 +1357,7 @@ void RTC_PCF8523::write_timer(Pcf8523Timer timer, Pcf8523TimerState *src) {
     // turn off the CLKOUT function if the interrupt is enabled,
     // enable the timer
     if (src->irupt_state.irupt_enabled) {
-      clkout_ctrl |= CLKOUT_DIS;
+      clkout_ctrl |= PCF8523_CLKOUT_DIS;
     }
     clkout_ctrl |= details->timer_en_mask;
 
