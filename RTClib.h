@@ -402,7 +402,7 @@ typedef struct {
 } Pcf8523TimerDetails;
 
 /* look-up table for each timer, in enumerated order */
-Pcf8523TimerDetails timer_details_table[] = {
+const Pcf8523TimerDetails timer_details_table[] = {
   // Timer A
   { PCF8523_CLKOUTCONTROL, bit(1), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(6), bit(1) },
   // WDT A

@@ -1271,6 +1271,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 #define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)
 #define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val)
 
+extern const Pcf8523TimerDetails timer_details_table[];
 
 /**************************************************************************/
 /*!
@@ -1283,7 +1284,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 void RTC_PCF8523::read_irupt(Pcf8523Timer irupt, Pcf8523IruptState *dest) {
   /* read the interrupt's register fields into the struct */
 
-  Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
+  const Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
 
   const uint8_t irupt_reg = read_PCF8523_register(timer_details->irupt_control_register);
 
@@ -1302,7 +1303,7 @@ void RTC_PCF8523::read_irupt(Pcf8523Timer irupt, Pcf8523IruptState *dest) {
 void RTC_PCF8523::write_irupt(Pcf8523Timer irupt, Pcf8523IruptState *src) {
   /* write the given interrupt into its register fields */
 
-  Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
+  const Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
 
   uint8_t irupt_reg = read_PCF8523_register(timer_details->irupt_control_register);
 
@@ -1335,7 +1336,7 @@ void RTC_PCF8523::write_irupt(Pcf8523Timer irupt, Pcf8523IruptState *src) {
 void RTC_PCF8523::write_timer(Pcf8523Timer timer, Pcf8523TimerState *src) {
   /* setup the given timer in TimerState src */
 
-  Pcf8523TimerDetails *details = &(timer_details_table[timer]);
+  const Pcf8523TimerDetails *details = &(timer_details_table[timer]);
 
   // turn off the timer before changing values
   uint8_t clkout_ctrl = read_PCF8523_register(details->timer_en_register);
@@ -1375,7 +1376,7 @@ void RTC_PCF8523::write_timer(Pcf8523Timer timer, Pcf8523TimerState *src) {
 void RTC_PCF8523::read_timer(Pcf8523Timer timer, Pcf8523TimerState *dest) {
   /* return the timer contents into TimerState */
 
-  Pcf8523TimerDetails *details = &(timer_details_table[timer]);
+  const Pcf8523TimerDetails *details = &(timer_details_table[timer]);
 
   // retrieve the timer enabled bit
   uint8_t clkout_ctrl = read_PCF8523_register(details->timer_en_register);
