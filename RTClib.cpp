@@ -1268,8 +1268,8 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
   Wire.endTransmission();
 }
 
-#define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)
-#define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val)
+#define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)             ///< Reads the register (reg), with the PCF address given to i2c
+#define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val) ///< Writes the register with a value (reg, value), with the PCF address given to i2c
 
 extern const Pcf8523TimerDetails timer_details_table[];
 

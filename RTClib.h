@@ -58,8 +58,7 @@ class TimeSpan;
 #define SECONDS_FROM_1970_TO_2000                                              \
   946684800 ///< Unixtime for 2000-01-01 00:00:00, useful for initialization
 
-// bit pattern for disabling the CLKOUT function
-#define PCF8523_CLKOUT_DIS ((0x7) << 3)
+#define PCF8523_CLKOUT_DIS ((0x7) << 3) ///< bit pattern for disabling the CLKOUT function
 
 /**************************************************************************/
 /*!
@@ -358,60 +357,51 @@ enum Pcf8523OffsetMode {
 
 /** Clock division frequencies for PCF8523 timers, in hardware order */
 enum Pcf8523FrequencyDivision {
-  PCF8523_Freq_4kHz,   // 4.096kHz divider
-  PCF8523_Freq_64Hz,   // 64Hz divider
-  PCF8523_Freq_second, // 1Hz (one second) divider
-  PCF8523_Freq_minute, // 1/60Hz (one minute) divider
-  PCF8523_Freq_hour    // 1/3600Hz (one hour) divider
+  PCF8523_Freq_4kHz,   ///< 4.096kHz divider
+  PCF8523_Freq_64Hz,   ///< 64Hz divider
+  PCF8523_Freq_second, ///< 1Hz (one second) divider
+  PCF8523_Freq_minute, ///< 1/60Hz (one minute) divider
+  PCF8523_Freq_hour    ///< 1/3600Hz (one hour) divider
 };
 
 /** Timers and interrupts that can be set or read */
 enum Pcf8523Timer {
-  PCF8523_Timer_Countdown_A,
-  PCF8523_Timer_WDT_A,
-  PCF8523_Timer_Countdown_B
+  PCF8523_Timer_Countdown_A, ///< Timer A, countdown mode
+  PCF8523_Timer_WDT_A,       ///< Timer A, watchdog timer mode
+  PCF8523_Timer_Countdown_B  ///< Timer B (countdown mode)
 };
 
 /** Current state of an interrupt */
 typedef struct {
-  /** whether the timer has gone off */
-  bool irupt_flag;
-  /** whether the flag state is tied to the interrupt pin state */
-  bool irupt_enabled;
+  bool irupt_flag;     ///< whether the timer has gone off
+  bool irupt_enabled;  ///< whether the flag state is tied to the interrupt pin state
 } Pcf8523IruptState;
 
 /** Current state of a timer */
 typedef struct {
-  /** whether the timer is running */
-  bool enabled;
-  /** the current value of the timer */
-  uint8_t value;
-  /** the clock divider used */
-  Pcf8523FrequencyDivision freq;
-  /** the timer's interrupt state */
-  Pcf8523IruptState irupt_state;
+  bool enabled;   ///< whether the timer is running
+  uint8_t value;  ///< the current value of the timer
+  Pcf8523FrequencyDivision freq;  ///< the clock divider used
+  Pcf8523IruptState irupt_state;  ///< the timer's interrupt state
 } Pcf8523TimerState;
 
-/* registers and masks for interacting with a timer */
+/** registers and masks for interacting with a timer */
 typedef struct {
-  uint8_t timer_en_register;      // timer enable register
-  uint8_t timer_en_mask;          // enable bit mask
-  uint8_t timer_dis_mask;         // timer disable bit mask
-  uint8_t timer_value_register;   // timer value register
-  uint8_t timer_freq_register;    // timer frequency register
-  uint8_t irupt_control_register; // interrupt control register
-  uint8_t irupt_flag_mask;        // flag bit mask
-  uint8_t irupt_en_mask;          // interrupt enable bit mask
+  uint8_t timer_en_register;      ///< timer enable register
+  uint8_t timer_en_mask;          ///< enable bit mask
+  uint8_t timer_dis_mask;         ///< timer disable bit mask
+  uint8_t timer_value_register;   ///< timer value register
+  uint8_t timer_freq_register;    ///< timer frequency register
+  uint8_t irupt_control_register; ///< interrupt control register
+  uint8_t irupt_flag_mask;        ///< flag bit mask
+  uint8_t irupt_en_mask;          ///< interrupt enable bit mask
 } Pcf8523TimerDetails;
 
-/* look-up table for each timer, in enumerated order */
+/** look-up table for each timer, in enumerated order */
 const Pcf8523TimerDetails timer_details_table[] = {
-  // Timer A
-  { PCF8523_CLKOUTCONTROL, bit(1), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(6), bit(1) },
-  // WDT A
-  { PCF8523_CLKOUTCONTROL, bit(2), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(7), bit(2) },
-  // Timer B
-  { PCF8523_CLKOUTCONTROL, bit(0), bit(0), PCF8523_TIMER_B_VALUE, PCF8523_TIMER_B_FREQ, PCF8523_CONTROL_2, bit(5), bit(0) }
+  { PCF8523_CLKOUTCONTROL, bit(1), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(6), bit(1) }, /**< Timer A */
+  { PCF8523_CLKOUTCONTROL, bit(2), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(7), bit(2) }, /**< WDT A */
+  { PCF8523_CLKOUTCONTROL, bit(0), bit(0), PCF8523_TIMER_B_VALUE, PCF8523_TIMER_B_FREQ, PCF8523_CONTROL_2, bit(5), bit(0) }             /**< Timer B */
 };
 
 /**************************************************************************/
