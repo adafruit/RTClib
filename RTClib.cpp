@@ -1271,30 +1271,6 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 #define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)
 #define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val)
 
-/* registers and masks for interacting with a timer */
-typedef struct {
-  uint8_t timer_en_register;      // timer enable register
-  uint8_t timer_en_mask;          // enable bit mask
-  uint8_t timer_dis_mask;         // timer disable bit mask
-  uint8_t timer_value_register;   // timer value register
-  uint8_t timer_freq_register;    // timer frequency register
-  uint8_t irupt_control_register; // interrupt control register
-  uint8_t irupt_flag_mask;        // flag bit mask
-  uint8_t irupt_en_mask;          // interrupt enable bit mask
-} Pcf8523TimerDetails;
-
-/* look-up table for each timer, in enumerated order */
-Pcf8523TimerDetails timer_details_table[] = {
-  // Timer A
-  { PCF8523_CLKOUTCONTROL, bit(1), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(6), bit(1) },
-  // WDT A
-  { PCF8523_CLKOUTCONTROL, bit(2), (bit(1) | bit(2)), PCF8523_TIMER_A_VALUE, PCF8523_TIMER_A_FREQ, PCF8523_CONTROL_2, bit(7), bit(2) },
-  // Timer B
-  { PCF8523_CLKOUTCONTROL, bit(0), bit(0), PCF8523_TIMER_B_VALUE, PCF8523_TIMER_B_FREQ, PCF8523_CONTROL_2, bit(5), bit(0) }
-};
-
-// bit pattern for disabling the CLKOUT function
-#define CLKOUT_DIS ((0x7) << 3)
 
 /**************************************************************************/
 /*!
