@@ -355,15 +355,6 @@ enum Pcf8523OffsetMode {
   PCF8523_OneMinute = 0x80 /**< Offset made every minute */
 };
 
-/** Clock division frequencies for PCF8523 timers, in hardware order */
-enum Pcf8523FrequencyDivision {
-  PCF8523_Freq_4kHz,   ///< 4.096kHz divider
-  PCF8523_Freq_64Hz,   ///< 64Hz divider
-  PCF8523_Freq_second, ///< 1Hz (one second) divider
-  PCF8523_Freq_minute, ///< 1/60Hz (one minute) divider
-  PCF8523_Freq_hour    ///< 1/3600Hz (one hour) divider
-};
-
 /** Timers and interrupts that can be set or read */
 enum Pcf8523Timer {
   PCF8523_Timer_Countdown_A, ///< Timer A, countdown mode
@@ -381,7 +372,7 @@ typedef struct {
 typedef struct {
   bool enabled;   ///< whether the timer is running
   uint8_t value;  ///< the current value of the timer
-  Pcf8523FrequencyDivision freq;  ///< the clock divider used
+  PCF8523TimerClockFreq freq;     ///< the clock divider used
   Pcf8523IruptState irupt_state;  ///< the timer's interrupt state
 } Pcf8523TimerState;
 

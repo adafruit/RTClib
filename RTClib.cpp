@@ -1383,7 +1383,7 @@ void RTC_PCF8523::read_timer(Pcf8523Timer timer, Pcf8523TimerState *dest) {
   dest->enabled = clkout_ctrl & details->timer_en_mask;
 
   // retrieve the frequency scalar from the timer's register
-  dest->freq = (Pcf8523FrequencyDivision) read_PCF8523_register(details->timer_freq_register);
+  dest->freq = (PCF8523TimerClockFreq) read_PCF8523_register(details->timer_freq_register);
 
   // retrieve the timer value from the timer's register
   dest->value = read_PCF8523_register(details->timer_value_register);

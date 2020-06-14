@@ -40,7 +40,7 @@ void setup () {
 
   state.enabled = true;
   state.value = 10;
-  state.freq = PCF8523_Freq_second;
+  state.freq = PCF8523_FrequencySecond;
   state.irupt_state.irupt_flag = false;
   state.irupt_state.irupt_enabled = true;
 
