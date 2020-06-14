@@ -1268,7 +1268,6 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
   Wire.endTransmission();
 }
 
-#define bit(x) (1 << (x))
 #define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)
 #define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val)
 
