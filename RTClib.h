@@ -367,13 +367,30 @@ typedef struct {
   bool irupt_enabled;  ///< whether the flag state is tied to the interrupt pin state
 } Pcf8523IruptState;
 
-/** Current state of a timer */
-typedef struct {
+/**************************************************************************/
+/*!
+    @brief  Current state of a timer
+
+    This class can be read from or written into the RTC. An update can be done
+    by reading, modifying, and then writing.
+
+    This class stores basic information in its public members about the timer
+    and its interrupt status: its countdown value and frequency, whether it is
+    running (enabled); its interrupt flag, and whether the interrupt is set to
+    drive associated pins.
+*/
+/**************************************************************************/
+class Pcf8523TimerState {
+public:
+  Pcf8523TimerState(uint8_t timer_value, PCF8523TimerClockFreq timer_freq, bool timer_enabled, bool irupt_flag, bool irupt_signal_enabled);
+  Pcf8523TimerState(const Pcf8523TimerState &copy);
+
   bool enabled;   ///< whether the timer is running
   uint8_t value;  ///< the current value of the timer
   PCF8523TimerClockFreq freq;     ///< the clock divider used
-  Pcf8523IruptState irupt_state;  ///< the timer's interrupt state
-} Pcf8523TimerState;
+  bool irupt_flag;                ///< the interrupt flag
+  bool irupt_enabled;             ///< the interrupt signal enable
+};
 
 /** registers and masks for interacting with a timer */
 typedef struct {
@@ -417,8 +434,9 @@ public:
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 
-  void write_timer(Pcf8523Timer timer, Pcf8523TimerState *src);
-  void read_timer(Pcf8523Timer timer, Pcf8523TimerState *dest);
+  void write_timer(Pcf8523Timer timer, const Pcf8523TimerState &src);
+  Pcf8523TimerState read_timer(Pcf8523Timer timer);
+
   void write_irupt(Pcf8523Timer irupt, Pcf8523IruptState *src);
   void read_irupt(Pcf8523Timer irupt, Pcf8523IruptState *dest);
 };
