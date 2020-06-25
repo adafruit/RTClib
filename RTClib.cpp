@@ -369,6 +369,36 @@ DateTime::DateTime(const __FlashStringHelper *date,
 
 /**************************************************************************/
 /*!
+    @brief  Constructor for creating a DateTime from an ISO8601 date string
+
+    This constructor expects its parameters to be a string in the 
+    https://en.wikipedia.org/wiki/ISO_8601 format, e.g:
+
+    "2020-06-25T15:29:37"
+
+	The year must be > 2000, as only the offset is considered.
+
+    Usage:
+
+    ```
+    DateTime dt("2020-06-25T15:29:37");
+    ```
+
+*/
+/**************************************************************************/
+DateTime::DateTime(const char *iso8601date) {
+  yOff = conv2d(iso8601date + 2);
+  m    = conv2d(iso8601date + 5);
+  d    = conv2d(iso8601date + 8);
+  hh   = conv2d(iso8601date + 11);
+  mm   = conv2d(iso8601date + 14);
+  ss   = conv2d(iso8601date + 17);
+}
+
+
+
+/**************************************************************************/
+/*!
     @brief  Check whether this DateTime is valid.
     @return true if valid, false if not.
 */
