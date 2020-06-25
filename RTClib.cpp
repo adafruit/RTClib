@@ -369,7 +369,7 @@ DateTime::DateTime(const __FlashStringHelper *date,
 
 /**************************************************************************/
 /*!
-    @brief  Constructor for creating a DateTime from an ISO8601 date string
+    @brief  Constructor for creating a DateTime from an ISO8601 date string.
 
     This constructor expects its parameters to be a string in the
     https://en.wikipedia.org/wiki/ISO_8601 format, e.g:
@@ -384,8 +384,9 @@ DateTime::DateTime(const __FlashStringHelper *date,
 
     @note The year must be > 2000, as only the yOff is considered.
 
-    @param iso8601date a datetime string in iso8601 format,
-                e.g. "2020-06-25T15:29:37".
+    @param iso8601date
+           A datetime string in iso8601 format,
+           e.g. "2020-06-25T15:29:37".
 
 */
 /**************************************************************************/
