@@ -376,13 +376,16 @@ DateTime::DateTime(const __FlashStringHelper *date,
 
     "2020-06-25T15:29:37"
 
-        The year must be > 2000, as only the offset is considered.
-
     Usage:
 
     ```
     DateTime dt("2020-06-25T15:29:37");
     ```
+
+    @note The year must be > 2000, as only the yOff is considered.
+
+    @param iso8601date a datetime string in iso8601 format,
+                e.g. "2020-06-25T15:29:37".
 
 */
 /**************************************************************************/
