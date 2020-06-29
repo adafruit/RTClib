@@ -392,7 +392,7 @@ DateTime::DateTime(const __FlashStringHelper *date,
 /**************************************************************************/
 DateTime::DateTime(const char *iso8601dateTime) {
   char ref[] = "2000-01-01T00:00:00";
-  memcpy(ref, iso8601dateTime, strlen(ref));
+  memcpy(ref, iso8601dateTime, min(strlen(ref), strlen(iso8601dateTime)));
   yOff = conv2d(ref + 2);
   m = conv2d(ref + 5);
   d = conv2d(ref + 8);
