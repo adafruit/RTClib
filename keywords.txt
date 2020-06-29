@@ -68,6 +68,9 @@ enableCountdownTimer	KEYWORD2
 disableCountdownTimer	KEYWORD2
 deconfigureAllTimers	KEYWORD2
 calibrate	KEYWORD2
+enable32K   KEYWORD2
+disable32K    KEYWORD2
+isEnabled32K    KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

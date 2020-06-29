@@ -307,6 +307,9 @@ public:
   void disableAlarm(uint8_t alarm_num);
   void clearAlarm(uint8_t alarm_num);
   bool alarmFired(uint8_t alarm_num);
+  void enable32K(void);
+  void disable32K(void);
+  bool isEnabled32K(void);
   static float getTemperature(); // in Celcius degree
 };
 
