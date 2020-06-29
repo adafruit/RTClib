@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a75e22d94bd5ab883ec56e6581e04a2d7">DateTime</a> (const __FlashStringHelper *date, const __FlashStringHelper *time)</td></tr>
 <tr class="memdesc:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory friendly constructor for generating the build time.  <a href="#a75e22d94bd5ab883ec56e6581e04a2d7">More...</a><br /></td></tr>
 <tr class="separator:a75e22d94bd5ab883ec56e6581e04a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6093674ec825488817cd7576e46213da"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a6093674ec825488817cd7576e46213da">DateTime</a> (const char *iso8601date)</td></tr>
+<tr class="memdesc:a6093674ec825488817cd7576e46213da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for creating a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> from an ISO8601 date string.  <a href="#a6093674ec825488817cd7576e46213da">More...</a><br /></td></tr>
+<tr class="separator:a6093674ec825488817cd7576e46213da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a21b2a59fbde555e5c5688d44e9d95aec">isValid</a> () const</td></tr>
 <tr class="memdesc:a21b2a59fbde555e5c5688d44e9d95aec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether this <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is valid.  <a href="#a21b2a59fbde555e5c5688d44e9d95aec">More...</a><br /></td></tr>
 <tr class="separator:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,7 +228,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af221f098098c80edfcd71fbc256f457a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af221f098098c80edfcd71fbc256f457a">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[1/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af221f098098c80edfcd71fbc256f457a">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,7 +261,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <a id="aad62a6709a1e65e6860b1efaf8c347e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad62a6709a1e65e6860b1efaf8c347e9">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[2/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aad62a6709a1e65e6860b1efaf8c347e9">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,7 +326,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <a id="a50502a3a29409c6c2507638779df1a9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50502a3a29409c6c2507638779df1a9d">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[3/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a50502a3a29409c6c2507638779df1a9d">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -349,7 +352,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <a id="aabeb5303c98a004439fe337bb5f5da63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabeb5303c98a004439fe337bb5f5da63">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[4/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aabeb5303c98a004439fe337bb5f5da63">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,7 +391,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </div>
 </div>
 <a id="a75e22d94bd5ab883ec56e6581e04a2d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75e22d94bd5ab883ec56e6581e04a2d7">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[5/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e22d94bd5ab883ec56e6581e04a2d7">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,6 +422,36 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
   <table class="params">
     <tr><td class="paramname">date</td><td>Date PROGMEM string, e.g. F("Apr 16 2020"). </td></tr>
     <tr><td class="paramname">time</td><td>Time PROGMEM string, e.g. F("18:34:56"). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6093674ec825488817cd7576e46213da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6093674ec825488817cd7576e46213da">&#9670;&nbsp;</a></span>DateTime() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DateTime::DateTime </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>iso8601dateTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for creating a <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> from an ISO8601 date string. </p>
+<p>This constructor expects its parameters to be a string in the <a href="https://en.wikipedia.org/wiki/ISO_8601">https://en.wikipedia.org/wiki/ISO_8601</a> format, e.g:</p>
+<p>"2020-06-25T15:29:37"</p>
+<p>Usage:</p>
+<div class="fragment"><div class="line"><a class="code" href="class_date_time.html">DateTime</a> dt(<span class="stringliteral">&quot;2020-06-25T15:29:37&quot;</span>);</div></div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>The year must be &gt; 2000, as only the yOff is considered.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iso8601dateTime</td><td>A dateTime string in iso8601 format, e.g. "2020-06-25T15:29:37". </td></tr>
   </table>
   </dd>
 </dl>
