@@ -95,6 +95,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5d9b443a5c3cd574a30e22f3c5f272a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a5d9b443a5c3cd574a30e22f3c5f272a1">alarmFired</a> (uint8_t alarm_num)</td></tr>
 <tr class="memdesc:a5d9b443a5c3cd574a30e22f3c5f272a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get status of alarm.  <a href="#a5d9b443a5c3cd574a30e22f3c5f272a1">More...</a><br /></td></tr>
 <tr class="separator:a5d9b443a5c3cd574a30e22f3c5f272a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab20d003e8bb8714c48cb3d06fdd7cecc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#ab20d003e8bb8714c48cb3d06fdd7cecc">enable32K</a> (void)</td></tr>
+<tr class="memdesc:ab20d003e8bb8714c48cb3d06fdd7cecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable 32KHz Output.  <a href="#ab20d003e8bb8714c48cb3d06fdd7cecc">More...</a><br /></td></tr>
+<tr class="separator:ab20d003e8bb8714c48cb3d06fdd7cecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68799885fdc7b5b9958b579376eb23a7"><td class="memItemLeft" align="right" valign="top"><a id="a68799885fdc7b5b9958b579376eb23a7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a68799885fdc7b5b9958b579376eb23a7">disable32K</a> (void)</td></tr>
+<tr class="memdesc:a68799885fdc7b5b9958b579376eb23a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable 32KHz Output. <br /></td></tr>
+<tr class="separator:a68799885fdc7b5b9958b579376eb23a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada935a4541328b627b4dbba95fa133c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#ada935a4541328b627b4dbba95fa133c8">isEnabled32K</a> (void)</td></tr>
+<tr class="memdesc:ada935a4541328b627b4dbba95fa133c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get status of 32KHz Output.  <a href="#ada935a4541328b627b4dbba95fa133c8">More...</a><br /></td></tr>
+<tr class="separator:ada935a4541328b627b4dbba95fa133c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -435,6 +445,48 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if alarm has been fired otherwise false </dd></dl>
+
+</div>
+</div>
+<a id="ab20d003e8bb8714c48cb3d06fdd7cecc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab20d003e8bb8714c48cb3d06fdd7cecc">&#9670;&nbsp;</a></span>enable32K()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RTC_DS3231::enable32K </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable 32KHz Output. </p>
+<p>The 32kHz output is enabled by default. It requires an external pull-up resistor to function correctly </p>
+
+</div>
+</div>
+<a id="ada935a4541328b627b4dbba95fa133c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada935a4541328b627b4dbba95fa133c8">&#9670;&nbsp;</a></span>isEnabled32K()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RTC_DS3231::isEnabled32K </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get status of 32KHz Output. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if enabled otherwise false </dd></dl>
 
 </div>
 </div>
