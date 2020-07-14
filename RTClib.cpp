@@ -1131,8 +1131,7 @@ DateTime RTC_PCF8523::now() {
 /**************************************************************************/
 void RTC_PCF8523::start(void) {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
-  if (ctlreg & (1<<5))
-  {
+  if (ctlreg & (1 << 5)) {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5));
   }
 }
@@ -1144,8 +1143,7 @@ void RTC_PCF8523::start(void) {
 /**************************************************************************/
 void RTC_PCF8523::stop(void) {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
-  if (!(ctlreg & (1<<5)))
-  {
+  if (!(ctlreg & (1 << 5))) {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5));
   }
 }
