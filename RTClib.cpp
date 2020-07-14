@@ -1129,10 +1129,9 @@ DateTime RTC_PCF8523::now() {
     @brief  Resets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8523::start(void)
-{
+void RTC_PCF8523::start(void) {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
-  if(ctlreg & (1<<5))
+  if (ctlreg & (1<<5))
   {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5));
   }
@@ -1143,10 +1142,9 @@ void RTC_PCF8523::start(void)
     @brief  Sets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8523::stop(void)
-{
+void RTC_PCF8523::stop(void) {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
-  if(!(ctlreg & (1<<5)))
+  if (!(ctlreg & (1<<5)))
   {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5));
   }
@@ -1158,8 +1156,7 @@ void RTC_PCF8523::stop(void)
     @return 1 if the RTC is running, 0 if not
 */
 /**************************************************************************/
-uint8_t RTC_PCF8523::isrunning()
-{
+uint8_t RTC_PCF8523::isrunning() {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
   return !((ctlreg >> 5) & 1);
 }
