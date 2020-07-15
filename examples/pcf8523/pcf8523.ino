@@ -39,6 +39,11 @@ void setup () {
   // This line sets the RTC with an explicit date & time, for example to set
   // January 21, 2014 at 3am you would call:
   // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+
+  // When the RTC was stopped and stays connected to the battery, it has
+  // to be restarted by clearing the STOP bit. Let's do this to ensure
+  // the RTC is running.
+  rtc.start();
 }
 
 void loop () {

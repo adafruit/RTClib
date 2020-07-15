@@ -366,6 +366,9 @@ public:
   boolean lostPower(void);
   boolean initialized(void);
   static DateTime now();
+  void start(void);
+  void stop(void);
+  uint8_t isrunning();
   Pcf8523SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
   void enableSecondTimer(void);

@@ -1126,6 +1126,41 @@ DateTime RTC_PCF8523::now() {
 
 /**************************************************************************/
 /*!
+    @brief  Resets the STOP bit in register Control_1
+*/
+/**************************************************************************/
+void RTC_PCF8523::start(void) {
+  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  if (ctlreg & (1 << 5)) {
+    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5));
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Sets the STOP bit in register Control_1
+*/
+/**************************************************************************/
+void RTC_PCF8523::stop(void) {
+  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  if (!(ctlreg & (1 << 5))) {
+    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5));
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Is the PCF8523 running? Check the STOP bit in register Control_1
+    @return 1 if the RTC is running, 0 if not
+*/
+/**************************************************************************/
+uint8_t RTC_PCF8523::isrunning() {
+  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  return !((ctlreg >> 5) & 1);
+}
+
+/**************************************************************************/
+/*!
     @brief  Read the mode of the INT/SQW pin on the PCF8523
     @return SQW pin mode as a #Pcf8523SqwPinMode enum
 */
