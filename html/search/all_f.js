@@ -7,5 +7,7 @@ var searchData=
   ['secondstime',['secondstime',['../class_date_time.html#a15a271a5c566550e3feae2b9624430f0',1,'DateTime']]],
   ['setalarm1',['setAlarm1',['../class_r_t_c___d_s3231.html#ad12211e56637221b0c6b956bfe764404',1,'RTC_DS3231']]],
   ['setalarm2',['setAlarm2',['../class_r_t_c___d_s3231.html#a686299444985b8c36d12a7ce32c9add6',1,'RTC_DS3231']]],
-  ['ss',['ss',['../class_date_time.html#a38da3481e6355fcf8ceb4c57eb9db0ce',1,'DateTime']]]
+  ['ss',['ss',['../class_date_time.html#a38da3481e6355fcf8ceb4c57eb9db0ce',1,'DateTime']]],
+  ['start',['start',['../class_r_t_c___p_c_f8523.html#ab2c5977b18ef47b58dbba32b1f507ea4',1,'RTC_PCF8523']]],
+  ['stop',['stop',['../class_r_t_c___p_c_f8523.html#ab1783d2501ea0d88792f50abbc5e450f',1,'RTC_PCF8523']]]
 ];
