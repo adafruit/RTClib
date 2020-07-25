@@ -46,14 +46,23 @@ void setup () {
 void loop() {
  DateTime time = rtc.now();
 
- //Full Timestamp
- Serial.println("DateTime::TIMESTAMP_FULL:\t" + time.timestamp(DateTime::TIMESTAMP_FULL));
+ // Create array to store timestamp.
+ char buffer[20];
 
- //Date Only
- Serial.println("DateTime::TIMESTAMP_DATE:\t" + time.timestamp(DateTime::TIMESTAMP_DATE));
+ // Full Timestamp
+ time.timestamp(buffer, DateTime::TIMESTAMP_FULL);
+ Serial.print("DateTime::TIMESTAMP_FULL:\t");
+ Serial.println(buffer);
 
- //Full Timestamp
- Serial.println("DateTime::TIMESTAMP_TIME:\t" + time.timestamp(DateTime::TIMESTAMP_TIME));
+ // Date Only
+ time.timestamp(buffer, DateTime::TIMESTAMP_DATE);
+ Serial.print("DateTime::TIMESTAMP_DATE:\t");
+ Serial.println(buffer);
+
+ // Full Timestamp
+ time.timestamp(buffer, DateTime::TIMESTAMP_TIME);
+ Serial.print("DateTime::TIMESTAMP_TIME:\t");
+ Serial.println(buffer);
 
  Serial.println("\n");
 
