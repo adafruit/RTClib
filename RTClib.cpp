@@ -681,7 +681,7 @@ bool DateTime::operator==(const DateTime &right) const {
 
 /**************************************************************************/
 /*!
-    @brief  Return a ISO 8601 timestamp as a `String` object.
+    @brief  Return a ISO 8601 timestamp as a char array.
 
     The generated timestamp conforms to one of the predefined, ISO
     8601-compatible formats for representing the date (if _opt_ is
@@ -694,9 +694,7 @@ bool DateTime::operator==(const DateTime &right) const {
     @return Timestamp string, e.g. "2020-04-16T18:34:56".
 */
 /**************************************************************************/
-String DateTime::timestamp(timestampOpt opt) {
-  char buffer[20];
-
+void DateTime::timestamp(char buffer[20], timestampOpt opt) {
   // Generate timestamp according to opt
   switch (opt) {
   case TIMESTAMP_TIME:
@@ -712,7 +710,6 @@ String DateTime::timestamp(timestampOpt opt) {
     sprintf(buffer, "%d-%02d-%02dT%02d:%02d:%02d", 2000 + yOff, m, d, hh, mm,
             ss);
   }
-  return String(buffer);
 }
 
 /**************************************************************************/
