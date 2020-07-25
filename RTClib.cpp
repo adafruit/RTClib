@@ -690,9 +690,10 @@ bool DateTime::operator==(const DateTime &right) const {
 
     @see The `toString()` method provides more general string formatting.
     
-    @param buffer A char array with 20 bytes. The number 20 is specified to
-    ensure the input buffer is never too small. The method will overwrite
-    the given buffer with the formatted date and/or time specified by opt.
+    @param buffer A char array with 20 bytes. The number 20 is specified
+        to ensure the input buffer is never too small. The method will
+        overwrite the given buffer with the formatted date and/or time
+        specified by opt
     @param opt Format of the timestamp
 */
 /**************************************************************************/
