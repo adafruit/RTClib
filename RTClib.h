@@ -138,7 +138,7 @@ public:
     TIMESTAMP_TIME, //!< `hh:mm:ss`
     TIMESTAMP_DATE  //!< `YYYY-MM-DD`
   };
-  String timestamp(timestampOpt opt = TIMESTAMP_FULL);
+  void timestamp(char buf[20], timestampOpt opt = TIMESTAMP_FULL);
 
   DateTime operator+(const TimeSpan &span);
   DateTime operator-(const TimeSpan &span);
