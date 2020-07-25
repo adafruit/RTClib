@@ -47,13 +47,13 @@ void loop() {
  DateTime time = rtc.now();
 
  //Full Timestamp
- Serial.println(String("DateTime::TIMESTAMP_FULL:\t")+time.timestamp(DateTime::TIMESTAMP_FULL));
+ Serial.println("DateTime::TIMESTAMP_FULL:\t" + time.timestamp(DateTime::TIMESTAMP_FULL));
 
  //Date Only
- Serial.println(String("DateTime::TIMESTAMP_DATE:\t")+time.timestamp(DateTime::TIMESTAMP_DATE));
+ Serial.println("DateTime::TIMESTAMP_DATE:\t" + time.timestamp(DateTime::TIMESTAMP_DATE));
 
  //Full Timestamp
- Serial.println(String("DateTime::TIMESTAMP_TIME:\t")+time.timestamp(DateTime::TIMESTAMP_TIME));
+ Serial.println("DateTime::TIMESTAMP_TIME:\t" + time.timestamp(DateTime::TIMESTAMP_TIME));
 
  Serial.println("\n");
 
