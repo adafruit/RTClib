@@ -120,6 +120,17 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 
 /**************************************************************************/
 /*!
+    @brief checks if the year is a leap year
+    @param year The year to checks
+    @return true if a leap year, false otherwise
+*/
+/**************************************************************************/
+bool isLeapYear(uint16_t year) {
+  return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
+}
+
+/**************************************************************************/
+/*!
     @brief  Given a date, return number of days since 2000/01/01,
             valid for 2000--2099
     @param y Year
@@ -413,6 +424,43 @@ bool DateTime::isValid() const {
   DateTime other(unixtime());
   return yOff == other.yOff && m == other.m && d == other.d && hh == other.hh &&
          mm == other.mm && ss == other.ss;
+}
+
+/**************************************************************************/
+/*!
+    @author Harrison Outram
+    @brief  Fixes DateTime object if invalid
+
+    Determines if any date or time components are too high.
+    E.g. seconds == 65
+
+    Increments next component and reduces invalid component to fix.
+    E.g. if seconds == 125, then minutes goes up by 2 and seconds
+    goes down to 5.
+
+    @warning Will still result in invalid DateTime if year is above 2099
+    @return true if fixed, false if year becomes invalid
+*/
+/**************************************************************************/
+bool DateTime::fixDateTime() {
+  uint8_t temp;
+
+  if (ss >= 60) {
+    temp = ss / 60;
+    mm += temp;
+    ss -= 60 * temp;
+  }
+  if (mm >= 60) {
+    temp = mm / 60;
+    hh += temp;
+    mm -= 60 * temp;
+  }
+  if (hh >= 24) {
+    temp = hh / 24;
+    d += temp;
+    hh -= temp * 24;
+  }
+
 }
 
 /**************************************************************************/

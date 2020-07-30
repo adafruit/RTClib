@@ -57,6 +57,15 @@ class TimeSpan;
 
 /**************************************************************************/
 /*!
+    @brief checks if the year is a leap year
+    @param year The year to checks
+    @return true if a leap year, false otherwise
+*/
+/**************************************************************************/
+bool isLeapYear(uint16_t year);
+
+/**************************************************************************/
+/*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
             seconds).
 
@@ -81,6 +90,7 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
+  bool fixDateTime();
   char *toString(char *buffer);
 
   /*!
