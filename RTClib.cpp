@@ -658,6 +658,7 @@ TimeSpan DateTime::operator-(const DateTime &right) {
 
 /**************************************************************************/
 /*!
+    @author Anton Rieutskyi
     @brief  Test if one DateTime is less (earlier) than another.
     @param right Comparison DateTime object
     @return True if the left DateTime is earlier than the right one,
@@ -665,18 +666,36 @@ TimeSpan DateTime::operator-(const DateTime &right) {
 */
 /**************************************************************************/
 bool DateTime::operator<(const DateTime &right) const {
-  return unixtime() < right.unixtime();
+   return (
+      yOff + 2000 < right.year() || (
+      yOff + 2000 == right.year() && (
+      m < right.month() || (
+      m == right.month() && (
+      d < right.day() || (
+      d == right.day() && (
+      hh < right.hour() || (
+      hh == right.hour() && (
+      mm < right.minute() || (
+      mm == right.minute() &&
+      ss < right.second() ) ) ) ) ) ) ) ) ) );
 }
 
 /**************************************************************************/
 /*!
+    @author Anton Rieutskyi
     @brief  Test if two DateTime objects are equal.
     @param right Comparison DateTime object
     @return True if both DateTime objects are the same, false otherwise.
 */
 /**************************************************************************/
 bool DateTime::operator==(const DateTime &right) const {
-  return unixtime() == right.unixtime();
+  return (
+    right.year()   == yOff + 2000 &&
+    right.month()  == m    &&
+    right.day()    == d    &&
+    right.hour()   == hh   &&
+    right.minute() == mm   &&
+    right.second() == ss);
 }
 
 /**************************************************************************/
