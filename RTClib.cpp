@@ -131,6 +131,33 @@ bool isLeapYear(uint16_t year) {
 
 /**************************************************************************/
 /*!
+    @brief calculates the number of days in the month
+
+    Considers leap years, e.g. if year == 2000 and month == 2 then
+    days in month is 29
+
+    @param year The year
+    @param month The month from 1-12 (1 being Jan and 12 being Dec)
+    @warning Will return 0 if month is invalid (i.e. month > 12)
+    @return The number of days in the month
+*/
+/**************************************************************************/
+uint8_t getDaysInMonth(uint16_t year, uint8_t month) {
+  uint8_t days = 0;
+
+  if (month == 12) {
+    days = 31;  // needed since daysInMonth does have December days
+  } else if (month < 12) {
+    days += pgm_read_byte(daysInMonth + month - 1);
+
+    if (month == 2 && isLeapYear(year)) days++;
+  }
+
+  return days;
+}
+
+/**************************************************************************/
+/*!
     @brief  Given a date, return number of days since 2000/01/01,
             valid for 2000--2099
     @param y Year
@@ -461,6 +488,26 @@ bool DateTime::fixDateTime() {
     hh -= temp * 24;
   }
 
+  // make month valid to prevent getDaysInMonth() returning 0
+  // Otherwise, infinite loop possible
+  if (m > 12) {
+    temp = m % 12;
+    yOff += temp;
+    m -= temp * 12;
+  }
+
+  temp = getDaysInMonth(yOff, m);
+  while (d > temp) {
+    d -= temp;
+    m++;
+    if (m > 12) {
+      yOff++;
+      m--;
+    }
+    temp = getDaysInMonth(yOff, m);
+  }
+
+  return yOff <= 99;
 }
 
 /**************************************************************************/

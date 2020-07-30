@@ -55,14 +55,8 @@ class TimeSpan;
 #define SECONDS_FROM_1970_TO_2000                                              \
   946684800 ///< Unixtime for 2000-01-01 00:00:00, useful for initialization
 
-/**************************************************************************/
-/*!
-    @brief checks if the year is a leap year
-    @param year The year to checks
-    @return true if a leap year, false otherwise
-*/
-/**************************************************************************/
 bool isLeapYear(uint16_t year);
+uint8_t getDaysInMonth(uint16_t year, uint8_t month);
 
 /**************************************************************************/
 /*!
