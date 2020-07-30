@@ -660,6 +660,9 @@ TimeSpan DateTime::operator-(const DateTime &right) {
 /*!
     @author Anton Rieutskyi
     @brief  Test if one DateTime is less (earlier) than another.
+    @warning if one or both DateTime objects are invalid, logic errors can
+        occur
+    @see `isValid()` method
     @param right Comparison DateTime object
     @return True if the left DateTime is earlier than the right one,
         false otherwise.
@@ -684,6 +687,9 @@ bool DateTime::operator<(const DateTime &right) const {
 /*!
     @author Anton Rieutskyi
     @brief  Test if two DateTime objects are equal.
+    @warning if one or both DateTime objects are invalid, logic errors can
+        occur
+    @see `isValid()` method
     @param right Comparison DateTime object
     @return True if both DateTime objects are the same, false otherwise.
 */
