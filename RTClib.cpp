@@ -146,11 +146,12 @@ uint8_t getDaysInMonth(uint16_t year, uint8_t month) {
   uint8_t days = 0;
 
   if (month == 12) {
-    days = 31;  // needed since daysInMonth does have December days
+    days = 31; // needed since daysInMonth does have December days
   } else if (month < 12) {
     days += pgm_read_byte(daysInMonth + month - 1);
 
-    if (month == 2 && isLeapYear(year)) days++;
+    if (month == 2 && isLeapYear(year))
+      days++;
   }
 
   return days;
