@@ -465,7 +465,9 @@ bool DateTime::isValid() const {
     E.g. if seconds == 125, then minutes goes up by 2 and seconds
     goes down to 5.
 
-    @warning Will still result in invalid DateTime if year is above 2099
+    Does nothing if the DateTime object is already valid
+
+    @warning Will still result in invalid DateTime object if year is above 2099
     @return true if fixed, false if year becomes invalid
 */
 /**************************************************************************/
