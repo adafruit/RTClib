@@ -120,6 +120,44 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 
 /**************************************************************************/
 /*!
+    @brief checks if the year is a leap year
+    @param year The year to checks
+    @return true if a leap year, false otherwise
+*/
+/**************************************************************************/
+bool isLeapYear(uint16_t year) {
+  return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
+}
+
+/**************************************************************************/
+/*!
+    @brief calculates the number of days in the month
+
+    Considers leap years, e.g. if year == 2000 and month == 2 then
+    days in month is 29
+
+    @param year The year
+    @param month The month from 1-12 (1 being Jan and 12 being Dec)
+    @warning Will return 0 if month is invalid (i.e. month > 12)
+    @return The number of days in the month
+*/
+/**************************************************************************/
+uint8_t getDaysInMonth(uint16_t year, uint8_t month) {
+  uint8_t days = 0;
+
+  if (month == 12) {
+    days = 31;  // needed since daysInMonth does have December days
+  } else if (month < 12) {
+    days += pgm_read_byte(daysInMonth + month - 1);
+
+    if (month == 2 && isLeapYear(year)) days++;
+  }
+
+  return days;
+}
+
+/**************************************************************************/
+/*!
     @brief  Given a date, return number of days since 2000/01/01,
             valid for 2000--2099
     @param y Year
@@ -413,6 +451,65 @@ bool DateTime::isValid() const {
   DateTime other(unixtime());
   return yOff == other.yOff && m == other.m && d == other.d && hh == other.hh &&
          mm == other.mm && ss == other.ss;
+}
+
+/**************************************************************************/
+/*!
+    @author Harrison Outram
+    @brief  Fixes DateTime object if invalid
+
+    Determines if any date or time components are too high.
+    E.g. seconds == 65
+
+    Increments next component and reduces invalid component to fix.
+    E.g. if seconds == 125, then minutes goes up by 2 and seconds
+    goes down to 5.
+
+    Does nothing if the DateTime object is already valid
+
+    @warning Will still result in invalid DateTime object if year is above 2099
+    @return true if fixed, false if year becomes invalid
+*/
+/**************************************************************************/
+bool DateTime::fixDateTime() {
+  uint8_t temp;
+
+  if (ss >= 60) {
+    temp = ss / 60;
+    mm += temp;
+    ss -= 60 * temp;
+  }
+  if (mm >= 60) {
+    temp = mm / 60;
+    hh += temp;
+    mm -= 60 * temp;
+  }
+  if (hh >= 24) {
+    temp = hh / 24;
+    d += temp;
+    hh -= temp * 24;
+  }
+
+  // make month valid to prevent getDaysInMonth() returning 0
+  // Otherwise, infinite loop possible
+  if (m > 12) {
+    temp = m % 12;
+    yOff += temp;
+    m -= temp * 12;
+  }
+
+  temp = getDaysInMonth(yOff, m);
+  while (d > temp) {
+    d -= temp;
+    m++;
+    if (m > 12) {
+      yOff++;
+      m--;
+    }
+    temp = getDaysInMonth(yOff, m);
+  }
+
+  return yOff <= 99;
 }
 
 /**************************************************************************/
