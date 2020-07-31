@@ -671,14 +671,14 @@ TimeSpan DateTime::operator-(const DateTime &right) {
 bool DateTime::operator<(const DateTime &right) const {
   return (yOff + 2000 < right.year() ||
           (yOff + 2000 == right.year() &&
-            (m < right.month() ||
-              (m == right.month() &&
-                (d < right.day() ||
-                  (d == right.day() &&
-                    (hh < right.hour() ||
-                      (hh == right.hour() &&
-                        (mm < right.minute() ||
-                          (mm == right.minute() && ss < right.second() ) ) ) ) ) ) ) ) ) );
+           (m < right.month() ||
+            (m == right.month() &&
+             (d < right.day() ||
+              (d == right.day() &&
+               (hh < right.hour() ||
+                (hh == right.hour() &&
+                 (mm < right.minute() ||
+                  (mm == right.minute() && ss < right.second() ) ) ) ) ) ) ) ) ) );
 }
 
 /**************************************************************************/
