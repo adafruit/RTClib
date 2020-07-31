@@ -678,7 +678,7 @@ bool DateTime::operator<(const DateTime &right) const {
                (hh < right.hour() ||
                 (hh == right.hour() &&
                  (mm < right.minute() ||
-                  (mm == right.minute() && ss < right.second() ) ) ) ) ) ) ) ) ) );
+                  (mm == right.minute() && ss < right.second()))))))))));
 }
 
 /**************************************************************************/
