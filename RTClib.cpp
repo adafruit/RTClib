@@ -122,11 +122,13 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 /*!
     @brief checks if the year is a leap year
     @param year The year to checks
+    @warning designed for year range 2000-2099. This does not work for years
+      that are multiples of 100 and not multiples of 400.
     @return true if a leap year, false otherwise
 */
 /**************************************************************************/
-bool isLeapYear(uint16_t year) {
-  return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
+static bool isLeapYear(uint16_t year) {
+  return year % 4 == 0;
 }
 
 /**************************************************************************/
@@ -468,48 +470,81 @@ bool DateTime::isValid() const {
 
     Does nothing if the DateTime object is already valid
 
-    @warning Will still result in invalid DateTime object if year is above 2099
+    @note month of 0 is interpreted as December of previous year
+
+    @warning Will still result in invalid DateTime object if year is after
+      2099 or before 2000. If before 2000, year will be set to 2100
     @return true if fixed, false if year becomes invalid
 */
 /**************************************************************************/
 bool DateTime::fixDateTime() {
   uint8_t temp;
-
+  
+  // prevents overflow and underflow errors
+  uint16_t newMin = mm;
+  uint16_t newHour = hh;
+  int16_t newDay = d;
+  int16_t newMonth = m;
+  int16_t newYear = yOff;
+  
   if (ss >= 60) {
     temp = ss / 60;
-    mm += temp;
+    newMin += temp;
     ss -= 60 * temp;
   }
-  if (mm >= 60) {
-    temp = mm / 60;
-    hh += temp;
-    mm -= 60 * temp;
+  if (newMin >= 60) {
+    temp = newMin / 60;
+    newHour += temp;
+    newMin -= 60 * temp;
   }
-  if (hh >= 24) {
-    temp = hh / 24;
-    d += temp;
-    hh -= temp * 24;
+  if (newHour >= 24) {
+    temp = newHour / 24;
+    newDay += temp;
+    newHour -= temp * 24;
   }
 
   // make month valid to prevent getDaysInMonth() returning 0
   // Otherwise, infinite loop possible
-  if (m > 12) {
-    temp = m % 12;
-    yOff += temp;
-    m -= temp * 12;
+  if (newMonth > 12) {
+    temp = newMonth / 12;
+    newYear += temp;
+    newMonth -= temp * 12;
+  } else if (newMonth == 0) { // interpret as December of previous year
+    newMonth = 12;
+    newYear--;
   }
 
-  temp = getDaysInMonth(yOff, m);
-  while (d > temp) {
-    d -= temp;
-    m++;
-    if (m > 12) {
-      yOff++;
-      m--;
+  temp = getDaysInMonth(newYear + 2000, newMonth);
+  while (newDay > temp) {
+    newDay -= temp;
+    newMonth++;
+    if (newMonth > 12) {
+      newYear++;
+      newMonth -= 12;
     }
-    temp = getDaysInMonth(yOff, m);
+    temp = getDaysInMonth(newYear + 2000, newMonth);
   }
 
+  if (newDay == 0) {
+    newMonth--;
+    if (newMonth == 0) {
+      newMonth = 12;
+      newYear--;
+    }
+    newDay = getDaysInMonth(newYear + 2000, newMonth);
+  }
+
+  mm = newMin;
+  hh = newHour;
+  d = newDay;
+  m = newMonth;
+
+  if (newYear >= 0)
+    yOff = newYear;
+  else
+    // can't assign negative to unsigned so assign value too high
+    yOff = 100; 
+  
   return yOff <= 99;
 }
 
