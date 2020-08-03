@@ -127,9 +127,7 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
     @return true if a leap year, false otherwise
 */
 /**************************************************************************/
-static bool isLeapYear(uint16_t year) {
-  return year % 4 == 0;
-}
+static bool isLeapYear(uint16_t year) { return year % 4 == 0; }
 
 /**************************************************************************/
 /*!
@@ -479,7 +477,6 @@ bool DateTime::isValid() const {
 /**************************************************************************/
 bool DateTime::fixDateTime() {
   uint8_t temp;
-  
   // prevents overflow and underflow errors
   uint16_t newMin = mm;
   uint16_t newHour = hh;
