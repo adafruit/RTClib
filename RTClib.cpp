@@ -483,7 +483,7 @@ bool DateTime::fixDateTime() {
   int16_t newDay = d;
   int16_t newMonth = m;
   int16_t newYear = yOff;
-  
+
   if (ss >= 60) {
     temp = ss / 60;
     newMin += temp;
@@ -540,8 +540,8 @@ bool DateTime::fixDateTime() {
     yOff = newYear;
   else
     // can't assign negative to unsigned so assign value too high
-    yOff = 100; 
-  
+    yOff = 100;
+
   return yOff <= 99;
 }
 
