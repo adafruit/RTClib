@@ -276,17 +276,23 @@ enum Ds3231Alarm1Mode {
   DS3231_A1_PerSecond = 0x0F, /**< Alarm once per second */
   DS3231_A1_Second = 0x0E,    /**< Alarm when seconds match */
   DS3231_A1_Minute = 0x0C,    /**< Alarm when minutes and seconds match */
-  DS3231_A1_Hour = 0x08,      /**< Alarm when hours, minutes and seconds match */
-  DS3231_A1_Date = 0x00,      /**< Alarm when date (day of month), hours, minutes and seconds match */
-  DS3231_A1_Day = 0x10        /**< Alarm when day (day of week), hours, minutes and seconds match */
+  DS3231_A1_Hour = 0x08,      /**< Alarm when hours, minutes
+                                   and seconds match */
+  DS3231_A1_Date = 0x00,      /**< Alarm when date (day of month), hours,
+                                   minutes and seconds match */
+  DS3231_A1_Day = 0x10        /**< Alarm when day (day of week), hours,
+                                   minutes and seconds match */
 };
 /** DS3231 Alarm modes for alarm 2 */
 enum Ds3231Alarm2Mode {
-  DS3231_A2_PerMinute = 0x7,  /**< Alarm once per minute (whenever seconds are 0) */
-  DS3231_A2_Minute = 0x6,     /**< Alarm when minutes match */
-  DS3231_A2_Hour = 0x4,       /**< Alarm when hours and minutes match */
-  DS3231_A2_Date = 0x0,       /**< Alarm when date (day of month), hours and minutes match */
-  DS3231_A2_Day = 0x8         /**< Alarm when day (day of week), hours and minutes match */
+  DS3231_A2_PerMinute = 0x7, /**< Alarm once per minute
+                                  (whenever seconds are 0) */
+  DS3231_A2_Minute = 0x6,    /**< Alarm when minutes match */
+  DS3231_A2_Hour = 0x4,      /**< Alarm when hours and minutes match */
+  DS3231_A2_Date = 0x0,      /**< Alarm when date (day of month), hours
+                                  and minutes match */
+  DS3231_A2_Day = 0x8        /**< Alarm when day (day of week), hours
+                                  and minutes match */
 };
 
 /**************************************************************************/
