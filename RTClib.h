@@ -88,7 +88,7 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
-  char *toString(char *buffer);
+  char *toString(char *buffer) const;
 
   /*!
       @brief  Return the year.
@@ -145,7 +145,7 @@ public:
     TIMESTAMP_TIME, //!< `hh:mm:ss`
     TIMESTAMP_DATE  //!< `YYYY-MM-DD`
   };
-  String timestamp(timestampOpt opt = TIMESTAMP_FULL);
+  String timestamp(timestampOpt opt = TIMESTAMP_FULL) const;
 
   DateTime operator+(const TimeSpan &span);
   DateTime operator-(const TimeSpan &span);
@@ -215,6 +215,9 @@ public:
   TimeSpan(int32_t seconds = 0);
   TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds);
   TimeSpan(const TimeSpan &copy);
+  TimeSpan(const char *iso8601);
+  String toString() const;
+  size_t toCharArray(char *buf, size_t len) const;
 
   /*!
       @brief  Number of days in the TimeSpan
@@ -228,21 +231,23 @@ public:
               e.g. 4 days, 3 hours - NOT 99 hours
       @return int8_t hours
   */
-  int8_t hours() const { return _seconds / 3600 % 24; }
+  int8_t hours() const {
+    return _seconds / (SECS_PER_MIN * MINS_PER_HOUR) % HOURS_PER_DAY;
+  }
   /*!
       @brief  Number of minutes in the TimeSpan
               This is not the total minutes, it includes days/hours
               e.g. 4 days, 3 hours, 27 minutes
       @return int8_t minutes
   */
-  int8_t minutes() const { return _seconds / 60 % 60; }
+  int8_t minutes() const { return _seconds / SECS_PER_MIN % MINS_PER_HOUR; }
   /*!
       @brief  Number of seconds in the TimeSpan
               This is not the total seconds, it includes the days/hours/minutes
               e.g. 4 days, 3 hours, 27 minutes, 7 seconds
       @return int8_t seconds
   */
-  int8_t seconds() const { return _seconds % 60; }
+  int8_t seconds() const { return _seconds % SECS_PER_MIN; }
   /*!
       @brief  Total number of seconds in the TimeSpan, e.g. 358027
       @return int32_t seconds
@@ -254,6 +259,9 @@ public:
 
 protected:
   int32_t _seconds; ///< Actual TimeSpan value is stored as seconds
+  static constexpr int32_t SECS_PER_MIN = 60; ///< Number of seconds in a minute
+  static constexpr int32_t MINS_PER_HOUR = 60; ///< Number of minutes in an hour
+  static constexpr int32_t HOURS_PER_DAY = 24; ///< Number of hours in a day
 };
 
 /** DS1307 SQW pin mode settings */
