@@ -695,7 +695,7 @@ bool DateTime::operator==(const DateTime &right) const {
 */
 /**************************************************************************/
 String DateTime::timestamp(timestampOpt opt) {
-  char buffer[20];
+  char buffer[25]; // large enough for any DateTime, including invalid ones
 
   // Generate timestamp according to opt
   switch (opt) {
