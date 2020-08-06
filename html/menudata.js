@@ -56,5 +56,7 @@ var menudata={children:[
 {text:"s",url:"globals.html#index_s"}]},
 {text:"Variables",url:"globals_vars.html"},
 {text:"Enumerations",url:"globals_enum.html"},
-{text:"Enumerator",url:"globals_eval.html"},
+{text:"Enumerator",url:"globals_eval.html",children:[
+{text:"d",url:"globals_eval.html#index_d"},
+{text:"p",url:"globals_eval.html#index_p"}]},
 {text:"Macros",url:"globals_defs.html"}]}]}]}
