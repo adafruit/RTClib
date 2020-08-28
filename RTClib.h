@@ -144,30 +144,46 @@ public:
   DateTime operator-(const TimeSpan &span);
   TimeSpan operator-(const DateTime &right);
   bool operator<(const DateTime &right) const;
+
   /*!
       @brief  Test if one DateTime is greater (later) than another.
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is later than the right one,
         false otherwise
   */
   bool operator>(const DateTime &right) const { return right < *this; }
+
   /*!
       @brief  Test if one DateTime is less (earlier) than or equal to another
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is earlier than or equal to the
         right one, false otherwise
   */
   bool operator<=(const DateTime &right) const { return !(*this > right); }
+
   /*!
       @brief  Test if one DateTime is greater (later) than or equal to another
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is later than or equal to the right
         one, false otherwise
   */
   bool operator>=(const DateTime &right) const { return !(*this < right); }
   bool operator==(const DateTime &right) const;
+
   /*!
       @brief  Test if two DateTime objects are not equal.
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the two objects are not equal, false if they are
   */
