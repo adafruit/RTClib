@@ -571,12 +571,12 @@ uint8_t DateTime::twelveHour() const {
 /**************************************************************************/
 /*!
     @brief  Return the day of the week.
-    @return Day of week as an integer from 0 (Sunday) to 6 (Saturday).
+    @return Day of week as an integer from 1 (Sunday) to 7 (Saturday).
 */
 /**************************************************************************/
 uint8_t DateTime::dayOfTheWeek() const {
   uint16_t day = date2days(yOff, m, d);
-  return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6
+  return ((day + 6) % 7) + 1; // Jan 1, 2000 is a Saturday, i.e. returns 7
 }
 
 /**************************************************************************/
@@ -1394,7 +1394,7 @@ void RTC_DS3231::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dt.second()));
   Wire._I2C_WRITE(bin2bcd(dt.minute()));
   Wire._I2C_WRITE(bin2bcd(dt.hour()));
-  Wire._I2C_WRITE(bin2bcd(0));
+  Wire._I2C_WRITE(bin2bcd(dt.dayOfTheWeek()));
   Wire._I2C_WRITE(bin2bcd(dt.day()));
   Wire._I2C_WRITE(bin2bcd(dt.month()));
   Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
