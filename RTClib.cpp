@@ -1358,6 +1358,16 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 
 /**************************************************************************/
 /*!
+    @brief  Convert the day of the week to a representation suitable for
+            storing in the DS3231: from 1 (Monday) to 7 (Sunday).
+    @param  d Day of the week as represented by the library:
+            from 0 (Sunday) to 6 (Saturday).
+*/
+/**************************************************************************/
+static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
+
+/**************************************************************************/
+/*!
     @brief  Start I2C for the DS3231 and test succesful connection
     @return True if Wire can find DS3231 or false otherwise.
 */
@@ -1394,7 +1404,8 @@ void RTC_DS3231::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dt.second()));
   Wire._I2C_WRITE(bin2bcd(dt.minute()));
   Wire._I2C_WRITE(bin2bcd(dt.hour()));
-  Wire._I2C_WRITE(bin2bcd(0));
+  // The RTC must know the day of the week for the weekly alarms to work.
+  Wire._I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())));
   Wire._I2C_WRITE(bin2bcd(dt.day()));
   Wire._I2C_WRITE(bin2bcd(dt.month()));
   Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
@@ -1523,7 +1534,7 @@ bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
   Wire._I2C_WRITE(bin2bcd(dt.minute()) | A1M2);
   Wire._I2C_WRITE(bin2bcd(dt.hour()) | A1M3);
   if (DY_DT) {
-    Wire._I2C_WRITE(bin2bcd(dt.dayOfTheWeek()) | A1M4 | DY_DT);
+    Wire._I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A1M4 | DY_DT);
   } else {
     Wire._I2C_WRITE(bin2bcd(dt.day()) | A1M4 | DY_DT);
   }
@@ -1559,7 +1570,7 @@ bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
   Wire._I2C_WRITE(bin2bcd(dt.minute()) | A2M2);
   Wire._I2C_WRITE(bin2bcd(dt.hour()) | A2M3);
   if (DY_DT) {
-    Wire._I2C_WRITE(bin2bcd(dt.dayOfTheWeek()) | A2M4 | DY_DT);
+    Wire._I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A2M4 | DY_DT);
   } else {
     Wire._I2C_WRITE(bin2bcd(dt.day()) | A2M4 | DY_DT);
   }
