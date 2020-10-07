@@ -41,6 +41,7 @@ class TimeSpan;
 #define PCF8563_CONTROL_1     0x00
 #define PCF8563_CONTROL_2     0x01
 #define PCF8563_VL_SECONDS    0x02
+#define PCF8563_CLKOUT_MASK   0x83
 
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
@@ -409,6 +410,15 @@ public:
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 };
 
+/** PCF8563 CLKOUT pin mode settings */
+enum Pcf8563ClkOutMode {
+  PCF8563_SquareWaveOFF   = 0x00, /**< Off */
+  PCF8563_SquareWave1Hz   = 0x83, /**< 1Hz square wave */
+  PCF8563_SquareWave32Hz  = 0x82, /**< 32Hz square wave */
+  PCF8563_SquareWave1kHz  = 0x81, /**< 1kHz square wave */
+  PCF8563_SquareWave32kHz = 0x80  /**< 32kHz square wave */
+};
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
@@ -424,6 +434,9 @@ public:
     void start(void);
     void stop(void);
     uint8_t isrunning();
+    Pcf8563ClkOutMode readClkOutMode();
+    void writeClkOutMode(Pcf8563ClkOutMode mode);
+
 
 };
 

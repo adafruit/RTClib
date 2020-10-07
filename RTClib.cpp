@@ -1356,6 +1356,8 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
   Wire.endTransmission();
 }
 
+// START RTC_PCF8563 implementation
+
 /**************************************************************************/
 /*!
     @brief  Start I2C for the PCF8563 and test succesful connection
@@ -1466,7 +1468,41 @@ uint8_t RTC_PCF8563::isrunning() {
   return !((ctlreg >> 5) & 1);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/**************************************************************************/
+/*!
+    @brief  Read the mode of the CLKOUT pin on the PCF8563
+    @return CLKOUT pin mode as a #Pcf8563SClkOutMode enum
+*/
+/**************************************************************************/
+Pcf8563ClkOutMode RTC_PCF8563::readClkOutMode() {
+  
+  int mode;
+
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);
+  Wire.endTransmission();
+
+  Wire.requestFrom((uint8_t)PCF8563_ADDRESS, (uint8_t)1);
+  mode = Wire._I2C_READ();
+
+
+  return static_cast<Pcf8563ClkOutMode>(mode & PCF8563_CLKOUT_MASK);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set the CLKOUT pin mode on the PCF8563
+    @param mode The mode to set, see the #Pcf8563ClkOutMode enum for options
+*/
+/**************************************************************************/
+void RTC_PCF8563::writeClkOutMode(Pcf8563ClkOutMode mode) {
+ 
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);
+  Wire._I2C_WRITE(mode);
+  Wire.endTransmission();
+
+}
 // END RTC_PCF8563 implementation
 
 /**************************************************************************/
