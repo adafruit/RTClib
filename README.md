@@ -16,8 +16,8 @@ Please note that dayOfTheWeek() ranges from 0 to 6 inclusive with 0 being 'Sunda
 
 MCU                | Tested Works | Doesn't Work | Not Tested  | Notes
 ------------------ | :----------: | :----------: | :---------: | -----
-Atmega328 @ 16MHz  |      X       |             |            |
-Atmega328 @ 12MHz  |      X       |             |            |
+Atmega328 @ 16MHz  |      X       |             |            | Use SDA/SCL on pins A4 & A5 
+Atmega328 @ 12MHz  |      X       |             |            | Use SDA/SCL on pins A4 & A5
 Atmega32u4 @ 16MHz |      X       |             |            | Use SDA/SCL on pins D3 &amp; D2
 Atmega32u4 @ 8MHz  |      X       |             |            | Use SDA/SCL on pins D3 &amp; D2
 ESP8266            |      X       |             |            | SDA/SCL default to pins 4 &amp; 5 but any two pins can be assigned as SDA/SCL using Wire.begin(SDA,SCL)
