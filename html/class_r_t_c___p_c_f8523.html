@@ -123,7 +123,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a7ef4eb0f08c838b2ca645d35dab79e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop all timers, clear their flags and settings on the PCF8523.  <a href="#a7ef4eb0f08c838b2ca645d35dab79e78">More...</a><br /></td></tr>
 <tr class="separator:a7ef4eb0f08c838b2ca645d35dab79e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8523.html#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">calibrate</a> (<a class="el" href="_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351f">Pcf8523OffsetMode</a> mode, int8_t offset)</td></tr>
-<tr class="memdesc:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use an offset to calibrate the PCF8523.  <a href="#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">More...</a><br /></td></tr>
+<tr class="memdesc:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compensate the drift of the RTC.  <a href="#a33e8ae8a0e1ab3e11c4d0dc07c45d1a1">More...</a><br /></td></tr>
 <tr class="separator:a33e8ae8a0e1ab3e11c4d0dc07c45d1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -493,19 +493,29 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Use an offset to calibrate the PCF8523. </p>
-<p>This can be used for:</p><ul>
-<li>Aging adjustment</li>
-<li>Temperature compensation</li>
-<li>Accuracy tuning <dl class="params"><dt>Parameters</dt><dd>
+<p>Compensate the drift of the RTC. </p>
+<p>This method sets the "offset" register of the PCF8523, which can be used to correct a previously measured drift rate. Two correction modes are available:</p>
+<ul>
+<li><b>PCF8523_TwoHours</b>: Clock adjustments are performed on <code>offset</code> consecutive minutes every two hours. This is the most energy-efficient mode.</li>
+<li><b>PCF8523_OneMinute</b>: Clock adjustments are performed on <code>offset</code> consecutive seconds every minute. Extra adjustments are performed on the last second of the minute is <code>abs(offset)&gt;60</code>.</li>
+</ul>
+<p>The <code>offset</code> parameter sets the correction amount in units of roughly 4&#160;ppm. The exact unit depends on the selected mode:</p>
+<table class="doxtable">
+<tr>
+<th>mode </th><th>offset unit  </th></tr>
+<tr>
+<td><code>PCF8523_TwoHours</code> </td><td>4.340 ppm = 0.375 s/day = 2.625 s/week </td></tr>
+<tr>
+<td><code>PCF8523_OneMinute</code> </td><td>4.069 ppm = 0.352 s/day = 2.461 s/week </td></tr>
+</table>
+<p>See the accompanying sketch pcf8523.ino for an example on how to use this method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>The offset mode to use, once every two hours or once every minute. See the <a class="el" href="_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351f">Pcf8523OffsetMode</a> enum. </td></tr>
-    <tr><td class="paramname">offset</td><td>Offset value from -64 to +63. See the datasheet for exact ppm values. </td></tr>
+    <tr><td class="paramname">mode</td><td>Correction mode, either <code>PCF8523_TwoHours</code> or <code>PCF8523_OneMinute</code>. </td></tr>
+    <tr><td class="paramname">offset</td><td>Correction amount, from -64 to +63. A positive offset makes the clock slower. </td></tr>
   </table>
   </dd>
 </dl>
-</li>
-</ul>
 
 </div>
 </div>
