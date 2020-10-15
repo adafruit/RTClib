@@ -1335,15 +1335,34 @@ void RTC_PCF8523::deconfigureAllTimers() {
 
 /**************************************************************************/
 /*!
-    @brief  Use an offset to calibrate the PCF8523.
-    @details This can be used for:
-            - Aging adjustment
-            - Temperature compensation
-            - Accuracy tuning
-    @param mode The offset mode to use, once every two hours or once every
-   minute. See the #Pcf8523OffsetMode enum.
-    @param offset Offset value from -64 to +63. See the datasheet for exact ppm
-   values.
+    @brief Compensate the drift of the RTC.
+    @details This method sets the "offset" register of the PCF8523,
+      which can be used to correct a previously measured drift rate.
+      Two correction modes are available:
+
+      - **PCF8523\_TwoHours**: Clock adjustments are performed on
+        `offset` consecutive minutes every two hours. This is the most
+        energy-efficient mode.
+
+      - **PCF8523\_OneMinute**: Clock adjustments are performed on
+        `offset` consecutive seconds every minute. Extra adjustments are
+        performed on the last second of the minute is `abs(offset)>60`.
+
+      The `offset` parameter sets the correction amount in units of
+      roughly 4&nbsp;ppm. The exact unit depends on the selected mode:
+
+      |  mode               | offset unit                            |
+      |---------------------|----------------------------------------|
+      | `PCF8523_TwoHours`  | 4.340 ppm = 0.375 s/day = 2.625 s/week |
+      | `PCF8523_OneMinute` | 4.069 ppm = 0.352 s/day = 2.461 s/week |
+
+      See the accompanying sketch pcf8523.ino for an example on how to
+      use this method.
+
+    @param mode Correction mode, either `PCF8523_TwoHours` or
+      `PCF8523_OneMinute`.
+    @param offset Correction amount, from -64 to +63. A positive offset
+      makes the clock slower.
 */
 /**************************************************************************/
 void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
