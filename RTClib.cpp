@@ -1375,6 +1375,183 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
   Wire.endTransmission();
 }
 
+#define read_PCF8523_register(reg) read_i2c_register(PCF8523_ADDRESS, reg)             ///< Reads the register (reg), with the PCF address given to i2c
+#define write_PCF8523_register(reg, val) write_i2c_register(PCF8523_ADDRESS, reg, val) ///< Writes the register with a value (reg, value), with the PCF address given to i2c
+
+extern const Pcf8523TimerDetails timer_details_table[];
+
+/**************************************************************************/
+/*!
+    @brief  Constructor for timer, from member timer and interrupt fields
+
+    @param timer_value The starting countdown value of the timer, from 0-255
+    @param timer_freq The countdown clock frequency of the timer
+    @param timer_enabled Whether the timer is enabled
+    @param irupt_flag Whether the timer has completed since this flag was last cleared
+    @param irupt_signal_enabled Whether the timer's interrupt drives its
+    @associated pin(s)
+
+    @note The irupt_flag can only be cleared or preserved, when set by a timer
+    going off; it cannot be set with a write, if unset.
+*/
+/**************************************************************************/
+Pcf8523TimerState::Pcf8523TimerState(uint8_t timer_value, PCF8523TimerClockFreq timer_freq, bool timer_enabled, bool irupt_flag, bool irupt_signal_enabled) {
+  value = timer_value;
+  freq = timer_freq;
+  enabled = timer_enabled;
+
+  this->irupt_flag = irupt_flag;
+  irupt_enabled = irupt_signal_enabled;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Copy constructor.
+    @param copy Pcf8523TimerState to copy.
+*/
+/**************************************************************************/
+Pcf8523TimerState::Pcf8523TimerState(const Pcf8523TimerState &copy) {
+  value = copy.value;
+  freq = copy.freq;
+  enabled = copy.enabled;
+
+  irupt_flag = copy.irupt_flag;
+  irupt_enabled = copy.irupt_enabled;
+}
+
+/**************************************************************************/
+/*!
+
+    @brief Reads the interrupt state into dest for the given interrupt.
+    @param irupt Which interrupt to read.
+    @param dest The IruptState struct where the current interrupt state is written.
+*/
+/**************************************************************************/
+void RTC_PCF8523::read_irupt(Pcf8523Timer irupt, Pcf8523IruptState *dest) {
+  /* read the interrupt's register fields into the struct */
+
+  const Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
+
+  const uint8_t irupt_reg = read_PCF8523_register(timer_details->irupt_control_register);
+
+  dest->irupt_flag = irupt_reg & timer_details->irupt_flag_mask;
+  dest->irupt_enabled = irupt_reg & timer_details->irupt_en_mask;
+}
+
+/**************************************************************************/
+/*!
+
+    @brief Sets the interrupt state for the given interrupt.
+    @param irupt Which interrupt to read.
+    @param src The IruptState struct that programs the interrupt.
+*/
+/**************************************************************************/
+void RTC_PCF8523::write_irupt(Pcf8523Timer irupt, Pcf8523IruptState *src) {
+  /* write the given interrupt into its register fields */
+
+  const Pcf8523TimerDetails *timer_details = &(timer_details_table[irupt]);
+
+  uint8_t irupt_reg = read_PCF8523_register(timer_details->irupt_control_register);
+
+  // clear out flag/en, and selectively re-add
+  irupt_reg &= ~(timer_details->irupt_flag_mask | timer_details->irupt_en_mask);
+
+  if (src->irupt_enabled) {
+    irupt_reg |= timer_details->irupt_en_mask;
+  }
+
+  if (src->irupt_flag) {
+    irupt_reg |= timer_details->irupt_flag_mask;
+  }
+
+  write_PCF8523_register(timer_details->irupt_control_register, irupt_reg);
+}
+
+/**************************************************************************/
+/*!
+
+    @brief Programs the selected timer from the given TimerState object.
+    @param timer Which timer to program.
+    @param src The TimerState object that programs the timer.
+
+    @note If the interrupt enable field is set, the square wave/CLKOUT
+    function will be disabled, and the SqwPinMode set to "OFF."
+    Instead, the INT function will be used.
+*/
+/**************************************************************************/
+void RTC_PCF8523::write_timer(Pcf8523Timer timer, const Pcf8523TimerState &src) {
+  /* setup the given timer in TimerState src */
+
+  const Pcf8523TimerDetails *details = &(timer_details_table[timer]);
+
+  // turn off the timer before changing values
+  uint8_t clkout_ctrl = read_PCF8523_register(details->timer_en_register);
+  clkout_ctrl &= ~(details->timer_dis_mask);
+  write_PCF8523_register(details->timer_en_register, clkout_ctrl);
+
+  // set the timer value and frequencies
+  write_PCF8523_register(details->timer_value_register, src.value);
+  write_PCF8523_register(details->timer_freq_register, (uint8_t) src.freq);
+
+  // set the irupt flag/enable bits -- delegate to other function
+  Pcf8523IruptState irupt;
+  irupt.irupt_flag = src.irupt_flag;
+  irupt.irupt_enabled = src.irupt_enabled;
+
+  write_irupt(timer, &irupt);
+
+  // enable the timer, if set
+  if (src.enabled) {
+    clkout_ctrl = read_PCF8523_register(details->timer_en_register);
+
+    // turn off the CLKOUT function if the interrupt is enabled,
+    // enable the timer
+    if (src.irupt_enabled) {
+      clkout_ctrl |= PCF8523_CLKOUT_DIS;
+    }
+    clkout_ctrl |= details->timer_en_mask;
+
+    write_PCF8523_register(details->timer_en_register, clkout_ctrl);
+  }
+}
+
+/**************************************************************************/
+/*!
+
+    @brief Reads the state of selected timer into the returned TimerState object.
+    @param timer Which timer to read.
+    @return TimerState The timer and interrupt current state
+*/
+/**************************************************************************/
+Pcf8523TimerState RTC_PCF8523::read_timer(Pcf8523Timer timer) {
+  /* return the timer contents into TimerState */
+
+  const Pcf8523TimerDetails *details = &(timer_details_table[timer]);
+
+  // retrieve the timer enabled bit
+  uint8_t clkout_ctrl = read_PCF8523_register(details->timer_en_register);
+  const bool enabled = clkout_ctrl & details->timer_en_mask;
+
+  // retrieve the frequency scalar from the timer's register
+  const PCF8523TimerClockFreq freq = (PCF8523TimerClockFreq) read_PCF8523_register(details->timer_freq_register);
+
+  // retrieve the timer value from the timer's register
+  const uint8_t value = read_PCF8523_register(details->timer_value_register);
+
+  // read the irupt flag/enable bits -- delegate to other function
+  Pcf8523IruptState irupt;
+  read_irupt(timer, &irupt);
+
+  return Pcf8523TimerState(
+    value,
+    freq,
+    enabled,
+    irupt.irupt_flag,
+    irupt.irupt_enabled
+    );
+}
+
+
 /**************************************************************************/
 /*!
     @brief  Convert the day of the week to a representation suitable for
