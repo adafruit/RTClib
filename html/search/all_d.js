@@ -36,5 +36,17 @@ var searchData=
   ['pcf8523sqwpinmode',['Pcf8523SqwPinMode',['../_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54c',1,'RTClib.h']]],
   ['pcf8523timerclockfreq',['PCF8523TimerClockFreq',['../_r_t_clib_8h.html#a0e2ec5f0c2faf2fe043c21662d51ba05',1,'RTClib.h']]],
   ['pcf8523timerintpulse',['PCF8523TimerIntPulse',['../_r_t_clib_8h.html#a97f6a2ddb89ca74aaee6a64185ea67fb',1,'RTClib.h']]],
+  ['pcf8563_5faddress',['PCF8563_ADDRESS',['../_r_t_clib_8h.html#a3bb78124c90eb983197e2b8aeb4896bd',1,'RTClib.h']]],
+  ['pcf8563_5fclkout_5fmask',['PCF8563_CLKOUT_MASK',['../_r_t_clib_8h.html#ad2d6409dd5fa90f8a44243b90c7f29f1',1,'RTClib.h']]],
+  ['pcf8563_5fclkoutcontrol',['PCF8563_CLKOUTCONTROL',['../_r_t_clib_8h.html#a73854f0fe40d125756643fbf82cddd2f',1,'RTClib.h']]],
+  ['pcf8563_5fcontrol_5f1',['PCF8563_CONTROL_1',['../_r_t_clib_8h.html#a805fe09d3b526d9555677446e2db35fa',1,'RTClib.h']]],
+  ['pcf8563_5fcontrol_5f2',['PCF8563_CONTROL_2',['../_r_t_clib_8h.html#a663ad981540d21c8cdd06c33cc5f609b',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave1hz',['PCF8563_SquareWave1Hz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aaab2ff4553a9aa1b76f19ab2831db53b5',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave1khz',['PCF8563_SquareWave1kHz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa7432b1123beb7015a8a4dcbccf83cac8',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave32hz',['PCF8563_SquareWave32Hz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aad89146dead207463c1c3f3293b24a05a',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave32khz',['PCF8563_SquareWave32kHz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa2a543be27bb4a46658a977357104db61',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewaveoff',['PCF8563_SquareWaveOFF',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa6e819ed246882c1d6dc022a98f96f101',1,'RTClib.h']]],
+  ['pcf8563_5fvl_5fseconds',['PCF8563_VL_SECONDS',['../_r_t_clib_8h.html#a835f85d72c5303cb4acab2c838b6ba59',1,'RTClib.h']]],
+  ['pcf8563sqwpinmode',['Pcf8563SqwPinMode',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2a',1,'RTClib.h']]],
   ['progmem',['PROGMEM',['../_r_t_clib_8cpp.html#a07f7414a12e65e2a192193542b7f13da',1,'RTClib.cpp']]]
 ];

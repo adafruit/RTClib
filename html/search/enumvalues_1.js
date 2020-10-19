@@ -22,5 +22,10 @@ var searchData=
   ['pcf8523_5fsquarewave32khz',['PCF8523_SquareWave32kHz',['../_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54ca77296514562af077a1220d042f1fe60d',1,'RTClib.h']]],
   ['pcf8523_5fsquarewave4khz',['PCF8523_SquareWave4kHz',['../_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54cad68302270b6fed37b0f6809bb5aa01bf',1,'RTClib.h']]],
   ['pcf8523_5fsquarewave8khz',['PCF8523_SquareWave8kHz',['../_r_t_clib_8h.html#ab06ba706f2d9f1e59b1ce1fe3048c54ca81c9eecbfb887507cdf1b14572abb13a',1,'RTClib.h']]],
-  ['pcf8523_5ftwohours',['PCF8523_TwoHours',['../_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351fab49fa7b214319eb235b18185bc682a93',1,'RTClib.h']]]
+  ['pcf8523_5ftwohours',['PCF8523_TwoHours',['../_r_t_clib_8h.html#ab02090fa3c1937fe68c0f036beae351fab49fa7b214319eb235b18185bc682a93',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave1hz',['PCF8563_SquareWave1Hz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aaab2ff4553a9aa1b76f19ab2831db53b5',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave1khz',['PCF8563_SquareWave1kHz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa7432b1123beb7015a8a4dcbccf83cac8',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave32hz',['PCF8563_SquareWave32Hz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aad89146dead207463c1c3f3293b24a05a',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewave32khz',['PCF8563_SquareWave32kHz',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa2a543be27bb4a46658a977357104db61',1,'RTClib.h']]],
+  ['pcf8563_5fsquarewaveoff',['PCF8563_SquareWaveOFF',['../_r_t_clib_8h.html#a7f5d7df4d8ed84d8920065f627504b2aa6e819ed246882c1d6dc022a98f96f101',1,'RTClib.h']]]
 ];
