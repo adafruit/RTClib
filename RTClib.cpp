@@ -1489,7 +1489,7 @@ uint8_t RTC_PCF8563::isrunning() {
 /**************************************************************************/
 /*!
     @brief  Read the mode of the CLKOUT pin on the PCF8563
-    @return CLKOUT pin mode as a #Pcf8563SClkOutMode enum
+    @return CLKOUT pin mode as a #Pcf8563SqwPinMode enum
 */
 /**************************************************************************/
 Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
@@ -1509,7 +1509,7 @@ Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
 /**************************************************************************/
 /*!
     @brief  Set the CLKOUT pin mode on the PCF8563
-    @param mode The mode to set, see the #Pcf8563ClkOutMode enum for options
+    @param mode The mode to set, see the #Pcf8563SqwPinMode enum for options
 */
 /**************************************************************************/
 void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
