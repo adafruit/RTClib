@@ -1398,7 +1398,7 @@ boolean RTC_PCF8563::begin(void) {
      below Vlow, bit VL in the VL_seconds register is set to indicate that
      the integrity of the clock information is no longer guaranteed.
     @return True if the bit is set (VDD droped below Vlow) indicating that
-    the clock integrity is not guaranteed and false only after the bit is 
+    the clock integrity is not guaranteed and false only after the bit is
     cleared using adjust()
 */
 /**************************************************************************/
@@ -1425,7 +1425,6 @@ void RTC_PCF8563::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dt.month()));
   Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
   Wire.endTransmission();
-
 }
 
 /**************************************************************************/
@@ -1437,19 +1436,19 @@ void RTC_PCF8563::adjust(const DateTime &dt) {
 
 DateTime RTC_PCF8563::now() {
   Wire.beginTransmission(PCF8563_ADDRESS);
-  Wire._I2C_WRITE((byte)2);	
+  Wire._I2C_WRITE((byte)2);
   Wire.endTransmission();
 
   Wire.requestFrom(PCF8563_ADDRESS, 7);
   uint8_t ss = bcd2bin(Wire._I2C_READ() & 0x7F);
   uint8_t mm = bcd2bin(Wire._I2C_READ() & 0x7F);
   uint8_t hh = bcd2bin(Wire._I2C_READ() & 0x3F);
-  uint8_t d = bcd2bin(Wire._I2C_READ()  & 0x3F);
-  Wire._I2C_READ();  // skip 'weekdays'
-  uint8_t m = bcd2bin(Wire._I2C_READ()  & 0x1F);
+  uint8_t d = bcd2bin(Wire._I2C_READ() & 0x3F);
+  Wire._I2C_READ(); // skip 'weekdays'
+  uint8_t m = bcd2bin(Wire._I2C_READ() & 0x1F);
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
-  
-  return DateTime (y, m, d, hh, mm, ss);
+
+  return DateTime(y, m, d, hh, mm, ss);
 }
 
 /**************************************************************************/
@@ -1494,7 +1493,7 @@ uint8_t RTC_PCF8563::isrunning() {
 */
 /**************************************************************************/
 Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
-  
+
   int mode;
 
   Wire.beginTransmission(PCF8563_ADDRESS);
@@ -1504,8 +1503,7 @@ Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
   Wire.requestFrom((uint8_t)PCF8563_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
-
-    return static_cast<Pcf8563SqwPinMode>(mode & PCF8563_CLKOUT_MASK);
+  return static_cast<Pcf8563SqwPinMode>(mode & PCF8563_CLKOUT_MASK);
 }
 
 /**************************************************************************/
@@ -1515,12 +1513,11 @@ Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
 */
 /**************************************************************************/
 void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
- 
+
   Wire.beginTransmission(PCF8563_ADDRESS);
   Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);
   Wire._I2C_WRITE(mode);
   Wire.endTransmission();
-
 }
 // END RTC_PCF8563 implementation
 

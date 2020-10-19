@@ -36,12 +36,12 @@ class TimeSpan;
 #define PCF8523_OFFSET 0x0E        ///< Offset register
 #define PCF8523_STATUSREG 0x03     ///< Status register
 
-#define PCF8563_ADDRESS       0x51
+#define PCF8563_ADDRESS 0x51
 #define PCF8563_CLKOUTCONTROL 0x0D
-#define PCF8563_CONTROL_1     0x00
-#define PCF8563_CONTROL_2     0x01
-#define PCF8563_VL_SECONDS    0x02
-#define PCF8563_CLKOUT_MASK   0x83
+#define PCF8563_CONTROL_1 0x00
+#define PCF8563_CONTROL_2 0x01
+#define PCF8563_VL_SECONDS 0x02
+#define PCF8563_CLKOUT_MASK 0x83
 
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
@@ -412,11 +412,11 @@ public:
 
 /** PCF8563 CLKOUT pin mode settings */
 enum Pcf8563SqwPinMode {
-  PCF8563_SquareWaveOFF   = 0x00, /**< Off */
-  PCF8563_SquareWave1Hz   = 0x83, /**< 1Hz square wave */
-  PCF8563_SquareWave32Hz  = 0x82, /**< 32Hz square wave */
-  PCF8563_SquareWave1kHz  = 0x81, /**< 1kHz square wave */
-  PCF8563_SquareWave32kHz = 0x80  /**< 32kHz square wave */
+  PCF8563_SquareWaveOFF = 0x00,  /**< Off */
+  PCF8563_SquareWave1Hz = 0x83,  /**< 1Hz square wave */
+  PCF8563_SquareWave32Hz = 0x82, /**< 32Hz square wave */
+  PCF8563_SquareWave1kHz = 0x81, /**< 1kHz square wave */
+  PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
 /**************************************************************************/
@@ -427,17 +427,16 @@ enum Pcf8563SqwPinMode {
 
 class RTC_PCF8563 {
 public:
-    boolean begin(void);
-    boolean lostPower(void);
-    void adjust(const DateTime& dt);
-    static DateTime now();
-    void start(void);
-    void stop(void);
-    uint8_t isrunning();
-    Pcf8563SqwPinMode readSqwPinMode();
-    void writeSqwPinMode(Pcf8563SqwPinMode mode);
+  boolean begin(void);
+  boolean lostPower(void);
+  void adjust(const DateTime &dt);
+  static DateTime now();
+  void start(void);
+  void stop(void);
+  uint8_t isrunning();
+  Pcf8563SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Pcf8563SqwPinMode mode);
 };
-
 
 /**************************************************************************/
 /*!
