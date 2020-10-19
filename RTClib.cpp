@@ -1474,7 +1474,7 @@ uint8_t RTC_PCF8563::isrunning() {
     @return CLKOUT pin mode as a #Pcf8563SClkOutMode enum
 */
 /**************************************************************************/
-Pcf8563ClkOutMode RTC_PCF8563::readClkOutMode() {
+Pcf8563SqwPinMode RTC_PCF8563::readSqwPinMode() {
   
   int mode;
 
@@ -1486,7 +1486,7 @@ Pcf8563ClkOutMode RTC_PCF8563::readClkOutMode() {
   mode = Wire._I2C_READ();
 
 
-  return static_cast<Pcf8563ClkOutMode>(mode & PCF8563_CLKOUT_MASK);
+    return static_cast<Pcf8563SqwPinMode>(mode & PCF8563_CLKOUT_MASK);
 }
 
 /**************************************************************************/
@@ -1495,7 +1495,7 @@ Pcf8563ClkOutMode RTC_PCF8563::readClkOutMode() {
     @param mode The mode to set, see the #Pcf8563ClkOutMode enum for options
 */
 /**************************************************************************/
-void RTC_PCF8563::writeClkOutMode(Pcf8563ClkOutMode mode) {
+void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
  
   Wire.beginTransmission(PCF8563_ADDRESS);
   Wire._I2C_WRITE(PCF8563_CLKOUTCONTROL);

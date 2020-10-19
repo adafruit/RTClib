@@ -411,7 +411,7 @@ public:
 };
 
 /** PCF8563 CLKOUT pin mode settings */
-enum Pcf8563ClkOutMode {
+enum Pcf8563SqwPinMode {
   PCF8563_SquareWaveOFF   = 0x00, /**< Off */
   PCF8563_SquareWave1Hz   = 0x83, /**< 1Hz square wave */
   PCF8563_SquareWave32Hz  = 0x82, /**< 32Hz square wave */
@@ -434,10 +434,8 @@ public:
     void start(void);
     void stop(void);
     uint8_t isrunning();
-    Pcf8563ClkOutMode readClkOutMode();
-    void writeClkOutMode(Pcf8563ClkOutMode mode);
-
-
+    Pcf8563SqwPinMode readSqwPinMode();
+    void writeSqwPinMode(Pcf8563SqwPinMode mode);
 };
 
 
