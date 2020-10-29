@@ -129,8 +129,8 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 */
 /**************************************************************************/
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
-  if (y >= 2000)
-    y -= 2000;
+  if (y >= 2000U)
+    y -= 2000U;
   uint16_t days = d;
   for (uint8_t i = 1; i < m; ++i)
     days += pgm_read_byte(daysInMonth + i - 1);
@@ -225,8 +225,8 @@ DateTime::DateTime(uint32_t t) {
 /**************************************************************************/
 DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
                    uint8_t min, uint8_t sec) {
-  if (year >= 2000)
-    year -= 2000;
+  if (year >= 2000U)
+    year -= 2000U;
   yOff = year;
   m = month;
   d = day;
@@ -669,8 +669,8 @@ TimeSpan DateTime::operator-(const DateTime &right) {
 */
 /**************************************************************************/
 bool DateTime::operator<(const DateTime &right) const {
-  return (yOff + 2000 < right.year() ||
-          (yOff + 2000 == right.year() &&
+  return (yOff + 2000U < right.year() ||
+          (yOff + 2000U == right.year() &&
            (m < right.month() ||
             (m == right.month() &&
              (d < right.day() ||
@@ -693,7 +693,7 @@ bool DateTime::operator<(const DateTime &right) const {
 */
 /**************************************************************************/
 bool DateTime::operator==(const DateTime &right) const {
-  return (right.year() == yOff + 2000 && right.month() == m &&
+  return (right.year() == yOff + 2000U && right.month() == m &&
           right.day() == d && right.hour() == hh && right.minute() == mm &&
           right.second() == ss);
 }
@@ -724,11 +724,11 @@ String DateTime::timestamp(timestampOpt opt) {
     break;
   case TIMESTAMP_DATE:
     // Only date
-    sprintf(buffer, "%d-%02d-%02d", 2000 + yOff, m, d);
+    sprintf(buffer, "%u-%02d-%02d", 2000U + yOff, m, d);
     break;
   default:
     // Full
-    sprintf(buffer, "%d-%02d-%02dT%02d:%02d:%02d", 2000 + yOff, m, d, hh, mm,
+    sprintf(buffer, "%u-%02d-%02dT%02d:%02d:%02d", 2000U + yOff, m, d, hh, mm,
             ss);
   }
   return String(buffer);
@@ -851,7 +851,7 @@ void RTC_DS1307::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(0));
   Wire._I2C_WRITE(bin2bcd(dt.day()));
   Wire._I2C_WRITE(bin2bcd(dt.month()));
-  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000U));
   Wire.endTransmission();
 }
 
@@ -873,7 +873,7 @@ DateTime RTC_DS1307::now() {
   Wire._I2C_READ();
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
-  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
 
   return DateTime(y, m, d, hh, mm, ss);
 }
@@ -1110,7 +1110,7 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dt.day()));
   Wire._I2C_WRITE(bin2bcd(0)); // skip weekdays
   Wire._I2C_WRITE(bin2bcd(dt.month()));
-  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000U));
   Wire.endTransmission();
 
   // set to battery switchover mode
@@ -1138,7 +1138,7 @@ DateTime RTC_PCF8523::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   Wire._I2C_READ(); // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ());
-  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
 
   return DateTime(y, m, d, hh, mm, ss);
 }
@@ -1573,7 +1573,7 @@ void RTC_DS3231::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())));
   Wire._I2C_WRITE(bin2bcd(dt.day()));
   Wire._I2C_WRITE(bin2bcd(dt.month()));
-  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000));
+  Wire._I2C_WRITE(bin2bcd(dt.year() - 2000U));
   Wire.endTransmission();
 
   uint8_t statreg = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
@@ -1599,7 +1599,7 @@ DateTime RTC_DS3231::now() {
   Wire._I2C_READ();
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
-  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
 
   return DateTime(y, m, d, hh, mm, ss);
 }
