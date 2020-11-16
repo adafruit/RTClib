@@ -1,7 +1,7 @@
 /* Example implementation of an alarm using DS3231
  *
  * VCC and GND of RTC should be connected to some power source
- * SDA, SCL sof RTC should be connected to SDA, SCL of arduino
+ * SDA, SCL of RTC should be connected to SDA, SCL of arduino
  * SQW should be connected to CLOCK_INTERRUPT_PIN
  * CLOCK_INTERRUPT_PIN needs to work with interrupts
  */
