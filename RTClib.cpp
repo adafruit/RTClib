@@ -1620,7 +1620,9 @@ Ds3231SqwPinMode RTC_DS3231::readSqwPinMode() {
   Wire.requestFrom((uint8_t)DS3231_ADDRESS, (uint8_t)1);
   mode = Wire._I2C_READ();
 
-  mode &= 0x93;
+  mode &= 0x1C;
+  if (mode & 0x04)
+    mode = DS3231_OFF;
   return static_cast<Ds3231SqwPinMode>(mode);
 }
 
@@ -1637,11 +1639,7 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
   ctrl &= ~0x04; // turn off INTCON
   ctrl &= ~0x18; // set freq bits to 0
 
-  if (mode == DS3231_OFF) {
-    ctrl |= 0x04; // turn on INTCN
-  } else {
-    ctrl |= mode;
-  }
+  ctrl |= mode;
   write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
 
   // Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL), HEX);
