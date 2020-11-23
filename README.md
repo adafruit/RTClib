@@ -62,7 +62,7 @@ https://learn.adafruit.com/the-well-automated-arduino-library/doxygen
 https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips
 
 ## Code formatting and clang-format
-The code should be formatted according to the [LLVM Coding Standards][std], which is the default of the clang-format tool.  The easiest way to ensure conformance is to [install clang-format][llvm] and run
+The code should be formatted according to the [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html), which is the default of the clang-format tool.  The easiest way to ensure conformance is to [install clang-format](https://llvm.org/builds/) and run
 
 ```shell
 clang-format -i <source_file>`
