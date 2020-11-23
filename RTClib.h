@@ -42,6 +42,10 @@ class TimeSpan;
 #define PCF8563_CONTROL_2 0x01     ///< Control and status register 2
 #define PCF8563_VL_SECONDS 0x02    ///< register address for VL_SECONDS
 #define PCF8563_CLKOUT_MASK 0x83   ///< bitmask for SqwPinMode on CLKOUT pin
+#define PCF8563_MINUTE_ALARM 0x09  ///< minute alarm register
+#define PCF8563_HOUR_ALARM 0x0A    ///< hour alarm register
+#define PCF8563_DAY_ALARM 0x0B     ///< day alarm register
+#define PCF8563_WEEKDAY_ALARM 0x0C ///< weekday alarm register
 
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
@@ -436,6 +440,10 @@ public:
   uint8_t isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
+  void setAlarm(const DateTime &dt);
+  void setAlarm(uint8_t hour, uint8_t min);
+  boolean readAlarmFlag(void);
+  void clearAlarmFlag(void);
 };
 
 /**************************************************************************/

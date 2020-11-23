@@ -44,6 +44,15 @@ void setup () {
   // to be restarted by clearing the STOP bit. Let's do this to ensure
   // the RTC is running.
   rtc.start();
+
+  // Enable Alarm interrupt
+  // One can only set day, hour and minutes for the alarm, the other values 
+  // of DateTime are ignored, but provided to comply with the format, 
+  //  one can also provide hour and minute only.
+  // January 21, 2014 at 3am you would call:
+  //rtc.setAlarm(DateTime(2014, 1, 21, 3, 0, 0));
+  // Or
+  rtc.setAlarm(3, 00);
 }
 
 void loop () {
@@ -88,5 +97,13 @@ void loop () {
     Serial.println();
 
     Serial.println();
+
+    if(rtc.readAlarmFlag()){
+      Serial.println("Alarm flag is set");
+      rtc.clearAlarmFlag();
+    } else{
+      Serial.println("Alarm Flag not set");
+    }
+    
     delay(3000);
 }
