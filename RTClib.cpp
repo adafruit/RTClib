@@ -1543,7 +1543,6 @@ void RTC_PCF8563::setAlarm(const DateTime &dt) {
   // Enable alarm interrupt AIE
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
                      (control_status_2 | 0x02)); // 00000010b
-
 }
 
 /**************************************************************************/
@@ -1582,7 +1581,6 @@ void RTC_PCF8563::disableAlarm(void) {
 
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
                      (control_status_2 | 0xFD)); // 11111101b
-
 }
 
 /**************************************************************************/
@@ -1610,7 +1608,7 @@ void RTC_PCF8563::clearAlarm(void) {
 
   uint8_t control_status_2 =
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
-  
+
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
                      (control_status_2 | 0xF7)); // 11110111b
 }
