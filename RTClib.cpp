@@ -1525,7 +1525,7 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
     @author Leonardo Bispo
     @brief  Set the Alarm values mode on the PCF8563
     @details  One can only set day, hour and minutes for the alarm, the other
-      values of DateTime are ignored, but provided to comply with the format, 
+      values of DateTime are ignored, but provided to comply with the format,
       one can also provide hour and minute only.
     @param dt DateTime to set
 */
@@ -1542,7 +1542,7 @@ void RTC_PCF8563::setAlarm(const DateTime &dt) {
 
   // Enable alarm interrupt AIE
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0x02 )); // 00000010b
+                     (control_status_2 | 0x02)); // 00000010b
 
 }
 
@@ -1566,7 +1566,7 @@ void RTC_PCF8563::setAlarm(uint8_t hour = 0, uint8_t min = 0) {
 
   // Enable alarm interrupt AIE
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0x02 )); // 00000010b
+                     (control_status_2 | 0x02)); // 00000010b
 }
 
 /**************************************************************************/
@@ -1581,7 +1581,7 @@ void RTC_PCF8563::disableAlarm(void) {
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0xFD )); // 11111101b
+                     (control_status_2 | 0xFD)); // 11111101b
 
 }
 
@@ -1597,7 +1597,7 @@ boolean RTC_PCF8563::alarmFired(void) {
   uint8_t control_status_2 =
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
-  return ((control_status_2 >> 3) & 1 );
+  return ((control_status_2 >> 3) & 1);
 }
 
 /**************************************************************************/
@@ -1612,7 +1612,7 @@ void RTC_PCF8563::clearAlarm(void) {
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
   
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0xF7 )); // 11110111b
+                     (control_status_2 | 0xF7)); // 11110111b
 }
 // END RTC_PCF8563 implementation
 
