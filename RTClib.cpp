@@ -1532,14 +1532,17 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
 /**************************************************************************/
 void RTC_PCF8563::setAlarm(const DateTime &dt) {
 
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, bin2bcd(dt.minute()));
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, 
+                     bin2bcd(dt.minute()));
   write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM,   bin2bcd(dt.hour()));
   write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM,    bin2bcd(dt.day()));
 
-  uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+  uint8_t control_status_2 = 
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
   // Enable alarm interrupt AIE
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, (control_status_2 | 0x02 )); // 00000010b
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, 
+                     (control_status_2 | 0x02 )); // 00000010b
 
 }
 
@@ -1554,14 +1557,16 @@ void RTC_PCF8563::setAlarm(const DateTime &dt) {
 void RTC_PCF8563::setAlarm(uint8_t hour = 0, uint8_t min = 0) {
 
   write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, bin2bcd(min));
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM,   bin2bcd(hour));
-  //disable day, just in case
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM,    0x80); // 10000000b
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM, bin2bcd(hour));
+  // disable day, just in case
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM, 0x80); // 10000000b
 
-  uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+  uint8_t control_status_2 = 
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
   // Enable alarm interrupt AIE
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, (control_status_2 | 0x02 )); // 00000010b
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, 
+                     (control_status_2 | 0x02 )); // 00000010b
 }
 
 /**************************************************************************/
@@ -1572,9 +1577,11 @@ void RTC_PCF8563::setAlarm(uint8_t hour = 0, uint8_t min = 0) {
 /**************************************************************************/
 void RTC_PCF8563::disableAlarm(void) {
 
-  uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+  uint8_t control_status_2 = 
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, (control_status_2 | 0xFD )); // 11111101b
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, 
+                     (control_status_2 | 0xFD )); // 11111101b
 
 }
 
@@ -1600,9 +1607,11 @@ boolean RTC_PCF8563::alarmFired(void) {
 /**************************************************************************/
 void RTC_PCF8563::clearAlarm(void) {
 
-  uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+  uint8_t control_status_2 = 
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
   
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, (control_status_2 | 0xF7 )); // 11110111b
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, 
+                     (control_status_2 | 0xF7 )); // 11110111b
 }
 // END RTC_PCF8563 implementation
 

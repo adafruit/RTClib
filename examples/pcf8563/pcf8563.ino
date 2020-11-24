@@ -98,9 +98,9 @@ void loop () {
 
     Serial.println();
 
-    if(rtc.readAlarmFlag()){
+    if(rtc.alarmFired()){
       Serial.println("Alarm flag is set");
-      rtc.clearAlarmFlag();
+      rtc.clearAlarm();
     } else{
       Serial.println("Alarm Flag not set");
     }
