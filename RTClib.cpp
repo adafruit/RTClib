@@ -1585,7 +1585,7 @@ void RTC_PCF8563::disableAlarm(void) {
     @return 1 if the Alarm is set, 0 if not
 */
 /**************************************************************************/
-boolean RTC_PCF8563::readAlarmFlag(void) {
+boolean RTC_PCF8563::alarmFired(void) {
 
   uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
@@ -1598,7 +1598,7 @@ boolean RTC_PCF8563::readAlarmFlag(void) {
     @brief  Clear the ALARM bit in register Control_2, also clear INT
 */
 /**************************************************************************/
-void RTC_PCF8563::clearAlarmFlag(void) {
+void RTC_PCF8563::clearAlarm(void) {
 
   uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
   

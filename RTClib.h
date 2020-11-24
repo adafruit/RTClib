@@ -443,8 +443,8 @@ public:
   void setAlarm(const DateTime &dt);
   void setAlarm(uint8_t hour, uint8_t min);
   void disableAlarm(void);
-  boolean readAlarmFlag(void);
-  void clearAlarmFlag(void);
+  boolean alarmFired(void);
+  void clearAlarm(void);
 };
 
 /**************************************************************************/

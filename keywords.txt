@@ -61,8 +61,6 @@ setAlarm1	KEYWORD2
 setAlarm2	KEYWORD2
 disableAlarm	KEYWORD2
 clearAlarm	KEYWORD2
-clearAlarmFlag	KEYWORD2
-readAlarmFlag	KEYWORD2
 alarmFired	KEYWORD2
 getTemperature	KEYWORD2
 lostPower	KEYWORD2
