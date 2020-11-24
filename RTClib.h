@@ -442,6 +442,7 @@ public:
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
   void setAlarm(const DateTime &dt);
   void setAlarm(uint8_t hour, uint8_t min);
+  void disableAlarm(void);
   boolean readAlarmFlag(void);
   void clearAlarmFlag(void);
 };

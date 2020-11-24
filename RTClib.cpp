@@ -1567,6 +1567,20 @@ void RTC_PCF8563::setAlarm(uint8_t hour = 0, uint8_t min = 0) {
 /**************************************************************************/
 /*!
     @author Leonardo Bispo
+    @brief  Disable the Alarm on the PCF8563
+*/
+/**************************************************************************/
+void RTC_PCF8563::disableAlarm(void) {
+
+  uint8_t control_status_2 = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, (control_status_2 | 0xFD )); // 11111101b
+
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
     @brief  Check the ALARM bit in register Control_2
     @return 1 if the Alarm is set, 0 if not
 */
