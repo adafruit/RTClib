@@ -465,7 +465,7 @@ bool DateTime::isValid() const {
 char *DateTime::toString(char *buffer) {
   uint8_t apTag =
       (strstr(buffer, "ap") != nullptr) || (strstr(buffer, "AP") != nullptr);
-  uint8_t hourReformatted, isPM;
+  uint8_t hourReformatted = 0, isPM = false;
   if (apTag) {     // 12 Hour Mode
     if (hh == 0) { // midnight
       isPM = false;
