@@ -1527,6 +1527,7 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
     @details  One can only set day, hour and minutes for the alarm, the other
       values of DateTime are ignored, but provided to comply with the format.
     @param dt DateTime to set
+    @param alarm_mode Desired mode, see Ds3231Alarm1Mode enum
 */
 /**************************************************************************/
 void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
@@ -1559,39 +1560,14 @@ void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
 /*!
     @author Leonardo Bispo
     @brief  Set Weekly Alarm values mode on the PCF8563
-    @param dow  Day of the week to trigger the alarm
+    @param dow  Day of the week to trigger the alarm, Sunday is 0
     @param hour Hour to trigger the alarm
     @param min  Minute to trigger the alarm
 */
 /**************************************************************************/
 void RTC_PCF8563::setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min) {
-
-  uint32_t t = SECONDS_FROM_1970_TO_2000;
-  switch (dow) {
-  case Sundays:
-    t = 1483228800; // Sunday, January 1, 2017 0:00:00
-    break;
-  case Mondays:
-    t = 1483315200;
-    break;
-  case Tuedays:
-    t = 1483401600;
-    break;
-  case Wednesdays:
-    t = 1483488000;
-    break;
-  case Thursdays:
-    t = 1483574400;
-    break;
-  case Fridays:
-    t = 1483660800;
-    break;
-  case Saturdays:
-    t = 1483747200; // Saturday, January 7, 2017 0:00:00
-    break;
-  }
-
-  setAlarm(DateTime(t), PCF8563_Alarm_Weekly);
+  // January 1st, 2017 was a Sunday
+  setAlarm(DateTime(2017, 1, 1 + dow, hour, min), PCF8563_Alarm_Weekly);
 }
 
 /**************************************************************************/
@@ -1675,7 +1651,7 @@ void RTC_PCF8563::clearAlarm(void) {
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0xF7)); // 11110111b
+                     (control_status_2 & 0x17)); // 00010111b
 }
 // END RTC_PCF8563 implementation
 
