@@ -84,7 +84,7 @@ class TimeSpan;
 /**************************************************************************/
 class DateTime {
 public:
-  DateTime(uint32_t t = SECONDS_FROM_1970_TO_2000);
+  DateTime(uint32_t = SECONDS_FROM_1970_TO_2000);
   DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour = 0,
            uint8_t min = 0, uint8_t sec = 0);
   DateTime(const DateTime &copy);
@@ -423,6 +423,25 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** Alarm modes of the PCF8563 */
+enum Pcf8563AlarmMode {
+  PCF8563_Alarm_hourly, /**< hourly, minute match */
+  PCF8563_Alarm_Daily, /**< daily, when hour and minute match */
+  PCF8563_Alarm_Weekly, /**< weekly, when dayOfTheWeek, hour and minute match */
+  PCF8563_Alarm_Monthly /**< monthly, when day, hour and minute match */
+};
+
+/** Day of the week for weekly Alarm modes of the PCF8563 */
+enum DayOfWeek {
+  Sundays,
+  Mondays,
+  Tuedays,
+  Wednesdays,
+  Thursdays,
+  Fridays,
+  Saturdays
+};
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
@@ -440,8 +459,11 @@ public:
   uint8_t isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
-  void setAlarm(const DateTime &dt);
+  void setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode);
+  void setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min);
+  void setAlarm(uint8_t day, uint8_t hour, uint8_t min);
   void setAlarm(uint8_t hour, uint8_t min);
+  void setAlarm(uint8_t min);
   void disableAlarm(void);
   boolean alarmFired(void);
   void clearAlarm(void);

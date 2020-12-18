@@ -1525,17 +1525,27 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
     @author Leonardo Bispo
     @brief  Set the Alarm values mode on the PCF8563
     @details  One can only set day, hour and minutes for the alarm, the other
-      values of DateTime are ignored, but provided to comply with the format,
-      one can also provide hour and minute only.
+      values of DateTime are ignored, but provided to comply with the format.
     @param dt DateTime to set
 */
 /**************************************************************************/
-void RTC_PCF8563::setAlarm(const DateTime &dt) {
+void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
 
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM,
-                     bin2bcd(dt.minute()));
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM, bin2bcd(dt.hour()));
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM, bin2bcd(dt.day()));
+  uint8_t minute = bin2bcd(dt.minute());
+  uint8_t hour = bin2bcd(dt.hour());
+  uint8_t day =
+      (alarm_mode == PCF8563_Alarm_Monthly) ? bin2bcd(dt.day()) : 0x80;
+  uint8_t weekDay =
+      (alarm_mode == PCF8563_Alarm_Weekly) ? bin2bcd(dt.dayOfTheWeek()) : 0x80;
+
+  if(alarm_mode == PCF8563_Alarm_hourly) {
+    hour = 0x80;
+  }
+
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, minute);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM, hour);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM, day);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_WEEKDAY_ALARM, weekDay);
 
   uint8_t control_status_2 =
       read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
@@ -1548,24 +1558,79 @@ void RTC_PCF8563::setAlarm(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @author Leonardo Bispo
-    @brief  Set the Alarm values mode on the PCF8563
+    @brief  Set Weekly Alarm values mode on the PCF8563
+    @param dow  Day of the week to trigger the alarm
     @param hour Hour to trigger the alarm
     @param min  Minute to trigger the alarm
 */
 /**************************************************************************/
-void RTC_PCF8563::setAlarm(uint8_t hour = 0, uint8_t min = 0) {
+void RTC_PCF8563::setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min) {
 
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, bin2bcd(min));
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM, bin2bcd(hour));
-  // disable day, just in case
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM, 0x80); // 10000000b
+  uint32_t t = SECONDS_FROM_1970_TO_2000;
+  switch (dow) {
+  case Sundays:
+    t = 1483228800; // Sunday, January 1, 2017 0:00:00
+    break;
+  case Mondays:
+    t = 1483315200;
+    break;
+  case Tuedays:
+    t = 1483401600;
+    break;
+  case Wednesdays:
+    t = 1483488000;
+    break;
+  case Thursdays:
+    t = 1483574400;
+    break;
+  case Fridays:
+    t = 1483660800;
+    break;
+  case Saturdays:
+    t = 1483747200; // Saturday, January 7, 2017 0:00:00 
+    break;
+  }
 
-  uint8_t control_status_2 =
-      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+  setAlarm(DateTime(t), PCF8563_Alarm_Weekly);
+}
 
-  // Enable alarm interrupt AIE
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
-                     (control_status_2 | 0x02)); // 00000010b
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Monthly Alarm values mode on the PCF8563
+    @param day  Minute to trigger the alarm
+    @param hour Hour to trigger the alarm
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t day, uint8_t hour, uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, day, hour, min), PCF8563_Alarm_Monthly);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Daily Alarm values mode on the PCF8563
+    @param hour Hour to trigger the alarm
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t hour, uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, 1, hour, min), PCF8563_Alarm_Daily);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Hourly Alarm values mode on the PCF8563
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, 1, 1, min), PCF8563_Alarm_hourly);
 }
 
 /**************************************************************************/
