@@ -48,9 +48,9 @@ void setup () {
   // Enable Alarm interrupt
   // One can only set day, hour and minutes for the alarm, the other values 
   // of DateTime are ignored, but provided to comply with the format, 
-  //  one can also provide hour and minute only.
+  // one can also provide hour and minute only.
   // January 21, 2014 at 3am you would call:
-  //rtc.setAlarm(DateTime(2014, 1, 21, 3, 0, 0));
+  // rtc.setAlarm(DateTime(2014, 1, 21, 3, 0, 0));
   // Or
   rtc.setAlarm(3, 00);
 }

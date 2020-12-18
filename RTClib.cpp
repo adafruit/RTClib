@@ -1538,7 +1538,7 @@ void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
   uint8_t weekDay =
       (alarm_mode == PCF8563_Alarm_Weekly) ? bin2bcd(dt.dayOfTheWeek()) : 0x80;
 
-  if(alarm_mode == PCF8563_Alarm_hourly) {
+  if (alarm_mode == PCF8563_Alarm_hourly) {
     hour = 0x80;
   }
 
@@ -1587,7 +1587,7 @@ void RTC_PCF8563::setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min) {
     t = 1483660800;
     break;
   case Saturdays:
-    t = 1483747200; // Saturday, January 7, 2017 0:00:00 
+    t = 1483747200; // Saturday, January 7, 2017 0:00:00
     break;
   }
 

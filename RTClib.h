@@ -426,7 +426,7 @@ enum Pcf8563SqwPinMode {
 /** Alarm modes of the PCF8563 */
 enum Pcf8563AlarmMode {
   PCF8563_Alarm_hourly, /**< hourly, minute match */
-  PCF8563_Alarm_Daily, /**< daily, when hour and minute match */
+  PCF8563_Alarm_Daily,  /**< daily, when hour and minute match */
   PCF8563_Alarm_Weekly, /**< weekly, when dayOfTheWeek, hour and minute match */
   PCF8563_Alarm_Monthly /**< monthly, when day, hour and minute match */
 };
