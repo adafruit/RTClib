@@ -1560,7 +1560,7 @@ void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
 /*!
     @author Leonardo Bispo
     @brief  Set Weekly Alarm values mode on the PCF8563
-    @param dow  Day of the week to trigger the alarm, Sunday is 0
+    @param dow  Day of the week to trigger the alarm, see DayOfWeek enum
     @param hour Hour to trigger the alarm
     @param min  Minute to trigger the alarm
 */
