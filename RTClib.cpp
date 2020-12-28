@@ -125,7 +125,7 @@ boolean RTC_DS1307::begin(const DateTime &dt) {
     @return 1 if the RTC is running, 0 if not
 */
 /**************************************************************************/
-uint8_t RTC_DS1307::isrunning(void) {
+boolean RTC_DS1307::isrunning(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
   Wire._I2C_WRITE((byte)0);
   Wire.endTransmission();
@@ -174,7 +174,7 @@ void RTC_DS1307::adjust(const DateTime &dt) {
 */
 /**************************************************************************/
 void RTC_DS1307::adjustDrift(const int drift) {
-  DateTime newDt = DateTime(unixtime() + drift);
+  DateTime newDt = DateTime(now().unixtime() + drift);
   adjust(newDt);
 }
 
@@ -532,7 +532,7 @@ void RTC_PCF8523::stop(void) {
     @return 1 if the RTC is running, 0 if not
 */
 /**************************************************************************/
-uint8_t RTC_PCF8523::isrunning() {
+boolean RTC_PCF8523::isrunning() {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
   return !((ctlreg >> 5) & 1);
 }
@@ -842,7 +842,7 @@ void RTC_PCF8563::stop(void) {
     @return 1 if the RTC is running, 0 if not
 */
 /**************************************************************************/
-uint8_t RTC_PCF8563::isrunning() {
+boolean RTC_PCF8563::isrunning() {
   uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
   return !((ctlreg >> 5) & 1);
 }

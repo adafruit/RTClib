@@ -215,7 +215,6 @@ public:
   DateTime now();
   void start(void);
   void stop(void);
-  boolean isrunning();
   Pcf8523SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
   void enableSecondTimer(void);
@@ -252,7 +251,6 @@ public:
   DateTime now();
   void start(void);
   void stop(void);
-  boolean isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
 };
