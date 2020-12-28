@@ -48,7 +48,7 @@ Adafruit invests time and resources providing this open source code, please supp
 
 # Contributing
 
-Contributions are welcome! Please read our [Code of Conduct](https://github.com/adafruit/RTClib/blob/master/CODE_OF_CONDUCT.md>)
+Contributions are welcome! Please read our [Code of Conduct](https://github.com/adafruit/RTClib/blob/master/code-of-conduct.md)
 before contributing to help this project stay welcoming.
 
 ## Documentation and doxygen
@@ -60,6 +60,13 @@ Some examples of how to use doxygen can be found in these guide pages:
 https://learn.adafruit.com/the-well-automated-arduino-library/doxygen
 
 https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips
+
+## Code formatting and clang-format
+The code should be formatted according to the [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html), which is the default of the clang-format tool.  The easiest way to ensure conformance is to [install clang-format](https://llvm.org/builds/) and run
+
+```shell
+clang-format -i <source_file>`
+```
 
 Written by JeeLabs
 MIT license, check license.txt for more information

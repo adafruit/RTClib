@@ -36,6 +36,13 @@ class TimeSpan;
 #define PCF8523_OFFSET 0x0E        ///< Offset register
 #define PCF8523_STATUSREG 0x03     ///< Status register
 
+#define PCF8563_ADDRESS 0x51       ///< I2C address for PCF8563
+#define PCF8563_CLKOUTCONTROL 0x0D ///< CLKOUT control register
+#define PCF8563_CONTROL_1 0x00     ///< Control and status register 1
+#define PCF8563_CONTROL_2 0x01     ///< Control and status register 2
+#define PCF8563_VL_SECONDS 0x02    ///< register address for VL_SECONDS
+#define PCF8563_CLKOUT_MASK 0x83   ///< bitmask for SqwPinMode on CLKOUT pin
+
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
 #define DS1307_NVRAM 0x08   ///< Start of RAM registers - 56 bytes, 0x08 to 0x3f
@@ -91,7 +98,7 @@ public:
       @brief  Return the year.
       @return Year (range: 2000--2099).
   */
-  uint16_t year() const { return 2000 + yOff; }
+  uint16_t year() const { return 2000U + yOff; }
   /*!
       @brief  Return the month.
       @return Month number (1--12).
@@ -148,42 +155,46 @@ public:
   DateTime operator-(const TimeSpan &span);
   TimeSpan operator-(const DateTime &right);
   bool operator<(const DateTime &right) const;
+
   /*!
       @brief  Test if one DateTime is greater (later) than another.
-    @warning if one or both DateTime objects are invalid, logic errors can
-        occur
-    @see `isValid()` method
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is later than the right one,
         false otherwise
   */
   bool operator>(const DateTime &right) const { return right < *this; }
+
   /*!
       @brief  Test if one DateTime is less (earlier) than or equal to another
-    @warning if one or both DateTime objects are invalid, logic errors can
-        occur
-    @see `isValid()` method
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is earlier than or equal to the
         right one, false otherwise
   */
   bool operator<=(const DateTime &right) const { return !(*this > right); }
+
   /*!
       @brief  Test if one DateTime is greater (later) than or equal to another
-    @warning if one or both DateTime objects are invalid, logic errors can
-        occur
-    @see `isValid()` method
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the left DateTime is later than or equal to the right
         one, false otherwise
   */
   bool operator>=(const DateTime &right) const { return !(*this < right); }
   bool operator==(const DateTime &right) const;
+
   /*!
       @brief  Test if two DateTime objects are not equal.
-    @warning if one or both DateTime objects are invalid, logic errors can
-        occur
-    @see `isValid()` method
+      @warning if one or both DateTime objects are invalid, returned value is
+        meaningless
+      @see use `isValid()` method to check if DateTime object is valid
       @param right DateTime object to compare
       @return True if the two objects are not equal, false if they are
   */
@@ -280,29 +291,35 @@ public:
 
 /** DS3231 SQW pin mode settings */
 enum Ds3231SqwPinMode {
-  DS3231_OFF = 0x01,            // Off
-  DS3231_SquareWave1Hz = 0x00,  // 1Hz square wave
-  DS3231_SquareWave1kHz = 0x08, // 1kHz square wave
-  DS3231_SquareWave4kHz = 0x10, // 4kHz square wave
-  DS3231_SquareWave8kHz = 0x18  // 8kHz square wave
+  DS3231_OFF = 0x1C,            /**< Off */
+  DS3231_SquareWave1Hz = 0x00,  /**<  1Hz square wave */
+  DS3231_SquareWave1kHz = 0x08, /**<  1kHz square wave */
+  DS3231_SquareWave4kHz = 0x10, /**<  4kHz square wave */
+  DS3231_SquareWave8kHz = 0x18  /**<  8kHz square wave */
 };
 
 /** DS3231 Alarm modes for alarm 1 */
 enum Ds3231Alarm1Mode {
-  DS3231_A1_PerSecond = 0x0F,
-  DS3231_A1_Second = 0x0E,
-  DS3231_A1_Minute = 0x0C,
-  DS3231_A1_Hour = 0x08,
-  DS3231_A1_Date = 0x00,
-  DS3231_A1_Day = 0x10
+  DS3231_A1_PerSecond = 0x0F, /**< Alarm once per second */
+  DS3231_A1_Second = 0x0E,    /**< Alarm when seconds match */
+  DS3231_A1_Minute = 0x0C,    /**< Alarm when minutes and seconds match */
+  DS3231_A1_Hour = 0x08,      /**< Alarm when hours, minutes
+                                   and seconds match */
+  DS3231_A1_Date = 0x00,      /**< Alarm when date (day of month), hours,
+                                   minutes and seconds match */
+  DS3231_A1_Day = 0x10        /**< Alarm when day (day of week), hours,
+                                   minutes and seconds match */
 };
 /** DS3231 Alarm modes for alarm 2 */
 enum Ds3231Alarm2Mode {
-  DS3231_A2_PerMinute = 0x7,
-  DS3231_A2_Minute = 0x6,
-  DS3231_A2_Hour = 0x4,
-  DS3231_A2_Date = 0x0,
-  DS3231_A2_Day = 0x8
+  DS3231_A2_PerMinute = 0x7, /**< Alarm once per minute
+                                  (whenever seconds are 0) */
+  DS3231_A2_Minute = 0x6,    /**< Alarm when minutes match */
+  DS3231_A2_Hour = 0x4,      /**< Alarm when hours and minutes match */
+  DS3231_A2_Date = 0x0,      /**< Alarm when date (day of month), hours
+                                  and minutes match */
+  DS3231_A2_Day = 0x8        /**< Alarm when day (day of week), hours
+                                  and minutes match */
 };
 
 /**************************************************************************/
@@ -395,6 +412,34 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+};
+
+/** PCF8563 CLKOUT pin mode settings */
+enum Pcf8563SqwPinMode {
+  PCF8563_SquareWaveOFF = 0x00,  /**< Off */
+  PCF8563_SquareWave1Hz = 0x83,  /**< 1Hz square wave */
+  PCF8563_SquareWave32Hz = 0x82, /**< 32Hz square wave */
+  PCF8563_SquareWave1kHz = 0x81, /**< 1kHz square wave */
+  PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
+};
+
+/**************************************************************************/
+/*!
+    @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
+*/
+/**************************************************************************/
+
+class RTC_PCF8563 {
+public:
+  boolean begin(void);
+  boolean lostPower(void);
+  void adjust(const DateTime &dt);
+  static DateTime now();
+  void start(void);
+  void stop(void);
+  uint8_t isrunning();
+  Pcf8563SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Pcf8563SqwPinMode mode);
 };
 
 /**************************************************************************/
