@@ -23,8 +23,7 @@
 #define _RTC_H_
 
 #include <Arduino.h>
-
-class DateTime;
+#include "../DateTime/DateTime.h"
 
 /**************************************************************************/
 /*!
@@ -62,7 +61,7 @@ public:
   /*!
     @brief Check if the RTC has lost power
     @return True if the RTC has lost power, false otherwise
-    @note Equivelant to `!rtc.isrunning()`
+    @note Equivalent to `!rtc.isrunning()`
   */
   virtual boolean lostPower(void);
 
@@ -71,18 +70,6 @@ public:
     @return The date/time
   */
   virtual DateTime now() = 0;
-
-  /*!
-    @brief Get the square wave mode
-    @return The square wave mode
-  */
-  virtual int readSqwPinMode() = 0;
-
-  /*!
-    @brief Set the square wave mode
-    @param mode The mode to set the square wave to
-  */
-  virtual void writeSqwPinMode(int mode) = 0;
 };
 
 #endif
