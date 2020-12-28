@@ -906,14 +906,17 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
 /**************************************************************************/
 /*!
     @brief  Start I2C for the DS1307 and test succesful connection
+    @param dt DateTime object containing desired date/time
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS1307::begin(void) {
+boolean RTC_DS1307::begin(const DateTime &dt) {
   Wire.begin();
   Wire.beginTransmission(DS1307_ADDRESS);
-  if (Wire.endTransmission() == 0)
+  if (Wire.endTransmission() == 0) {
+    adjust(dt);
     return true;
+  }
   return false;
 }
 
@@ -935,6 +938,18 @@ uint8_t RTC_DS1307::isrunning(void) {
 
 /**************************************************************************/
 /*!
+    @brief  Check the status register Oscillator Stop flag to see if the DS1307
+   stopped due to power loss
+    @return True if the bit is set (oscillator is or has stopped) and false only
+   after the bit is cleared, for instance with adjust()
+*/
+/**************************************************************************/
+boolean RTC_DS1307::lostPower(void) {
+  return (read_i2c_register(DS1307_ADDRESS, 0) >> 7);
+}
+
+/**************************************************************************/
+/*!
     @brief  Set the date and time in the DS1307
     @param dt DateTime object containing the desired date/time
 */
@@ -950,6 +965,18 @@ void RTC_DS1307::adjust(const DateTime &dt) {
   Wire._I2C_WRITE(bin2bcd(dt.month()));
   Wire._I2C_WRITE(bin2bcd(dt.year() - 2000U));
   Wire.endTransmission();
+}
+
+/**************************************************************************/
+/*!
+    @brief  Adjust the RTC clock to compensate for system clock drift
+    @param drift Adjustment to make in seconds
+    @note Positive values make the clock go ahead in time and vice-versa
+*/
+/**************************************************************************/
+void RTC_DS1307::adjustDrift(const int drift) {
+  DateTime newDt = DateTime(unixtime() + drift);
+  adjust(newDt);
 }
 
 /**************************************************************************/
@@ -1076,8 +1103,21 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
   rollover issues. Note that lastMillis is **not** the millis() value
   of the last call to now(): it's the millis() value corresponding to
   the last **full second** of Unix time. */
+uint32_t RTC_Millis::millisPerSecond = 1000;
 uint32_t RTC_Millis::lastMillis;
 uint32_t RTC_Millis::lastUnix;
+
+/**************************************************************************/
+/*!
+    @brief  Start the RTC_Millis date/time
+    @param dt DateTime object containing desired date/time
+    @return true
+*/
+/**************************************************************************/
+boolean RTC_Millis::begin(const DateTime &dt) {
+  adjust(dt);
+  return true;
+}
 
 /**************************************************************************/
 /*!
@@ -1092,6 +1132,15 @@ void RTC_Millis::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
+    @brief  Adjust the RTC clock to compensate for system clock drift
+    @param drift Adjustment to make in milliseconds
+    @note Positive values make the clock go ahead in time and vice-versa
+*/
+/**************************************************************************/
+void RTC_Millis::adjustDrift(int drift) { lastMillis = 1000 - drift; }
+
+/**************************************************************************/
+/*!
     @brief  Return a DateTime object containing the current date/time.
             Note that computing (millis() - lastMillis) is rollover-safe as long
             as this method is called at least once every 49.7 days.
@@ -1099,8 +1148,8 @@ void RTC_Millis::adjust(const DateTime &dt) {
 */
 /**************************************************************************/
 DateTime RTC_Millis::now() {
-  uint32_t elapsedSeconds = (millis() - lastMillis) / 1000;
-  lastMillis += elapsedSeconds * 1000;
+  uint32_t elapsedSeconds = (millis() - lastMillis) / millisPerSecond;
+  lastMillis += elapsedSeconds * millisPerSecond;
   lastUnix += elapsedSeconds;
   return lastUnix;
 }
@@ -1112,6 +1161,18 @@ uint32_t RTC_Micros::microsPerSecond = 1000000;
 /** The timing logic is identical to RTC_Millis. */
 uint32_t RTC_Micros::lastMicros;
 uint32_t RTC_Micros::lastUnix;
+
+/**************************************************************************/
+/*!
+    @brief  Start the RTC_Micros date/time
+    @param dt DateTime object containing desired date/time
+    @return true
+*/
+/**************************************************************************/
+boolean RTC_Micros::begin(const DateTime &dt) {
+  adjust(dt);
+  return true;
+}
 
 /**************************************************************************/
 /*!
@@ -1127,11 +1188,11 @@ void RTC_Micros::adjust(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @brief  Adjust the RTC_Micros clock to compensate for system clock drift
-    @param ppm Adjustment to make
+    @param drift Adjustment to make in microseconds
 */
 /**************************************************************************/
 // A positive adjustment makes the clock faster.
-void RTC_Micros::adjustDrift(int ppm) { microsPerSecond = 1000000 - ppm; }
+void RTC_Micros::adjustDrift(int drift) { microsPerSecond = 1000000 - drift; }
 
 /**************************************************************************/
 /*!
@@ -1152,11 +1213,13 @@ DateTime RTC_Micros::now() {
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8523::begin(void) {
+boolean RTC_PCF8523::begin(const DateTime &dt) {
   Wire.begin();
   Wire.beginTransmission(PCF8523_ADDRESS);
-  if (Wire.endTransmission() == 0)
+  if (Wire.endTransmission() == 0) {
+    adjust(dt);
     return true;
+  }
   return false;
 }
 
@@ -1480,11 +1543,13 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
     @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8563::begin(void) {
+boolean RTC_PCF8563::begin(const DateTime &dt) {
   Wire.begin();
   Wire.beginTransmission(PCF8563_ADDRESS);
-  if (Wire.endTransmission() == 0)
+  if (Wire.endTransmission() == 0) {
+    adjust(dt);
     return true;
+  }
   return false;
 }
 
@@ -1634,11 +1699,13 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS3231::begin(void) {
+boolean RTC_DS3231::begin(const DateTime &dt) {
   Wire.begin();
   Wire.beginTransmission(DS3231_ADDRESS);
-  if (Wire.endTransmission() == 0)
+  if (Wire.endTransmission() == 0) {
+    adjust(dt);
     return true;
+  }
   return false;
 }
 

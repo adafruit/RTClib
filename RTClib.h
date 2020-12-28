@@ -23,6 +23,7 @@
 #define _RTCLIB_H_
 
 #include <Arduino.h>
+#include "utility/RTC.h"
 class TimeSpan;
 
 /** Registers */
@@ -61,6 +62,8 @@ class TimeSpan;
 #define SECONDS_PER_DAY 86400L ///< 60 * 60 * 24
 #define SECONDS_FROM_1970_TO_2000                                              \
   946684800 ///< Unixtime for 2000-01-01 00:00:00, useful for initialization
+
+const DateTime COMPILE_DT = DateTime(__DATE__, __TIME__);
 
 bool isLeapYear(uint16_t year);
 uint8_t getDaysInMonth(uint16_t year, uint8_t month);
@@ -275,11 +278,13 @@ enum Ds1307SqwPinMode {
     @brief  RTC based on the DS1307 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS1307 {
+class RTC_DS1307 : RTC {
 public:
-  boolean begin(void);
+  boolean begin(const DateTime &dt = COMPILE_DT);
   static void adjust(const DateTime &dt);
-  uint8_t isrunning(void);
+  void adjustDrift(int drift);
+  bool isrunning(void);
+  bool lostPower(void);
   static DateTime now();
   static Ds1307SqwPinMode readSqwPinMode();
   static void writeSqwPinMode(Ds1307SqwPinMode mode);
@@ -327,10 +332,12 @@ enum Ds3231Alarm2Mode {
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS3231 {
+class RTC_DS3231 : RTC {
 public:
-  boolean begin(void);
+  boolean begin(const DateTime &dt = COMPILE_DT);
   static void adjust(const DateTime &dt);
+  static void adjustDrift(const int drift);
+  bool isrunning(void);
   bool lostPower(void);
   static DateTime now();
   static Ds3231SqwPinMode readSqwPinMode();
@@ -392,16 +399,17 @@ enum Pcf8523OffsetMode {
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_PCF8523 {
+class RTC_PCF8523 : RTC {
 public:
-  boolean begin(void);
+  boolean begin(const DateTime &dt = COMPILE_DT);
   void adjust(const DateTime &dt);
+  boolean isrunning(void);
   boolean lostPower(void);
   boolean initialized(void);
   static DateTime now();
   void start(void);
   void stop(void);
-  uint8_t isrunning();
+  boolean isrunning();
   Pcf8523SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
   void enableSecondTimer(void);
@@ -429,9 +437,10 @@ enum Pcf8563SqwPinMode {
 */
 /**************************************************************************/
 
-class RTC_PCF8563 {
+class RTC_PCF8563 : RTC {
 public:
-  boolean begin(void);
+  boolean begin(const DateTime &dt = COMPILE_DT);
+  boolean isrunning(void);
   boolean lostPower(void);
   void adjust(const DateTime &dt);
   static DateTime now();
@@ -448,17 +457,26 @@ public:
    use. NOTE: this is immune to millis() rollover events.
 */
 /**************************************************************************/
-class RTC_Millis {
+class RTC_Millis : RTC {
 public:
+  static boolean begin(const DateTime &dt = COMPILE_DT);
   /*!
-      @brief  Start the RTC
-      @param dt DateTime object with the date/time to set
+    @brief  Simulate if the RTC is running
+    @return true
   */
-  static void begin(const DateTime &dt) { adjust(dt); }
+  boolean isrunning(void) { return true; }
+  /*!
+    @brief Simulate if the RTC has lost power
+    @return false
+  */
+  boolean lostPower(void) { return false; }
   static void adjust(const DateTime &dt);
+  static void adjustDrift(const int drift);
   static DateTime now();
 
 protected:
+  static uint32_t millisPerSecond; ///< Number of milliseconds reported by
+                                   ///< millis() per "true" (calibrated) second
   static uint32_t lastUnix;   ///< Unix time from the previous call to now() -
                               ///< prevents rollover issues
   static uint32_t lastMillis; ///< the millis() value corresponding to the last
@@ -474,13 +492,23 @@ protected:
             approximately 71.6 minutes.
 */
 /**************************************************************************/
-class RTC_Micros {
+class RTC_Micros : RTC {
 public:
   /*!
       @brief  Start the RTC
       @param dt DateTime object with the date/time to set
   */
-  static void begin(const DateTime &dt) { adjust(dt); }
+  static boolean begin(const DateTime &dt = COMPILE_DT);
+  /*!
+    @brief  Simulate if the RTC is running
+    @return true
+  */
+  boolean isrunning(void) { return true; }
+  /*!
+    @brief Simulate if the RTC has lost power
+    @return false
+  */
+  boolean lostPower(void) { return false; }
   static void adjust(const DateTime &dt);
   static void adjustDrift(int ppm);
   static DateTime now();
