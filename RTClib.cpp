@@ -1000,6 +1000,22 @@ boolean RTC_DS3231::begin(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
+    @brief  Is the DS3231 running? Check the Clock Halt bit in register 0
+    @return 1 if the RTC is running, 0 if not
+*/
+/**************************************************************************/
+bool RTC_DS3231::isrunning(void) {
+  Wire.beginTransmission(DS3231_ADDRESS);
+  Wire._I2C_WRITE((byte)0);
+  Wire.endTransmission();
+
+  Wire.requestFrom(DS3231_ADDRESS, 1);
+  uint8_t ss = Wire._I2C_READ();
+  return !(ss >> 7);
+}
+
+/**************************************************************************/
+/*!
     @brief  Check the status register Oscillator Stop Flag to see if the DS3231
    stopped due to power loss
     @return True if the bit is set (oscillator stopped) or false if it is
