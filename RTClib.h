@@ -57,18 +57,6 @@
   0x11 ///< Temperature register (high byte - low byte is at 0x12), 10-bit
        ///< temperature value
 
-#if (ARDUINO >= 100)
-#include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
-// Macro to deal with the difference in I2C write functions from old and new
-// Arduino versions.
-#define _I2C_WRITE write ///< Modern I2C write
-#define _I2C_READ read   ///< Modern I2C read
-#else
-#include <WProgram.h>
-#define _I2C_WRITE send   ///< Legacy I2C write
-#define _I2C_READ receive ///< legacy I2C read
-#endif
-
 /** DS1307 SQW pin mode settings */
 enum Ds1307SqwPinMode {
   DS1307_OFF = 0x00,            // Low
