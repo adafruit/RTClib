@@ -197,13 +197,12 @@ void RTC_DS1307::adjust(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @brief  Adjust the RTC clock to compensate for system clock drift
-    @param drift Adjustment to make in seconds
-    @note Positive values make the clock go ahead in time and vice-versa
+    @param ppm Parts per million to adjust the clock speed by
+    @note Positive values make the clock go faster and vice-versa
 */
 /**************************************************************************/
-void RTC_DS1307::adjustDrift(const int drift) {
-  DateTime newDt = DateTime(now().unixtime() + drift);
-  adjust(newDt);
+void RTC_DS1307::adjustDrift(const int ppm) {
+  skipPeriod = 1000000L / ppm;
 }
 
 /**************************************************************************/
@@ -225,8 +224,20 @@ DateTime RTC_DS1307::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
+  DateTime currNow(y, m, d, hh, mm, ss);
 
-  return DateTime(y, m, d, hh, mm, ss);
+  if (skipPeriod != 0) {
+    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
+      if (skipPeriod > 0)
+        currNow = DateTime(currNow.unixtime() + 1);
+      else
+        currNow = DateTime(currNow.unixtime() - 1);
+
+      adjust(currNow);
+    }
+  }
+
+  return currNow;
 }
 
 /**************************************************************************/
@@ -371,11 +382,11 @@ void RTC_Millis::adjust(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @brief  Adjust the RTC clock speed to compensate for system clock drift
-    @param drift Adjustment to make in milliseconds
+    @param ppm Parts per million to adjust clock speed by
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Millis::adjustDrift(int drift) { millisPerSecond = 1000 - drift; }
+void RTC_Millis::adjustDrift(const int ppm) { millisPerSecond = (1000000UL - ppm) / 1000; }
 
 /**************************************************************************/
 /*!
@@ -438,11 +449,11 @@ void RTC_Micros::adjust(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @brief  Adjust the RTC_Micros clock speed to compensate for system clock drift
-    @param drift Adjustment to make in microseconds
+    @param ppm Parts per million drift rate adjustment
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Micros::adjustDrift(int drift) { microsPerSecond = 1000000 - drift; }
+void RTC_Micros::adjustDrift(const int ppm) { microsPerSecond = 1000000 - ppm; }
 
 /**************************************************************************/
 /*!
@@ -549,6 +560,17 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
+    @brief  Adjust the RTC clock to compensate for system clock drift
+    @param ppm Parts per million to adjust the clock speed by
+    @note Positive values make the clock go faster and vice-versa
+*/
+/**************************************************************************/
+void RTC_PCF8523::adjustDrift(const int ppm) {
+  skipPeriod = 1000000L / ppm;
+}
+
+/**************************************************************************/
+/*!
     @brief  Get the current date/time
     @return DateTime object containing the current date/time
 */
@@ -566,8 +588,20 @@ DateTime RTC_PCF8523::now() {
   Wire._I2C_READ(); // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
+  DateTime currNow(y, m, d, hh, mm, ss);
 
-  return DateTime(y, m, d, hh, mm, ss);
+  if (skipPeriod != 0) {
+    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
+      if (skipPeriod > 0)
+        currNow = DateTime(currNow.unixtime() + 1);
+      else
+        currNow = DateTime(currNow.unixtime() - 1);
+
+      adjust(currNow);
+    }
+  }
+
+  return currNow;
 }
 
 /**************************************************************************/
@@ -875,6 +909,17 @@ void RTC_PCF8563::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
+    @brief  Adjust the RTC clock to compensate for system clock drift
+    @param ppm Parts per million to adjust the clock speed by
+    @note Positive values make the clock go faster and vice-versa
+*/
+/**************************************************************************/
+void RTC_PCF8563::adjustDrift(const int ppm) {
+  skipPeriod = 1000000L / ppm;
+}
+
+/**************************************************************************/
+/*!
     @brief  Get the current date/time
     @return DateTime object containing the current date/time
 */
@@ -893,8 +938,20 @@ DateTime RTC_PCF8563::now() {
   Wire._I2C_READ(); // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ() & 0x1F);
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
+  DateTime currNow(y, m, d, hh, mm, ss);
 
-  return DateTime(y, m, d, hh, mm, ss);
+  if (skipPeriod != 0) {
+    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
+      if (skipPeriod > 0)
+        currNow = DateTime(currNow.unixtime() + 1);
+      else
+        currNow = DateTime(currNow.unixtime() - 1);
+
+      adjust(currNow);
+    }
+  }
+
+  return currNow;
 }
 
 /**************************************************************************/
@@ -1048,6 +1105,17 @@ void RTC_DS3231::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
+    @brief  Adjust the RTC clock to compensate for system clock drift
+    @param ppm Parts per million to adjust the clock speed by
+    @note Positive values make the clock go faster and vice-versa
+*/
+/**************************************************************************/
+void RTC_DS3231::adjustDrift(const int ppm) {
+  skipPeriod = 1000000L / ppm;
+}
+
+/**************************************************************************/
+/*!
     @brief  Get the current date/time
     @return DateTime object with the current date/time
 */
@@ -1065,8 +1133,20 @@ DateTime RTC_DS3231::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
+  DateTime currNow(y, m, d, hh, mm, ss);
 
-  return DateTime(y, m, d, hh, mm, ss);
+  if (skipPeriod != 0) {
+    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
+      if (skipPeriod > 0)
+        currNow = DateTime(currNow.unixtime() + 1);
+      else
+        currNow = DateTime(currNow.unixtime() - 1);
+
+      adjust(currNow);
+    }
+  }
+
+  return currNow;
 }
 
 /**************************************************************************/

@@ -77,7 +77,7 @@ public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
-  void adjustDrift(int drift);
+  void adjustDrift(const int ppm);
   bool isrunning(void);
   bool lostPower(void);
   DateTime now();
@@ -87,6 +87,10 @@ public:
   void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
   void writenvram(uint8_t address, uint8_t data);
   void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
+
+protected:
+  int16_t skipPeriod;   // period in us to skip a second
+  DateTime prevNow;
 };
 
 /** DS3231 SQW pin mode settings */
@@ -132,7 +136,7 @@ public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
-  void adjustDrift(const int drift);
+  void adjustDrift(const int ppm);
   bool isrunning(void);
   bool lostPower(void);
   DateTime now();
@@ -147,6 +151,10 @@ public:
   void disable32K(void);
   bool isEnabled32K(void);
   static float getTemperature(); // in Celcius degree
+
+protected:
+  int16_t skipPeriod;   // period in us to skip a second
+  DateTime prevNow;
 };
 
 /** PCF8523 INT/SQW pin mode settings */
@@ -200,6 +208,7 @@ public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
+  void adjustDrift(const int ppm);
   boolean isrunning(void);
   boolean lostPower(void);
   boolean initialized(void);
@@ -216,6 +225,10 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+
+protected:
+  int16_t skipPeriod;   // period in us to skip a second
+  DateTime prevNow;
 };
 
 /** PCF8563 CLKOUT pin mode settings */
@@ -240,11 +253,16 @@ public:
   boolean isrunning(void);
   boolean lostPower(void);
   void adjust(const DateTime &dt);
+  void adjustDrift(const int ppm);
   DateTime now();
   void start(void);
   void stop(void);
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
+
+protected:
+  int16_t skipPeriod;   // period in us to skip a second
+  DateTime prevNow;
 };
 
 /**************************************************************************/
@@ -268,7 +286,7 @@ public:
   */
   boolean lostPower(void) { return false; }
   void adjust(const DateTime &dt);
-  void adjustDrift(const int drift);
+  void adjustDrift(const int ppm);
   DateTime now();
 
 protected:
@@ -304,7 +322,7 @@ public:
   */
   boolean lostPower(void) { return false; }
   void adjust(const DateTime &dt);
-  void adjustDrift(int ppm);
+  void adjustDrift(const int ppm);
   DateTime now();
 
 protected:
