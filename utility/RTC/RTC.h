@@ -37,7 +37,7 @@ public:
     @param dt DateTime object containing desired date/time
     @return True if successful, false otherwise
   */
-  virtual boolean begin(DateTime &dt) = 0;
+  virtual boolean begin(DateTime &dt);
 
   /*!
     @brief Adjust the RTC to the specified date/time
@@ -46,7 +46,7 @@ public:
   virtual void adjust(const DateTime &dt) = 0;
 
   /*!
-    @brief Adjust the RTC's date/time to account for RTC drift
+    @brief Adjust the RTC time's rate of change to counter drift
     @param drift The drift to adjust the date/time by
     @note Positive values makes the clock go ahead in time and vice-versa
   */
