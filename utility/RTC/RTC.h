@@ -43,7 +43,7 @@ public:
     @param dt DateTime object containing desired date/time
     @return True if successful, false otherwise
   */
-  virtual boolean begin(DateTime &dt) = 0;
+  virtual boolean begin(const DateTime &dt) = 0;
 
   /*!
     @brief Adjust the RTC to the specified date/time
