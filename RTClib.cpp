@@ -117,6 +117,22 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
 /**************************************************************************/
 /*!
     @brief  Start I2C for the DS1307 and test succesful connection
+    @return True if Wire can find DS1307 or false otherwise.
+    @note Preserves the date/time on the RTC
+*/
+/**************************************************************************/
+boolean RTC_DS1307::begin(void) {
+  Wire.begin();
+  Wire.beginTransmission(DS1307_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start I2C for the DS1307, test succesful connection, then initialise the date/time
     @param dt DateTime object containing desired date/time
     @return True if Wire can find DS1307 or false otherwise.
 */
@@ -321,6 +337,17 @@ uint32_t RTC_Millis::lastUnix;
 /**************************************************************************/
 /*!
     @brief  Start the RTC_Millis date/time
+    @return true
+    @note Equivalent to `begin(DateTime::COMPILE_DT)`
+*/
+/**************************************************************************/
+boolean RTC_Millis::begin(void) {
+  adjust(DateTime::COMPILE_DT);
+  return true;
+}
+/**************************************************************************/
+/*!
+    @brief  Start the RTC_Millis date/time
     @param dt DateTime object containing desired date/time
     @return true
 */
@@ -376,6 +403,18 @@ uint32_t RTC_Micros::lastUnix;
 /**************************************************************************/
 /*!
     @brief  Start the RTC_Micros date/time
+    @return true
+    @note Equivalent to `begin(DateTime::COMPILE_DT)`
+*/
+/**************************************************************************/
+boolean RTC_Micros::begin(void) {
+  adjust(DateTime::COMPILE_DT);
+  return true;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start the RTC_Micros date/time
     @param dt DateTime object containing desired date/time
     @return true
 */
@@ -421,6 +460,23 @@ DateTime RTC_Micros::now() {
 /**************************************************************************/
 /*!
     @brief  Start I2C for the PCF8523 and test succesful connection
+    @return True if Wire can find PCF8523 or false otherwise.
+    @note Preserves the date/time on the RTC
+*/
+/**************************************************************************/
+boolean RTC_PCF8523::begin(void) {
+  Wire.begin();
+  Wire.beginTransmission(PCF8523_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start I2C for the PCF8523 and test succesful connection
+    @param dt DateTime object containing desired date/time
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
@@ -752,6 +808,23 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 /*!
     @brief  Start I2C for the PCF8563 and test succesful connection
     @return True if Wire can find PCF8563 or false otherwise.
+    @note Preserves the date/time on the RTC
+*/
+/**************************************************************************/
+boolean RTC_PCF8563::begin(void) {
+  Wire.begin();
+  Wire.beginTransmission(PCF8563_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start I2C for the PCF8563 and test succesful connection
+    @param dt DateTime object containing desired date/time
+    @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
 boolean RTC_PCF8563::begin(const DateTime &dt) {
@@ -907,6 +980,23 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 /**************************************************************************/
 /*!
     @brief  Start I2C for the DS3231 and test succesful connection
+    @return True if Wire can find DS3231 or false otherwise.
+    @note Preserves the date/time on the RTC
+*/
+/**************************************************************************/
+boolean RTC_DS3231::begin(void) {
+  Wire.begin();
+  Wire.beginTransmission(DS3231_ADDRESS);
+  if (Wire.endTransmission() == 0)
+    return true;
+  
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Start I2C for the DS3231 and test succesful connection
+    @param dt DateTime object containing desired date/time
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/

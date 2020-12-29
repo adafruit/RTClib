@@ -33,11 +33,17 @@
 class RTC {
 public:
   /*!
-    @brief Start the RTC
+    @brief Start the RTC while preserving the RTC's date/time
+    @return True if successful, false otherwise
+  */
+  virtual boolean begin(void) = 0;
+
+  /*!
+    @brief Start the RTC and adjust the RTC's date/time
     @param dt DateTime object containing desired date/time
     @return True if successful, false otherwise
   */
-  virtual boolean begin(DateTime &dt);
+  virtual boolean begin(DateTime &dt) = 0;
 
   /*!
     @brief Adjust the RTC to the specified date/time
@@ -48,7 +54,7 @@ public:
   /*!
     @brief Adjust the RTC time's rate of change to counter drift
     @param drift The drift to adjust the date/time by
-    @note Positive values makes the clock go ahead in time and vice-versa
+    @note Positive values makes the clock go faster and vice-versa
   */
   virtual void adjustDrift(const int drift);
 

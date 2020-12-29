@@ -74,7 +74,8 @@ enum Ds1307SqwPinMode {
 /**************************************************************************/
 class RTC_DS1307 : RTC {
 public:
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
   void adjustDrift(int drift);
   bool isrunning(void);
@@ -128,7 +129,8 @@ enum Ds3231Alarm2Mode {
 /**************************************************************************/
 class RTC_DS3231 : RTC {
 public:
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
   void adjustDrift(const int drift);
   bool isrunning(void);
@@ -195,7 +197,8 @@ enum Pcf8523OffsetMode {
 /**************************************************************************/
 class RTC_PCF8523 : RTC {
 public:
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   void adjust(const DateTime &dt);
   boolean isrunning(void);
   boolean lostPower(void);
@@ -232,7 +235,8 @@ enum Pcf8563SqwPinMode {
 
 class RTC_PCF8563 : RTC {
 public:
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   boolean isrunning(void);
   boolean lostPower(void);
   void adjust(const DateTime &dt);
@@ -251,7 +255,8 @@ public:
 /**************************************************************************/
 class RTC_Millis : RTC {
 public:
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   /*!
     @brief  Simulate if the RTC is running
     @return true
@@ -286,11 +291,8 @@ protected:
 /**************************************************************************/
 class RTC_Micros : RTC {
 public:
-  /*!
-      @brief  Start the RTC
-      @param dt DateTime object with the date/time to set
-  */
-  boolean begin(const DateTime &dt = DateTime::COMPILE_DT);
+  boolean begin(void);
+  boolean begin(const DateTime &dt);
   /*!
     @brief  Simulate if the RTC is running
     @return true
