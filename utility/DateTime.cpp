@@ -60,8 +60,6 @@ static uint32_t time2ulong(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
   return ((days * 24UL + h) * 60 + m) * 60 + s;
 }
 
-const DateTime DateTime::COMPILE_DT = DateTime(F(__DATE__), F(__TIME__));
-
 /**************************************************************************/
 /*!
     @brief  Constructor from

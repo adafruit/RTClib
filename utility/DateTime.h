@@ -29,11 +29,6 @@ uint8_t getDaysInMonth(uint16_t year, uint8_t month);
 /**************************************************************************/
 class DateTime {
 public:
-  /*!
-    @brief The date/time at compile time
-  */
-  const static DateTime COMPILE_DT;
-
   DateTime(uint32_t t = SECONDS_FROM_1970_TO_2000);
   DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour = 0,
            uint8_t min = 0, uint8_t sec = 0);

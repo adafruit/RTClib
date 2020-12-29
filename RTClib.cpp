@@ -326,11 +326,11 @@ uint32_t RTC_Millis::lastUnix;
 /*!
     @brief  Start the RTC_Millis date/time
     @return true
-    @note Equivalent to `begin(DateTime::COMPILE_DT)`
+    @note Equivalent to `begin(DateTime(F(__DATE__), F(__TIME__)))`
 */
 /**************************************************************************/
 boolean RTC_Millis::begin(void) {
-  adjust(DateTime::COMPILE_DT);
+  adjust(DateTime(F(__DATE__), F(__TIME__)));
   return true;
 }
 /**************************************************************************/
@@ -392,11 +392,11 @@ uint32_t RTC_Micros::lastUnix;
 /*!
     @brief  Start the RTC_Micros date/time
     @return true
-    @note Equivalent to `begin(DateTime::COMPILE_DT)`
+    @note Equivalent to `begin(DateTime(F(__DATE__), F(__TIME__)))`
 */
 /**************************************************************************/
 boolean RTC_Micros::begin(void) {
-  adjust(DateTime::COMPILE_DT);
+  adjust(DateTime(F(__DATE__), F(__TIME__)));
   return true;
 }
 
