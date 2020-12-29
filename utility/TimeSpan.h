@@ -1,6 +1,8 @@
 #ifndef _TIMESPAN_H_
 #define _TIMESPAN_H_
 
+#include <Arduino.h>
+
 /**************************************************************************/
 /*!
     @brief  Timespan which can represent changes in time with seconds accuracy.
