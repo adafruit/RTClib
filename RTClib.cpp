@@ -343,12 +343,12 @@ void RTC_Millis::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock to compensate for system clock drift
+    @brief  Adjust the RTC clock speed to compensate for system clock drift
     @param drift Adjustment to make in milliseconds
-    @note Positive values make the clock go ahead in time and vice-versa
+    @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Millis::adjustDrift(int drift) { lastMillis = 1000 - drift; }
+void RTC_Millis::adjustDrift(int drift) { millisPerSecond = 1000 - drift; }
 
 /**************************************************************************/
 /*!
@@ -398,11 +398,11 @@ void RTC_Micros::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC_Micros clock to compensate for system clock drift
+    @brief  Adjust the RTC_Micros clock speed to compensate for system clock drift
     @param drift Adjustment to make in microseconds
+    @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-// A positive adjustment makes the clock faster.
 void RTC_Micros::adjustDrift(int drift) { microsPerSecond = 1000000 - drift; }
 
 /**************************************************************************/
