@@ -52,13 +52,6 @@ public:
   virtual void adjust(const DateTime &dt) = 0;
 
   /*!
-    @brief Adjust the RTC time's rate of change to counter drift
-    @param ppm Parts per million to adjust clock speed by
-    @note Positive values makes the clock go faster and vice-versa
-  */
-  virtual void adjustDrift(const int ppm);
-
-  /*!
     @brief Check if the RTC is running or not
     @return True if it is running, false otherwise
   */
