@@ -42,7 +42,6 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
-  bool fixDateTime();
   char *toString(char *buffer);
 
   /*!
