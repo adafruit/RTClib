@@ -196,17 +196,6 @@ void RTC_DS1307::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock to compensate for system clock drift
-    @param ppm Parts per million to adjust the clock speed by
-    @note Positive values make the clock go faster and vice-versa
-*/
-/**************************************************************************/
-void RTC_DS1307::adjustDrift(const int ppm) {
-  skipPeriod = 1000000L / ppm;
-}
-
-/**************************************************************************/
-/*!
     @brief  Get the current date and time from the DS1307
     @return DateTime object containing the current date and time
 */
@@ -224,20 +213,8 @@ DateTime RTC_DS1307::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
-  DateTime currNow(y, m, d, hh, mm, ss);
 
-  if (skipPeriod != 0) {
-    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
-      if (skipPeriod > 0)
-        currNow = DateTime(currNow.unixtime() + 1);
-      else
-        currNow = DateTime(currNow.unixtime() - 1);
-
-      adjust(currNow);
-    }
-  }
-
-  return currNow;
+  return DateTime(y, m, d, hh, mm, ss);
 }
 
 /**************************************************************************/
@@ -341,7 +318,7 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
   rollover issues. Note that lastMillis is **not** the millis() value
   of the last call to now(): it's the millis() value corresponding to
   the last **full second** of Unix time. */
-uint32_t RTC_Millis::millisPerSecond = 1000;
+uint32_t RTC_Millis::microsPerSecond = 1000000L;
 uint32_t RTC_Millis::lastMillis;
 uint32_t RTC_Millis::lastUnix;
 
@@ -386,7 +363,7 @@ void RTC_Millis::adjust(const DateTime &dt) {
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Millis::adjustDrift(const int ppm) { millisPerSecond = (1000000UL - ppm) / 1000; }
+void RTC_Millis::adjustDrift(const int ppm) { microsPerSecond = 1000000L - ppm; }
 
 /**************************************************************************/
 /*!
@@ -397,15 +374,15 @@ void RTC_Millis::adjustDrift(const int ppm) { millisPerSecond = (1000000UL - ppm
 */
 /**************************************************************************/
 DateTime RTC_Millis::now() {
-  uint32_t elapsedSeconds = (millis() - lastMillis) / millisPerSecond;
-  lastMillis += elapsedSeconds * millisPerSecond;
+  uint32_t elapsedSeconds = (millis() - lastMillis) * 1000 / microsPerSecond;
+  lastMillis += elapsedSeconds * microsPerSecond;
   lastUnix += elapsedSeconds;
   return lastUnix;
 }
 
 /** Number of microseconds reported by micros() per "true" (calibrated) second.
  */
-uint32_t RTC_Micros::microsPerSecond = 1000000;
+uint32_t RTC_Micros::microsPerSecond = 1000000L;
 
 /** The timing logic is identical to RTC_Millis. */
 uint32_t RTC_Micros::lastMicros;
@@ -453,7 +430,7 @@ void RTC_Micros::adjust(const DateTime &dt) {
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Micros::adjustDrift(const int ppm) { microsPerSecond = 1000000 - ppm; }
+void RTC_Micros::adjustDrift(const int ppm) { microsPerSecond = 1000000L - ppm; }
 
 /**************************************************************************/
 /*!
@@ -560,17 +537,6 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock to compensate for system clock drift
-    @param ppm Parts per million to adjust the clock speed by
-    @note Positive values make the clock go faster and vice-versa
-*/
-/**************************************************************************/
-void RTC_PCF8523::adjustDrift(const int ppm) {
-  skipPeriod = 1000000L / ppm;
-}
-
-/**************************************************************************/
-/*!
     @brief  Get the current date/time
     @return DateTime object containing the current date/time
 */
@@ -588,25 +554,13 @@ DateTime RTC_PCF8523::now() {
   Wire._I2C_READ(); // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
-  DateTime currNow(y, m, d, hh, mm, ss);
 
-  if (skipPeriod != 0) {
-    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
-      if (skipPeriod > 0)
-        currNow = DateTime(currNow.unixtime() + 1);
-      else
-        currNow = DateTime(currNow.unixtime() - 1);
-
-      adjust(currNow);
-    }
-  }
-
-  return currNow;
+  return DateTime(y, m, d, hh, mm, ss);
 }
 
 /**************************************************************************/
 /*!
-    @brief  Resets the STOP bit in register Control_1
+    @brief  resets the stop bit in register control_1
 */
 /**************************************************************************/
 void RTC_PCF8523::start(void) {
@@ -909,17 +863,6 @@ void RTC_PCF8563::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock to compensate for system clock drift
-    @param ppm Parts per million to adjust the clock speed by
-    @note Positive values make the clock go faster and vice-versa
-*/
-/**************************************************************************/
-void RTC_PCF8563::adjustDrift(const int ppm) {
-  skipPeriod = 1000000L / ppm;
-}
-
-/**************************************************************************/
-/*!
     @brief  Get the current date/time
     @return DateTime object containing the current date/time
 */
@@ -938,20 +881,8 @@ DateTime RTC_PCF8563::now() {
   Wire._I2C_READ(); // skip 'weekdays'
   uint8_t m = bcd2bin(Wire._I2C_READ() & 0x1F);
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000;
-  DateTime currNow(y, m, d, hh, mm, ss);
 
-  if (skipPeriod != 0) {
-    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
-      if (skipPeriod > 0)
-        currNow = DateTime(currNow.unixtime() + 1);
-      else
-        currNow = DateTime(currNow.unixtime() - 1);
-
-      adjust(currNow);
-    }
-  }
-
-  return currNow;
+  return DateTime(y, m, d, hh, mm, ss);
 }
 
 /**************************************************************************/
@@ -1105,17 +1036,6 @@ void RTC_DS3231::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock to compensate for system clock drift
-    @param ppm Parts per million to adjust the clock speed by
-    @note Positive values make the clock go faster and vice-versa
-*/
-/**************************************************************************/
-void RTC_DS3231::adjustDrift(const int ppm) {
-  skipPeriod = 1000000L / ppm;
-}
-
-/**************************************************************************/
-/*!
     @brief  Get the current date/time
     @return DateTime object with the current date/time
 */
@@ -1133,20 +1053,8 @@ DateTime RTC_DS3231::now() {
   uint8_t d = bcd2bin(Wire._I2C_READ());
   uint8_t m = bcd2bin(Wire._I2C_READ());
   uint16_t y = bcd2bin(Wire._I2C_READ()) + 2000U;
-  DateTime currNow(y, m, d, hh, mm, ss);
 
-  if (skipPeriod != 0) {
-    if ((currNow - prevNow) * 1000000L > abs(skipPeriod)) {
-      if (skipPeriod > 0)
-        currNow = DateTime(currNow.unixtime() + 1);
-      else
-        currNow = DateTime(currNow.unixtime() - 1);
-
-      adjust(currNow);
-    }
-  }
-
-  return currNow;
+  return DateTime(y, m, d, hh, mm, ss);
 }
 
 /**************************************************************************/
