@@ -23,9 +23,9 @@
 #define _RTCLIB_H_
 
 #include <Arduino.h>
-#include "utility/RTC/RTC.h"
-#include "utility/DateTime/DateTime.h"
-#include "utility/TimeSpan/TimeSpan.h"
+#include "utility/RTC.h"
+#include "utility/DateTime.h"
+#include "utility/TimeSpan.h"
 
 /** Registers */
 #define PCF8523_ADDRESS 0x68       ///< I2C address for PCF8523

@@ -23,7 +23,7 @@
 #define _RTC_H_
 
 #include <Arduino.h>
-#include "../DateTime/DateTime.h"
+#include "DateTime.h"
 
 /**************************************************************************/
 /*!

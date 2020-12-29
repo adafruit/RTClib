@@ -2,7 +2,7 @@
 #define _DATETIME_H_
 
 #include <Arduino.h>
-#include "../TimeSpan/TimeSpan.h"
+#include "TimeSpan.h"
 
 /** Constants */
 #define SECONDS_PER_DAY 86400L ///< 60 * 60 * 24
