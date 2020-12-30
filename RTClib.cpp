@@ -363,7 +363,9 @@ void RTC_Millis::adjust(const DateTime &dt) {
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Millis::adjustDrift(const int ppm) { microsPerSecond = 1000000L - ppm; }
+void RTC_Millis::adjustDrift(const int ppm) {
+  millisPerSecond = (1000000L - ppm) / 1000;
+}
 
 /**************************************************************************/
 /*!
@@ -374,8 +376,8 @@ void RTC_Millis::adjustDrift(const int ppm) { microsPerSecond = 1000000L - ppm; 
 */
 /**************************************************************************/
 DateTime RTC_Millis::now() {
-  uint32_t elapsedSeconds = (millis() - lastMillis) * 1000 / microsPerSecond;
-  lastMillis += elapsedSeconds * microsPerSecond;
+  uint32_t elapsedSeconds = (millis() - lastMillis) / millisPerSecond;
+  lastMillis += elapsedSeconds * millisPerSecond;
   lastUnix += elapsedSeconds;
   return lastUnix;
 }

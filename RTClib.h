@@ -272,8 +272,8 @@ public:
   DateTime now();
 
 protected:
-  static uint32_t microsPerSecond; ///< Number of milliseconds reported by
-                                   ///< millis() per "true" (calibrated) second
+  static uint32_t millisPerSecond; ///< Number of milliseconds reported by
+                                   ///< millis() per "true" (calibrated) kilosecond
   static uint32_t lastUnix;   ///< Unix time from the previous call to now() -
                               ///< prevents rollover issues
   static uint32_t lastMillis; ///< the millis() value corresponding to the last
