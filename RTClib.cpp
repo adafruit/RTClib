@@ -318,7 +318,7 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
   rollover issues. Note that lastMillis is **not** the millis() value
   of the last call to now(): it's the millis() value corresponding to
   the last **full second** of Unix time. */
-uint32_t RTC_Millis::microsPerSecond = 1000000L;
+uint16_t RTC_Millis::millisPerSecond = 1000;
 uint32_t RTC_Millis::lastMillis;
 uint32_t RTC_Millis::lastUnix;
 
