@@ -52,17 +52,25 @@ public:
   virtual void adjust(const DateTime &dt) = 0;
 
   /*!
+    @brief  Adjust the RTC clock speed to compensate for system clock
+   drift
+    @param ppm Parts per million to adjust clock speed by
+    @note Positive values make the clock faster and vice-versa
+  */
+  virtual void adjustDrift(const int ppm);
+
+  /*!
     @brief Check if the RTC is running or not
     @return True if it is running, false otherwise
   */
-  virtual boolean isrunning(void) = 0;
+  virtual boolean isrunning(void);
 
   /*!
     @brief Check if the RTC has lost power
     @return True if the RTC has lost power, false otherwise
     @note Equivalent to `!rtc.isrunning()`
   */
-  virtual boolean lostPower(void);
+  boolean lostPower(void);
 
   /*!
     @brief Get the current date/time from the RTC
