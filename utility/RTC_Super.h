@@ -22,8 +22,8 @@
 #ifndef _RTC_SUPER_H_
 #define _RTC_SUPER_H_
 
-#include <Arduino.h>
 #include "DateTime.h"
+#include <Arduino.h>
 
 /**************************************************************************/
 /*!

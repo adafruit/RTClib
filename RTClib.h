@@ -22,10 +22,10 @@
 #ifndef _RTCLIB_H_
 #define _RTCLIB_H_
 
-#include <Arduino.h>
 #include "utility/RTC_Super.h"
 #include "utility/DateTime.h"
 #include "utility/TimeSpan.h"
+#include <Arduino.h>
 
 /** Registers */
 #define PCF8523_ADDRESS 0x68       ///< I2C address for PCF8523
@@ -272,8 +272,9 @@ public:
   DateTime now();
 
 protected:
-  static uint16_t millisPerSecond; ///< Number of milliseconds reported by
-                                   ///< millis() per "true" (calibrated) kilosecond
+  static uint16_t
+      millisPerSecond;        ///< Number of milliseconds reported by
+                              ///< millis() per "true" (calibrated) kilosecond
   static uint32_t lastUnix;   ///< Unix time from the previous call to now() -
                               ///< prevents rollover issues
   static uint32_t lastMillis; ///< the millis() value corresponding to the last

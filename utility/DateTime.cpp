@@ -639,4 +639,3 @@ String DateTime::timestamp(timestampOpt opt) {
   }
   return String(buffer);
 }
-

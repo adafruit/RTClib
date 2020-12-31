@@ -126,13 +126,14 @@ boolean RTC_DS1307::begin(void) {
   Wire.beginTransmission(DS1307_ADDRESS);
   if (Wire.endTransmission() == 0)
     return true;
-  
+
   return false;
 }
 
 /**************************************************************************/
 /*!
-    @brief  Start I2C for the DS1307, test succesful connection, then initialise the date/time
+    @brief  Start I2C for the DS1307, test succesful connection, then initialise
+   the date/time
     @param dt DateTime object containing desired date/time
     @return True if Wire can find DS1307 or false otherwise.
 */
@@ -358,7 +359,8 @@ void RTC_Millis::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock speed to compensate for system clock drift
+    @brief  Adjust the RTC clock speed to compensate for system clock
+   drift
     @param ppm Parts per million to adjust clock speed by
     @note Positive values make the clock faster and vice-versa
 */
@@ -427,12 +429,15 @@ void RTC_Micros::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC_Micros clock speed to compensate for system clock drift
+    @brief  Adjust the RTC_Micros clock speed to compensate for system clock
+   drift
     @param ppm Parts per million drift rate adjustment
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Micros::adjustDrift(const int ppm) { microsPerSecond = 1000000L - ppm; }
+void RTC_Micros::adjustDrift(const int ppm) {
+  microsPerSecond = 1000000L - ppm;
+}
 
 /**************************************************************************/
 /*!
@@ -459,7 +464,7 @@ boolean RTC_PCF8523::begin(void) {
   Wire.beginTransmission(PCF8523_ADDRESS);
   if (Wire.endTransmission() == 0)
     return true;
-  
+
   return false;
 }
 
@@ -806,7 +811,7 @@ boolean RTC_PCF8563::begin(void) {
   Wire.beginTransmission(PCF8563_ADDRESS);
   if (Wire.endTransmission() == 0)
     return true;
-  
+
   return false;
 }
 
