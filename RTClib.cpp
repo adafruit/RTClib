@@ -359,18 +359,6 @@ void RTC_Millis::adjust(const DateTime &dt) {
 
 /**************************************************************************/
 /*!
-    @brief  Adjust the RTC clock speed to compensate for system clock
-   drift
-    @param ppm Parts per million to adjust clock speed by
-    @note Positive values make the clock faster and vice-versa
-*/
-/**************************************************************************/
-void RTC_Millis::adjustDrift(const int ppm) {
-  millisPerSecond = (1000000L - ppm) / 1000;
-}
-
-/**************************************************************************/
-/*!
     @brief  Return a DateTime object containing the current date/time.
             Note that computing (millis() - lastMillis) is rollover-safe as long
             as this method is called at least once every 49.7 days.
