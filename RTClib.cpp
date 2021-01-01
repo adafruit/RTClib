@@ -365,8 +365,8 @@ void RTC_Millis::adjust(const DateTime &dt) {
 */
 /**************************************************************************/
 DateTime RTC_Millis::now() {
-  uint32_t elapsedSeconds = (millis() - lastMillis) / millisPerSecond;
-  lastMillis += elapsedSeconds * millisPerSecond;
+  uint32_t elapsedSeconds = (millis() - lastMillis) / 1000;
+  lastMillis += elapsedSeconds * 1000;
   lastUnix += elapsedSeconds;
   return lastUnix;
 }
