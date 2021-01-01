@@ -30,7 +30,7 @@
     @brief  RTC superclass for all RTC chips
 */
 /**************************************************************************/
-class RTC_Super {
+class RTC {
 public:
   /*!
     @brief Start the RTC while preserving the RTC's date/time

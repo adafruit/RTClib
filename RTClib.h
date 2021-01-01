@@ -74,7 +74,7 @@ enum Ds1307SqwPinMode {
     @brief  RTC based on the DS1307 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS1307 : public RTC_Super {
+class RTC_DS1307 : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
@@ -128,7 +128,7 @@ enum Ds3231Alarm2Mode {
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS3231 : public RTC_Super {
+class RTC_DS3231 : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
@@ -195,7 +195,7 @@ enum Pcf8523OffsetMode {
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_PCF8523 : public RTC_Super {
+class RTC_PCF8523 : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
@@ -233,7 +233,7 @@ enum Pcf8563SqwPinMode {
 */
 /**************************************************************************/
 
-class RTC_PCF8563 : public RTC_Super {
+class RTC_PCF8563 : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
@@ -253,7 +253,7 @@ public:
    use. NOTE: this is immune to millis() rollover events.
 */
 /**************************************************************************/
-class RTC_Millis : public RTC_Super {
+class RTC_Millis : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
@@ -286,7 +286,7 @@ protected:
             approximately 71.6 minutes.
 */
 /**************************************************************************/
-class RTC_Micros : public RTC_Super {
+class RTC_Micros : public RTC {
 public:
   boolean begin(void);
   boolean begin(const DateTime &dt);
