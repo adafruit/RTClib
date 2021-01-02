@@ -24,7 +24,7 @@
 
 #include "utility/TimeSpan.h"
 #include "utility/DateTime.h"
-#include "utility/RTC_Super.h"
+#include "utility/RTC_Base.h"
 #include <Arduino.h>
 
 /** Registers */
