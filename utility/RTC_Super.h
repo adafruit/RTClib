@@ -30,7 +30,7 @@
     @brief  RTC superclass for all RTC chips
 */
 /**************************************************************************/
-class RTC {
+class RTC_Super {
 public:
   /*!
     @brief Start the RTC while preserving the RTC's date/time
@@ -43,7 +43,7 @@ public:
     @param dt DateTime object containing desired date/time
     @return True if successful, false otherwise
   */
-  virtual boolean begin(const DateTime &dt) = 0;
+  virtual boolean begin(const DateTime &dt);
 
   /*!
     @brief Adjust the RTC to the specified date/time
@@ -66,9 +66,8 @@ public:
   virtual boolean isrunning(void);
 
   /*!
-    @brief Check if the RTC has lost power
+    @brief Check if the RTC has lost power since last adjust()
     @return True if the RTC has lost power, false otherwise
-    @note Equivalent to `!rtc.isrunning()`
   */
   boolean lostPower(void);
 
