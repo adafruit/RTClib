@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-  @file     RTC_Super.h
+  @file     RTC_Base.h
 
   Original library by JeeLabs http://news.jeelabs.org/code/, released to the
   public domain
@@ -19,8 +19,8 @@
 */
 /**************************************************************************/
 
-#ifndef _RTC_SUPER_H_
-#define _RTC_SUPER_H_
+#ifndef _RTC_BASE_H
+#define _RTC_BASE_H
 
 #include "DateTime.h"
 #include <Arduino.h>
@@ -30,7 +30,7 @@
     @brief  RTC base class for all RTC chips
 */
 /**************************************************************************/
-class RTC_Base {
+class RealTimeClock {
 public:
   /*!
     @brief Start the RTC while preserving the RTC's date/time
