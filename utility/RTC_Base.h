@@ -28,6 +28,8 @@
 /**************************************************************************/
 /*!
     @brief  RTC base class for all RTC chips
+    @note Called RealTimeClock as there is already a macro called RTC in
+    Arduino IDE install files
 */
 /**************************************************************************/
 class RealTimeClock {
