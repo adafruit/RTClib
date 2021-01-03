@@ -301,7 +301,7 @@ public:
   */
   boolean lostPower(void) { return false; }
   void adjust(const DateTime &dt);
-  void adjustDrift(const int ppm);
+  void adjustDrift(int ppm);
   DateTime now();
 
 protected:

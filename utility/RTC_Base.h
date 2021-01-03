@@ -59,7 +59,7 @@ public:
     @param ppm Parts per million to adjust clock speed by
     @note Positive values make the clock faster and vice-versa
   */
-  virtual void adjustDrift(const int ppm);
+  virtual void adjustDrift(int ppm);
 
   /*!
     @brief Check if the RTC is running or not
