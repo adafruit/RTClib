@@ -53,13 +53,14 @@ public:
   */
   virtual void adjust(const DateTime &dt) = 0;
 
-  /*!
+  /*
     @brief  Adjust the RTC clock speed to compensate for system clock
    drift
     @param ppm Parts per million to adjust clock speed by
     @note Positive values make the clock faster and vice-versa
+    @todo Implement function in future version
   */
-  virtual void adjustDrift(int ppm);
+  //virtual void adjustDrift(int ppm);
 
   /*!
     @brief Check if the RTC is running or not
