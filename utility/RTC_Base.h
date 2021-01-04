@@ -71,7 +71,7 @@ public:
     @brief Check if the RTC has lost power since last adjust()
     @return True if the RTC has lost power, false otherwise
   */
-  boolean lostPower(void);
+  virtual boolean lostPower(void);
 
   /*!
     @brief Get the current date/time from the RTC
