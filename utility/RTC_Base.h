@@ -60,7 +60,7 @@ public:
     @note Positive values make the clock faster and vice-versa
     @todo Implement function in future version
   */
-  //virtual void adjustDrift(int ppm);
+  // virtual void adjustDrift(int ppm);
 
   /*!
     @brief Check if the RTC is running or not
