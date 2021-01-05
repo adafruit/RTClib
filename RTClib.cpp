@@ -422,9 +422,7 @@ void RTC_Micros::adjust(const DateTime &dt) {
     @note Positive values make the clock faster and vice-versa
 */
 /**************************************************************************/
-void RTC_Micros::adjustDrift(int ppm) {
-  microsPerSecond = 1000000L - ppm;
-}
+void RTC_Micros::adjustDrift(int ppm) { microsPerSecond = 1000000L - ppm; }
 
 /**************************************************************************/
 /*!
