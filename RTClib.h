@@ -22,7 +22,6 @@
 #ifndef _RTCLIB_H_
 #define _RTCLIB_H_
 
-#include "utility/TimeSpan.h"
 #include "utility/DateTime.h"
 #include "utility/RTC_Base.h"
 #include <Arduino.h>
