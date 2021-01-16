@@ -412,6 +412,12 @@ public:
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 };
 
+/** PCF8563 timer control register settings */
+enum PCF8563TimerControl {
+  PCF8563_TimerControl_TE = 128,
+  PCF8563_TimerControl_TD = 3
+};
+
 /** PCF8563 Timer clock source settings */
 enum PCF8563TimerClockFreq {
   PCF8563_TimerClk4096kHz = 0x00, /**< 4096 kHz */

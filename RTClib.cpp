@@ -1464,7 +1464,7 @@ void RTC_PCF8563::enableCountdownTimer(PCF8563TimerClockFreq clkFreq, uint8_t nu
   //write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg & ~0x03 | clkFreq);
 
   // Sets the enable bit TE and the clock source bits TD[1:0] in the timer control register 
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, (timer_ctlreg & ~0x03) | clkFreq | (1 << 7));
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, (timer_ctlreg & ~PCF8563_TimerControl_TD) | clkFreq | PCF8563_TimerControl_TE);
 
   // uint8_t timer_ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL);
   // //if (timer_ctlreg & (1 << 5)) {
@@ -1483,7 +1483,7 @@ void RTC_PCF8563::disableCountdownTimer() {
   uint8_t timer_ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL);
 
   // Reset the enable bit TE in the timer control register leaving the clock source bits TD[1:0] unchanged
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg & ~(1 << 7));
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg & ~PCF8563_TimerControl_TE);
 }
 
 /**************************************************************************/
@@ -1521,7 +1521,7 @@ void RTC_PCF8563::disableCountdownTimerInt(void) {
   uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
 
   // Reset the enable bit TIE in the control status 2 register leaving other bits unchanged
-  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg & ~1);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg & ~PCF8563_CONTROL2_TIE);
 }
 
 uint8_t RTC_PCF8563::getAndClearIntFlags(void) {
@@ -1531,8 +1531,8 @@ uint8_t RTC_PCF8563::getAndClearIntFlags(void) {
   // Clear the AF and TF interrupt flags in control status register 2
   write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg & ~12);
 
-  // Return the value of the control status 2 register masking out all bits except the interrupt flags
-  return(ctlreg & 12);
+  // Return the value of the control status 2 register masking out all bits except the TF and AF interrupt flags
+  return(ctlreg & (PCF8563_CONTROL2_AF | PCF8563_CONTROL2_TF));
 }
 
 /**************************************************************************/
