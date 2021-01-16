@@ -38,6 +38,8 @@ class TimeSpan;
 
 #define PCF8563_ADDRESS 0x51       ///< I2C address for PCF8563
 #define PCF8563_CLKOUTCONTROL 0x0D ///< CLKOUT control register
+#define PCF8563_TIMER_CONTROL 0x0E ///< Timer control register
+#define PCF8563_TIMER 0x0F         ///< Timer register
 #define PCF8563_CONTROL_1 0x00     ///< Control and status register 1
 #define PCF8563_CONTROL_2 0x01     ///< Control and status register 2
 #define PCF8563_VL_SECONDS 0x02    ///< register address for VL_SECONDS
@@ -410,6 +412,23 @@ public:
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 };
 
+/** PCF8563 Timer clock source settings */
+enum PCF8563TimerClockFreq {
+  PCF8563_TimerClk4096kHz = 0x00, /**< 4096 kHz */
+  PCF8563_TimerClk64Hz = 0x01,    /**< 64 Hz */
+  PCF8563_TimerClk1Hz = 0x02,     /**< 1 Hz */
+  PCF8563_TimerClk1_60Hz = 0x03   /**< 1/60 Hz */
+};
+
+/** PCF8563 control status 2 register settings */
+enum PCF8563Control2 {
+  PCF8563_CONTROL2_TI_TP = 16,
+  PCF8563_CONTROL2_AF = 8,
+  PCF8563_CONTROL2_TF = 4,
+  PCF8563_CONTROL2_AIE = 2,
+  PCF8563_CONTROL2_TIE = 1
+};
+
 /** PCF8563 CLKOUT pin mode settings */
 enum Pcf8563SqwPinMode {
   PCF8563_SquareWaveOFF = 0x00,  /**< Off */
@@ -431,6 +450,11 @@ public:
   boolean lostPower(void);
   void adjust(const DateTime &dt);
   static DateTime now();
+  void enableCountdownTimer(PCF8563TimerClockFreq clkFreq, uint8_t numPeriods);
+  void disableCountdownTimer(void);
+  void enableCountdownTimerInt(bool pulse);
+  void disableCountdownTimerInt(void);
+  uint8_t getAndClearIntFlags(void);
   void start(void);
   void stop(void);
   uint8_t isrunning();
