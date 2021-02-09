@@ -339,7 +339,7 @@ public:
   void enable32K(void);
   void disable32K(void);
   bool isEnabled32K(void);
-  static float getTemperature(); // in Celcius degree
+  static float getTemperature(); // in Celsius degree
 };
 
 /** PCF8523 INT/SQW pin mode settings */
