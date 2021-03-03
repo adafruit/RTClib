@@ -42,7 +42,7 @@
 */
 /**************************************************************************/
 
-#ifdef __AVR_ATtiny85__
+#if defined(__AVR_ATtiny84__) || defined(__AVR_ATtiny85__)
 #include <TinyWireM.h>
 #define Wire TinyWireM
 #else
