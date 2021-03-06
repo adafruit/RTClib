@@ -42,14 +42,14 @@
 */
 /**************************************************************************/
 
-#if defined(__AVR_ATtiny84__) || defined(__AVR_ATtiny85__)
+#include "RTClib.h"
+#if defined(__AVR__) && !defined(TWCR) && defined(USICR)
 #include <TinyWireM.h>
 #define Wire TinyWireM
 #else
 #include <Wire.h>
 #endif
 
-#include "RTClib.h"
 #ifdef __AVR__
 #include <avr/pgmspace.h>
 #elif defined(ESP8266)
