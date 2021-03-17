@@ -42,14 +42,14 @@
 */
 /**************************************************************************/
 
-#ifdef __AVR_ATtiny85__
+#include "RTClib.h"
+#if defined(__AVR__) && !defined(TWCR) && defined(USICR)
 #include <TinyWireM.h>
 #define Wire TinyWireM
 #else
 #include <Wire.h>
 #endif
 
-#include "RTClib.h"
 #ifdef __AVR__
 #include <avr/pgmspace.h>
 #elif defined(ESP8266)
@@ -63,9 +63,6 @@
 #endif
 
 #if (ARDUINO >= 100)
-#include <Arduino.h> // capital A so it is error prone on case-sensitive filesystems
-// Macro to deal with the difference in I2C write functions from old and new
-// Arduino versions.
 #define _I2C_WRITE write ///< Modern I2C write
 #define _I2C_READ read   ///< Modern I2C read
 #else
