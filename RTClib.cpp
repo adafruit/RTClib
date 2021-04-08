@@ -805,12 +805,17 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
 
 /**************************************************************************/
 /*!
-    @brief  Start I2C for the DS1307 and test succesful connection
+    @brief  Start I2C for the DS1307 and test succesful connection.
+      Specify RTCLIB_CUSTOM_SDA and RTCLIB_CUSTOM_SCL for custom Wire pins.
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
 boolean RTC_DS1307::begin(void) {
+#if defined(RTCLIB_CUSTOM_SDA) && defined(RTCLIB_CUSTOM_SCL)
+  Wire.begin(RTCLIB_CUSTOM_SDA, RTCLIB_CUSTOM_SCL);
+#else
   Wire.begin();
+#endif
   Wire.beginTransmission(DS1307_ADDRESS);
   if (Wire.endTransmission() == 0)
     return true;
