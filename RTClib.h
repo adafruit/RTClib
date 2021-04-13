@@ -273,7 +273,7 @@ enum Ds1307SqwPinMode {
 /**************************************************************************/
 class RTC_DS1307 {
 public:
-  boolean begin(void);
+  bool begin(void);
   static void adjust(const DateTime &dt);
   uint8_t isrunning(void);
   static DateTime now();
@@ -325,7 +325,7 @@ enum Ds3231Alarm2Mode {
 /**************************************************************************/
 class RTC_DS3231 {
 public:
-  boolean begin(void);
+  bool begin(void);
   static void adjust(const DateTime &dt);
   bool lostPower(void);
   static DateTime now();
@@ -390,10 +390,10 @@ enum Pcf8523OffsetMode {
 /**************************************************************************/
 class RTC_PCF8523 {
 public:
-  boolean begin(void);
+  bool begin(void);
   void adjust(const DateTime &dt);
-  boolean lostPower(void);
-  boolean initialized(void);
+  bool lostPower(void);
+  bool initialized(void);
   static DateTime now();
   void start(void);
   void stop(void);
@@ -427,8 +427,8 @@ enum Pcf8563SqwPinMode {
 
 class RTC_PCF8563 {
 public:
-  boolean begin(void);
-  boolean lostPower(void);
+  bool begin(void);
+  bool lostPower(void);
   void adjust(const DateTime &dt);
   static DateTime now();
   void start(void);

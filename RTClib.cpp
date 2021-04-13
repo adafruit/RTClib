@@ -809,7 +809,7 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS1307::begin(void) {
+bool RTC_DS1307::begin(void) {
   Wire.begin();
   Wire.beginTransmission(DS1307_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1052,7 +1052,7 @@ DateTime RTC_Micros::now() {
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8523::begin(void) {
+bool RTC_PCF8523::begin(void) {
   Wire.begin();
   Wire.beginTransmission(PCF8523_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1071,7 +1071,7 @@ boolean RTC_PCF8523::begin(void) {
    after the bit is cleared, for instance with adjust()
 */
 /**************************************************************************/
-boolean RTC_PCF8523::lostPower(void) {
+bool RTC_PCF8523::lostPower(void) {
   return (read_i2c_register(PCF8523_ADDRESS, PCF8523_STATUSREG) >> 7);
 }
 
@@ -1082,7 +1082,7 @@ boolean RTC_PCF8523::lostPower(void) {
     @return True if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
-boolean RTC_PCF8523::initialized(void) {
+bool RTC_PCF8523::initialized(void) {
   Wire.beginTransmission(PCF8523_ADDRESS);
   Wire._I2C_WRITE((byte)PCF8523_CONTROL_3);
   Wire.endTransmission();
@@ -1380,7 +1380,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
     @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8563::begin(void) {
+bool RTC_PCF8563::begin(void) {
   Wire.begin();
   Wire.beginTransmission(PCF8563_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1400,7 +1400,7 @@ boolean RTC_PCF8563::begin(void) {
 */
 /**************************************************************************/
 
-boolean RTC_PCF8563::lostPower(void) {
+bool RTC_PCF8563::lostPower(void) {
   return (read_i2c_register(PCF8563_ADDRESS, PCF8563_VL_SECONDS) >> 7);
 }
 
@@ -1534,7 +1534,7 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS3231::begin(void) {
+bool RTC_DS3231::begin(void) {
   Wire.begin();
   Wire.beginTransmission(DS3231_ADDRESS);
   if (Wire.endTransmission() == 0)
