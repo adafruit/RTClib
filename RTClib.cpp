@@ -586,7 +586,7 @@ uint8_t DateTime::dayOfTheWeek() const {
     @return Number of seconds since 1970-01-01 00:00:00.
 */
 /**************************************************************************/
-uint32_t DateTime::unixtime(void) const {
+uint32_t DateTime::unixtime() const {
   uint32_t t;
   uint16_t days = date2days(yOff, m, d);
   t = time2ulong(days, hh, mm, ss);
@@ -608,7 +608,7 @@ uint32_t DateTime::unixtime(void) const {
     @return Number of seconds since 2000-01-01 00:00:00.
 */
 /**************************************************************************/
-uint32_t DateTime::secondstime(void) const {
+uint32_t DateTime::secondstime() const {
   uint32_t t;
   uint16_t days = date2days(yOff, m, d);
   t = time2ulong(days, hh, mm, ss);
@@ -809,7 +809,7 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
-bool RTC_DS1307::begin(void) {
+bool RTC_DS1307::begin() {
   Wire.begin();
   Wire.beginTransmission(DS1307_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -823,7 +823,7 @@ bool RTC_DS1307::begin(void) {
     @return 1 if the RTC is running, 0 if not
 */
 /**************************************************************************/
-uint8_t RTC_DS1307::isrunning(void) {
+uint8_t RTC_DS1307::isrunning() {
   Wire.beginTransmission(DS1307_ADDRESS);
   Wire._I2C_WRITE((byte)0);
   Wire.endTransmission();
@@ -1052,7 +1052,7 @@ DateTime RTC_Micros::now() {
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
-bool RTC_PCF8523::begin(void) {
+bool RTC_PCF8523::begin() {
   Wire.begin();
   Wire.beginTransmission(PCF8523_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1071,7 +1071,7 @@ bool RTC_PCF8523::begin(void) {
    after the bit is cleared, for instance with adjust()
 */
 /**************************************************************************/
-bool RTC_PCF8523::lostPower(void) {
+bool RTC_PCF8523::lostPower() {
   return (read_i2c_register(PCF8523_ADDRESS, PCF8523_STATUSREG) >> 7);
 }
 
@@ -1082,7 +1082,7 @@ bool RTC_PCF8523::lostPower(void) {
     @return True if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
-bool RTC_PCF8523::initialized(void) {
+bool RTC_PCF8523::initialized() {
   Wire.beginTransmission(PCF8523_ADDRESS);
   Wire._I2C_WRITE((byte)PCF8523_CONTROL_3);
   Wire.endTransmission();
@@ -1145,7 +1145,7 @@ DateTime RTC_PCF8523::now() {
     @brief  Resets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8523::start(void) {
+void RTC_PCF8523::start() {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
   if (ctlreg & (1 << 5)) {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5));
@@ -1157,7 +1157,7 @@ void RTC_PCF8523::start(void) {
     @brief  Sets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8523::stop(void) {
+void RTC_PCF8523::stop() {
   uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
   if (!(ctlreg & (1 << 5))) {
     write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5));
@@ -1380,7 +1380,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
     @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
-bool RTC_PCF8563::begin(void) {
+bool RTC_PCF8563::begin() {
   Wire.begin();
   Wire.beginTransmission(PCF8563_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1400,7 +1400,7 @@ bool RTC_PCF8563::begin(void) {
 */
 /**************************************************************************/
 
-bool RTC_PCF8563::lostPower(void) {
+bool RTC_PCF8563::lostPower() {
   return (read_i2c_register(PCF8563_ADDRESS, PCF8563_VL_SECONDS) >> 7);
 }
 
@@ -1453,7 +1453,7 @@ DateTime RTC_PCF8563::now() {
     @brief  Resets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8563::start(void) {
+void RTC_PCF8563::start() {
   uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
   if (ctlreg & (1 << 5)) {
     write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, ctlreg & ~(1 << 5));
@@ -1465,7 +1465,7 @@ void RTC_PCF8563::start(void) {
     @brief  Sets the STOP bit in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8563::stop(void) {
+void RTC_PCF8563::stop() {
   uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
   if (!(ctlreg & (1 << 5))) {
     write_i2c_register(PCF8523_ADDRESS, PCF8563_CONTROL_1, ctlreg | (1 << 5));
@@ -1534,7 +1534,7 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
-bool RTC_DS3231::begin(void) {
+bool RTC_DS3231::begin() {
   Wire.begin();
   Wire.beginTransmission(DS3231_ADDRESS);
   if (Wire.endTransmission() == 0)
@@ -1550,7 +1550,7 @@ bool RTC_DS3231::begin(void) {
    running
 */
 /**************************************************************************/
-bool RTC_DS3231::lostPower(void) {
+bool RTC_DS3231::lostPower() {
   return (read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG) >> 7);
 }
 
@@ -1784,7 +1784,7 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
     pull-up resistor to function correctly
 */
 /**************************************************************************/
-void RTC_DS3231::enable32K(void) {
+void RTC_DS3231::enable32K() {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
   status |= (0x1 << 0x03);
   write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
@@ -1796,7 +1796,7 @@ void RTC_DS3231::enable32K(void) {
     @brief  Disable 32KHz Output
 */
 /**************************************************************************/
-void RTC_DS3231::disable32K(void) {
+void RTC_DS3231::disable32K() {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
   status &= ~(0x1 << 0x03);
   write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
@@ -1809,7 +1809,7 @@ void RTC_DS3231::disable32K(void) {
     @return True if enabled otherwise false
 */
 /**************************************************************************/
-bool RTC_DS3231::isEnabled32K(void) {
+bool RTC_DS3231::isEnabled32K() {
   uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
   return (status >> 0x03) & 0x1;
 }
