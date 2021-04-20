@@ -42,6 +42,10 @@ class TimeSpan;
 #define PCF8563_CONTROL_2 0x01     ///< Control and status register 2
 #define PCF8563_VL_SECONDS 0x02    ///< register address for VL_SECONDS
 #define PCF8563_CLKOUT_MASK 0x83   ///< bitmask for SqwPinMode on CLKOUT pin
+#define PCF8563_MINUTE_ALARM 0x09  ///< minute alarm register
+#define PCF8563_HOUR_ALARM 0x0A    ///< hour alarm register
+#define PCF8563_DAY_ALARM 0x0B     ///< day alarm register
+#define PCF8563_WEEKDAY_ALARM 0x0C ///< weekday alarm register
 
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
@@ -419,6 +423,25 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** Alarm modes of the PCF8563 */
+enum Pcf8563AlarmMode {
+  PCF8563_Alarm_hourly, /**< hourly, minute match */
+  PCF8563_Alarm_Daily,  /**< daily, when hour and minute match */
+  PCF8563_Alarm_Weekly, /**< weekly, when dayOfTheWeek, hour and minute match */
+  PCF8563_Alarm_Monthly /**< monthly, when day, hour and minute match */
+};
+
+/** Day of the week for weekly Alarm modes of the PCF8563 */
+enum DayOfWeek {
+  Sundays,
+  Mondays,
+  Tuedays,
+  Wednesdays,
+  Thursdays,
+  Fridays,
+  Saturdays
+};
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
@@ -436,6 +459,14 @@ public:
   uint8_t isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
+  void setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode);
+  void setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min);
+  void setAlarm(uint8_t day, uint8_t hour, uint8_t min);
+  void setAlarm(uint8_t hour, uint8_t min);
+  void setAlarm(uint8_t min);
+  void disableAlarm(void);
+  boolean alarmFired(void);
+  void clearAlarm(void);
 };
 
 /**************************************************************************/

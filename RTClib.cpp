@@ -1516,6 +1516,140 @@ void RTC_PCF8563::writeSqwPinMode(Pcf8563SqwPinMode mode) {
   Wire._I2C_WRITE(mode);
   Wire.endTransmission();
 }
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set the Alarm values mode on the PCF8563
+    @details  One can only set day, hour and minutes for the alarm, the other
+      values of DateTime are ignored, but provided to comply with the format.
+    @param dt DateTime to set
+    @param alarm_mode Desired mode, see Ds3231Alarm1Mode enum
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(const DateTime &dt, Pcf8563AlarmMode alarm_mode) {
+
+  uint8_t minute = bin2bcd(dt.minute());
+  uint8_t hour = bin2bcd(dt.hour());
+  uint8_t day =
+      (alarm_mode == PCF8563_Alarm_Monthly) ? bin2bcd(dt.day()) : 0x80;
+  uint8_t weekDay =
+      (alarm_mode == PCF8563_Alarm_Weekly) ? bin2bcd(dt.dayOfTheWeek()) : 0x80;
+
+  if (alarm_mode == PCF8563_Alarm_hourly) {
+    hour = 0x80;
+  }
+
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_MINUTE_ALARM, minute);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_HOUR_ALARM, hour);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_DAY_ALARM, day);
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_WEEKDAY_ALARM, weekDay);
+
+  uint8_t control_status_2 =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  // Enable alarm interrupt AIE
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
+                     (control_status_2 | 0x02)); // 00000010b
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Weekly Alarm values mode on the PCF8563
+    @param dow  Day of the week to trigger the alarm, see DayOfWeek enum
+    @param hour Hour to trigger the alarm
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(DayOfWeek dow, uint8_t hour, uint8_t min) {
+  // January 1st, 2017 was a Sunday
+  setAlarm(DateTime(2017, 1, 1 + dow, hour, min), PCF8563_Alarm_Weekly);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Monthly Alarm values mode on the PCF8563
+    @param day  Minute to trigger the alarm
+    @param hour Hour to trigger the alarm
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t day, uint8_t hour, uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, day, hour, min), PCF8563_Alarm_Monthly);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Daily Alarm values mode on the PCF8563
+    @param hour Hour to trigger the alarm
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t hour, uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, 1, hour, min), PCF8563_Alarm_Daily);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Set Hourly Alarm values mode on the PCF8563
+    @param min  Minute to trigger the alarm
+*/
+/**************************************************************************/
+void RTC_PCF8563::setAlarm(uint8_t min) {
+
+  setAlarm(DateTime(2000, 1, 1, 1, min), PCF8563_Alarm_hourly);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Disable the Alarm on the PCF8563
+*/
+/**************************************************************************/
+void RTC_PCF8563::disableAlarm(void) {
+
+  uint8_t control_status_2 =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
+                     (control_status_2 | 0xFD)); // 11111101b
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Check the ALARM bit in register Control_2
+    @return 1 if the Alarm is set, 0 if not
+*/
+/**************************************************************************/
+boolean RTC_PCF8563::alarmFired(void) {
+
+  uint8_t control_status_2 =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  return ((control_status_2 >> 3) & 1);
+}
+
+/**************************************************************************/
+/*!
+    @author Leonardo Bispo
+    @brief  Clear the ALARM bit in register Control_2, also clear INT
+*/
+/**************************************************************************/
+void RTC_PCF8563::clearAlarm(void) {
+
+  uint8_t control_status_2 =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2,
+                     (control_status_2 & 0x17)); // 00010111b
+}
 // END RTC_PCF8563 implementation
 
 /**************************************************************************/
