@@ -117,6 +117,45 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 
 /**************************************************************************/
 /*!
+    @brief checks if the year is a leap year
+    @param year The year to checks
+    @warning designed for year range 2000-2099. This does not work for years
+      that are multiples of 100 and not multiples of 400.
+    @return true if a leap year, false otherwise
+*/
+/**************************************************************************/
+static bool isLeapYear(uint16_t year) { return year % 4 == 0; }
+
+/**************************************************************************/
+/*!
+    @brief calculates the number of days in the month
+
+    Considers leap years, e.g. if year == 2000 and month == 2 then
+    days in month is 29
+
+    @param year The year
+    @param month The month from 1-12 (1 being Jan and 12 being Dec)
+    @warning Will return 0 if month is invalid (i.e. month > 12)
+    @return The number of days in the month
+*/
+/**************************************************************************/
+uint8_t getDaysInMonth(uint16_t year, uint8_t month) {
+  uint8_t days = 0;
+
+  if (month == 12) {
+    days = 31; // needed since daysInMonth does have December days
+  } else if (month < 12) {
+    days += pgm_read_byte(daysInMonth + month - 1);
+
+    if (month == 2 && isLeapYear(year))
+      days++;
+  }
+
+  return days;
+}
+
+/**************************************************************************/
+/*!
     @brief  Given a date, return number of days since 2000/01/01,
             valid for 2000--2099
     @param y Year
@@ -410,6 +449,97 @@ bool DateTime::isValid() const {
   DateTime other(unixtime());
   return yOff == other.yOff && m == other.m && d == other.d && hh == other.hh &&
          mm == other.mm && ss == other.ss;
+}
+
+/**************************************************************************/
+/*!
+    @author Harrison Outram
+    @brief  Fixes DateTime object if invalid
+
+    Determines if any date or time components are too high.
+    E.g. seconds == 65
+
+    Increments next component and reduces invalid component to fix.
+    E.g. if seconds == 125, then minutes goes up by 2 and seconds
+    goes down to 5.
+
+    Does nothing if the DateTime object is already valid
+
+    @note month of 0 is interpreted as December of previous year
+
+    @warning Will still result in invalid DateTime object if year is after
+      2099 or before 2000. If before 2000, year will be set to 2100
+    @return true if fixed, false if year becomes invalid
+*/
+/**************************************************************************/
+bool DateTime::fixDateTime() {
+  uint8_t temp;
+  // prevents overflow and underflow errors
+  uint16_t newMin = mm;
+  uint16_t newHour = hh;
+  int16_t newDay = d;
+  int16_t newMonth = m;
+  int16_t newYear = yOff;
+
+  if (ss >= 60) {
+    temp = ss / 60;
+    newMin += temp;
+    ss -= 60 * temp;
+  }
+  if (newMin >= 60) {
+    temp = newMin / 60;
+    newHour += temp;
+    newMin -= 60 * temp;
+  }
+  if (newHour >= 24) {
+    temp = newHour / 24;
+    newDay += temp;
+    newHour -= temp * 24;
+  }
+
+  // make month valid to prevent getDaysInMonth() returning 0
+  // Otherwise, infinite loop possible
+  if (newMonth > 12) {
+    temp = newMonth / 12;
+    newYear += temp;
+    newMonth -= temp * 12;
+  } else if (newMonth == 0) { // interpret as December of previous year
+    newMonth = 12;
+    newYear--;
+  }
+
+  temp = getDaysInMonth(newYear + 2000, newMonth);
+  while (newDay > temp) {
+    newDay -= temp;
+    newMonth++;
+    if (newMonth > 12) {
+      newYear++;
+      newMonth -= 12;
+    }
+    temp = getDaysInMonth(newYear + 2000, newMonth);
+  }
+
+  if (newDay == 0) {
+    newMonth--;
+    if (newMonth == 0) {
+      newMonth = 12;
+      newYear--;
+    }
+    newDay = getDaysInMonth(newYear + 2000, newMonth);
+  }
+
+  mm = newMin;
+  hh = newHour;
+  d = newDay;
+  m = newMonth;
+
+  if (newYear >= 0)
+    yOff = newYear;
+  else
+    // can't assign negative to unsigned so assign value too high
+    yOff = 100;
+
+  return yOff <= 99;
 }
 
 /**************************************************************************/

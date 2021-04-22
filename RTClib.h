@@ -62,6 +62,8 @@ class TimeSpan;
 #define SECONDS_FROM_1970_TO_2000                                              \
   946684800 ///< Unixtime for 2000-01-01 00:00:00, useful for initialization
 
+uint8_t getDaysInMonth(uint16_t year, uint8_t month);
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -88,6 +90,7 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
+  bool fixDateTime();
   char *toString(char *buffer);
 
   /*!
