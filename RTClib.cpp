@@ -1450,6 +1450,90 @@ DateTime RTC_PCF8563::now() {
 
 /**************************************************************************/
 /*!
+    @brief  Enable the Countdown Timer Interrupt on the PCF8563.
+*/
+/**************************************************************************/
+void RTC_PCF8563::enableCountdownTimer(PCF8563TimerClockFreq clkFreq, uint8_t numPeriods) {
+  // Set the countdown value (TIMER[7:0]) in the timer register
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER, numPeriods);
+
+  uint8_t timer_ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL);
+  //write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg & ~0x03 | clkFreq);
+
+  // Sets the enable bit TE and the clock source bits TD[1:0] in the timer control register 
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, (timer_ctlreg & ~PCF8563_TimerControl_TD) | clkFreq | PCF8563_TimerControl_TE);
+
+  // uint8_t timer_ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL);
+  // //if (timer_ctlreg & (1 << 5)) {
+  //   write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg | (1 << 7));
+  // //}
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable the Countdown Timer on the PCF8563.
+    @details 
+*/
+/**************************************************************************/
+void RTC_PCF8563::disableCountdownTimer() {
+  // Leave compatible settings intact
+  uint8_t timer_ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL);
+
+  // Reset the enable bit TE in the timer control register leaving the clock source bits TD[1:0] unchanged
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_TIMER_CONTROL, timer_ctlreg & ~PCF8563_TimerControl_TE);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Enable the interrupt for the countdown timer on the PCF8563.
+    @details 
+*/
+/**************************************************************************/
+void RTC_PCF8563::enableCountdownTimerInt(bool pulse) {
+  // Leave compatible settings intact
+  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  // Set the counter interrupt enable bit TIE in the control status 2. Additionally clear any interrupt flags.
+  // Because the alarm and timer interrupt are tied to the interrupt signal both flags have to be cleared.
+  if(pulse) {
+    // sets the TI_TP bit in control status 2 register so that the generated interrupt is a pulse
+    ctlreg = (ctlreg | (PCF8563_CONTROL2_TI_TP | PCF8563_CONTROL2_TIE)) & ~(PCF8563_CONTROL2_AF | PCF8563_CONTROL2_TF);
+  } else {
+    // clear the TI_TP bit in control status 2 register. The value of INT is equal to the value 
+    // of the timer interrupt flag TF
+    ctlreg = (ctlreg | PCF8563_CONTROL2_TIE) & ~(PCF8563_CONTROL2_TI_TP | PCF8563_CONTROL2_AF | PCF8563_CONTROL2_TF);
+  }
+  
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable the interrupt for the countdown timer on the PCF8563.
+    @details 
+*/
+/**************************************************************************/
+void RTC_PCF8563::disableCountdownTimerInt(void) {
+  // Leave compatible settings intact
+  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  // Reset the enable bit TIE in the control status 2 register leaving other bits unchanged
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg & ~PCF8563_CONTROL2_TIE);
+}
+
+uint8_t RTC_PCF8563::getAndClearIntFlags(void) {
+  // Read control status register 2 which contains the interrupt flags
+  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2);
+
+  // Clear the AF and TF interrupt flags in control status register 2
+  write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_2, ctlreg & ~12);
+
+  // Return the value of the control status 2 register masking out all bits except the TF and AF interrupt flags
+  return(ctlreg & (PCF8563_CONTROL2_AF | PCF8563_CONTROL2_TF));
+}
+
+/**************************************************************************/
+/*!
     @brief  Resets the STOP bit in register Control_1
 */
 /**************************************************************************/
