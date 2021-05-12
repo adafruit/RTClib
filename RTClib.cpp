@@ -459,7 +459,7 @@ bool DateTime::isValid() const {
 */
 /**************************************************************************/
 
-char *DateTime::toString(char *buffer) {
+char *DateTime::toString(char *buffer) const {
   uint8_t apTag =
       (strstr(buffer, "ap") != nullptr) || (strstr(buffer, "AP") != nullptr);
   uint8_t hourReformatted = 0, isPM = false;
@@ -710,7 +710,7 @@ bool DateTime::operator==(const DateTime &right) const {
     @return Timestamp string, e.g. "2020-04-16T18:34:56".
 */
 /**************************************************************************/
-String DateTime::timestamp(timestampOpt opt) {
+String DateTime::timestamp(timestampOpt opt) const {
   char buffer[25]; // large enough for any DateTime, including invalid ones
 
   // Generate timestamp according to opt
@@ -761,6 +761,161 @@ TimeSpan::TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds)
 */
 /**************************************************************************/
 TimeSpan::TimeSpan(const TimeSpan &copy) : _seconds(copy._seconds) {}
+
+/*!
+    @brief  Create a new TimeSpan from an iso8601 formatted period string
+
+    If the string is entirely malformed (doesn't begin with P or -) this will
+    construct a TimeSpan of 0 seconds. If parsing fails before the end of the
+    string, this constuctor will interpret its argument as the longest
+    well-formed prefix string.
+
+    For example, the string P5M10~ will parse the same as P5M
+
+    @param iso8601 the formatted string
+*/
+TimeSpan::TimeSpan(const char *iso8601) : _seconds(0) {
+  int32_t sign = 1;
+  const char *cursor = iso8601;
+  if (*cursor == '-') {
+    sign = -1;
+    cursor++;
+  }
+  if (*cursor == 'P') {
+    cursor++;
+  } else {
+    return;
+  }
+
+  char *rest;
+  long num = strtol(cursor, &rest, 10);
+  cursor = rest;
+  if (*cursor == 'D') {
+    _seconds += sign * SECONDS_PER_DAY * num;
+    cursor++;
+  }
+
+  if (*cursor == 'T') {
+    cursor++;
+    num = strtol(cursor, &rest, 10);
+    cursor = rest;
+  } else if (*cursor == '\0') {
+    return;
+  } else {
+    // error: malformed iso8601
+    return;
+  }
+
+  if (*cursor == 'H') {
+    _seconds += sign * SECS_PER_MIN * MINS_PER_HOUR * num;
+    cursor++;
+    num = strtol(cursor, &rest, 10);
+    cursor = rest;
+  }
+
+  if (*cursor == 'M') {
+    _seconds += sign * SECS_PER_MIN * num;
+    cursor++;
+    num = strtol(cursor, &rest, 10);
+    cursor = rest;
+  }
+
+  if (*cursor == 'S') {
+    _seconds += sign * num;
+  }
+}
+
+/*!
+    @brief  Formats this TimeSpan according to iso8601
+
+    See toCharArray for more details on the format
+
+    @return String of formatted TimeSpan
+*/
+String TimeSpan::toString() const {
+  constexpr size_t buflen = 19;
+  char buf[buflen];
+  this->toCharArray(buf, buflen);
+  return String(buf);
+}
+
+// Equivalent to left - right unless that would underflow, otherwise 0
+//
+// At the time of writing, this is only used in logic in TimeSpan::toCharArray
+// This function's inclusion is very unfortunate, and if it is used anywhere
+// else, should probably use a template
+static size_t sat_sub(size_t left, size_t right) {
+  if (left > right) {
+    return left - right;
+  } else {
+    return 0;
+  }
+}
+
+/*!
+    @brief  Formats this TimeSpan according to iso8601
+
+    Fails (returning 0) if buf is too small to store the result. buf size >= 19
+    will never fail.
+    Example: TimeSpan t(32, 23, 54, 11) formats to "P32DT23H54M11S".
+
+    @param buf char array to write output. Always contains trailing '\0'.
+    @param len the length of buf. Must be at least 1.
+    @return number of bytes written excluding trailing '\0' or 0 on failure
+*/
+size_t TimeSpan::toCharArray(char *buf, size_t len) const {
+  size_t written = 0;
+
+  if (_seconds == 0) {
+    written += snprintf(buf, len, "PT0S");
+    if (written >= len) {
+      return 0;
+    } else {
+      return written;
+    }
+  }
+
+  // Keep sign separate from tmp to prevent overflow caused by -1 * INT_MIN
+  int8_t sign = _seconds > 0 ? 1 : -1;
+  int32_t tmp = _seconds;
+  int8_t seconds = sign * (tmp % SECS_PER_MIN);
+  // Fold in sign - while dividing by SECS_PER_MIN, tmp can no longer overflow
+  tmp /= sign * SECS_PER_MIN;
+  int8_t minutes = tmp % MINS_PER_HOUR;
+  tmp /= MINS_PER_HOUR;
+  int8_t hours = tmp % HOURS_PER_DAY;
+  int16_t days = tmp / HOURS_PER_DAY;
+
+  if (_seconds < 0) {
+    written += snprintf(buf + written, sat_sub(len, written), "-P");
+  } else {
+    written += snprintf(buf + written, sat_sub(len, written), "P");
+  }
+
+  if (days > 0) {
+    written += snprintf(buf + written, sat_sub(len, written), "%dD", days);
+  }
+
+  if (hours > 0 || minutes > 0 || seconds > 0) {
+    written += snprintf(buf + written, sat_sub(len, written), "%s", "T");
+
+    if (hours > 0) {
+      written += snprintf(buf + written, sat_sub(len, written), "%dH", hours);
+    }
+    if (minutes > 0) {
+      written += snprintf(buf + written, sat_sub(len, written), "%dM", minutes);
+    }
+    if (seconds > 0) {
+      written += snprintf(buf + written, sat_sub(len, written), "%dS", seconds);
+    }
+  }
+
+  if (written >= len) {
+    return 0;
+  } else {
+    return written;
+  }
+}
 
 /**************************************************************************/
 /*!
