@@ -809,9 +809,7 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS1307::begin(){
-  return begin(&Wire);
-}
+
 boolean RTC_DS1307::begin(TwoWire *wireInstance) {
   RTCWireBus = wireInstance;
   RTCWireBus->begin();
@@ -1056,9 +1054,7 @@ DateTime RTC_Micros::now() {
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8523::begin(){
-  return begin(&Wire);
-}
+
 boolean RTC_PCF8523::begin(TwoWire *wireInstance) {
   RTCWireBus = wireInstance;
   RTCWireBus->begin();
@@ -1388,9 +1384,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
     @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8563::begin(){
-  return begin(&Wire);
-}
+
 boolean RTC_PCF8563::begin(TwoWire *wireInstance) {
   RTCWireBus = wireInstance;
   RTCWireBus->begin();
@@ -1546,9 +1540,7 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS3231::begin(){
-  return begin(&Wire);
-}
+
 boolean RTC_DS3231::begin(TwoWire *wireInstance) {
   RTCWireBus = wireInstance;
   RTCWireBus->begin();

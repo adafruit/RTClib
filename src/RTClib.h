@@ -275,8 +275,7 @@ enum Ds1307SqwPinMode {
 /**************************************************************************/
 class RTC_DS1307 {
 public:
-  boolean begin();
-  boolean begin(TwoWire *wireInstance);
+  boolean begin(TwoWire *wireInstance = &Wire);
   static void adjust(const DateTime &dt);
   uint8_t isrunning(void);
   static DateTime now();
@@ -286,7 +285,6 @@ public:
   void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
   void writenvram(uint8_t address, uint8_t data);
   void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
-
 };
 
 /** DS3231 SQW pin mode settings */
@@ -329,8 +327,7 @@ enum Ds3231Alarm2Mode {
 /**************************************************************************/
 class RTC_DS3231 {
 public:
-  boolean begin();
-  boolean begin(TwoWire *wireInstance);
+  boolean begin(TwoWire *wireInstance = &Wire);
   static void adjust(const DateTime &dt);
   bool lostPower(void);
   static DateTime now();
@@ -345,7 +342,6 @@ public:
   void disable32K(void);
   bool isEnabled32K(void);
   static float getTemperature(); // in Celsius degree
-
 };
 
 /** PCF8523 INT/SQW pin mode settings */
@@ -396,8 +392,7 @@ enum Pcf8523OffsetMode {
 /**************************************************************************/
 class RTC_PCF8523 {
 public:
-  boolean begin();
-  boolean begin(TwoWire *wireInstance);
+  boolean begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
   boolean lostPower(void);
   boolean initialized(void);
@@ -415,7 +410,6 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
-  
 };
 
 /** PCF8563 CLKOUT pin mode settings */
@@ -435,8 +429,7 @@ enum Pcf8563SqwPinMode {
 
 class RTC_PCF8563 {
 public:
-  boolean begin();
-  boolean begin(TwoWire *wireInstance);
+  boolean begin(TwoWire *wireInstance = &Wire);
   boolean lostPower(void);
   void adjust(const DateTime &dt);
   static DateTime now();
@@ -445,7 +438,6 @@ public:
   uint8_t isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
-  
 };
 
 /**************************************************************************/
