@@ -1702,7 +1702,8 @@ bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
   RTCWireBus->_I2C_WRITE(bin2bcd(dt.minute()) | A1M2);
   RTCWireBus->_I2C_WRITE(bin2bcd(dt.hour()) | A1M3);
   if (DY_DT) {
-    RTCWireBus->_I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A1M4 | DY_DT);
+    RTCWireBus->_I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A1M4 |
+                           DY_DT);
   } else {
     RTCWireBus->_I2C_WRITE(bin2bcd(dt.day()) | A1M4 | DY_DT);
   }
@@ -1738,7 +1739,8 @@ bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
   RTCWireBus->_I2C_WRITE(bin2bcd(dt.minute()) | A2M2);
   RTCWireBus->_I2C_WRITE(bin2bcd(dt.hour()) | A2M3);
   if (DY_DT) {
-    RTCWireBus->_I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A2M4 | DY_DT);
+    RTCWireBus->_I2C_WRITE(bin2bcd(dowToDS3231(dt.dayOfTheWeek())) | A2M4 |
+                           DY_DT);
   } else {
     RTCWireBus->_I2C_WRITE(bin2bcd(dt.day()) | A2M4 | DY_DT);
   }
