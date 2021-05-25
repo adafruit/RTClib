@@ -79,13 +79,14 @@
     @return Register value
 */
 /**************************************************************************/
-static uint8_t read_i2c_register(uint8_t addr, uint8_t reg) {
-  RTCWireBus->beginTransmission(addr);
-  RTCWireBus->_I2C_WRITE((byte)reg);
-  RTCWireBus->endTransmission();
+static uint8_t read_i2c_register(uint8_t addr, uint8_t reg,
+                                 TwoWire *wireInstance) {
+  wireInstance->beginTransmission(addr);
+  wireInstance->_I2C_WRITE((byte)reg);
+  wireInstance->endTransmission();
 
-  RTCWireBus->requestFrom(addr, (byte)1);
-  return RTCWireBus->_I2C_READ();
+  wireInstance->requestFrom(addr, (byte)1);
+  return wireInstance->_I2C_READ();
 }
 
 /**************************************************************************/
@@ -96,11 +97,12 @@ static uint8_t read_i2c_register(uint8_t addr, uint8_t reg) {
     @param val Value to write
 */
 /**************************************************************************/
-static void write_i2c_register(uint8_t addr, uint8_t reg, uint8_t val) {
-  RTCWireBus->beginTransmission(addr);
-  RTCWireBus->_I2C_WRITE((byte)reg);
-  RTCWireBus->_I2C_WRITE((byte)val);
-  RTCWireBus->endTransmission();
+static void write_i2c_register(uint8_t addr, uint8_t reg, uint8_t val,
+                               TwoWire *wireInstance) {
+  wireInstance->beginTransmission(addr);
+  wireInstance->_I2C_WRITE((byte)reg);
+  wireInstance->_I2C_WRITE((byte)val);
+  wireInstance->endTransmission();
 }
 
 /**************************************************************************/
@@ -973,7 +975,7 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
   writenvram(address, &data, 1);
 }
 
-/** Alignment between the milis() timescale and the Unix timescale. These
+/** Alignment between the millis() timescale and the Unix timescale. These
   two variables are updated on each call to now(), which prevents
   rollover issues. Note that lastMillis is **not** the millis() value
   of the last call to now(): it's the millis() value corresponding to
@@ -1076,7 +1078,8 @@ boolean RTC_PCF8523::begin(TwoWire *wireInstance) {
 */
 /**************************************************************************/
 boolean RTC_PCF8523::lostPower(void) {
-  return (read_i2c_register(PCF8523_ADDRESS, PCF8523_STATUSREG) >> 7);
+  return (read_i2c_register(PCF8523_ADDRESS, PCF8523_STATUSREG, RTCWireBus) >>
+          7);
 }
 
 /**************************************************************************/
@@ -1150,9 +1153,11 @@ DateTime RTC_PCF8523::now() {
 */
 /**************************************************************************/
 void RTC_PCF8523::start(void) {
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, RTCWireBus);
   if (ctlreg & (1 << 5)) {
-    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5));
+    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 5),
+                       RTCWireBus);
   }
 }
 
@@ -1162,9 +1167,11 @@ void RTC_PCF8523::start(void) {
 */
 /**************************************************************************/
 void RTC_PCF8523::stop(void) {
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, RTCWireBus);
   if (!(ctlreg & (1 << 5))) {
-    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5));
+    write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 5),
+                       RTCWireBus);
   }
 }
 
@@ -1175,7 +1182,8 @@ void RTC_PCF8523::stop(void) {
 */
 /**************************************************************************/
 uint8_t RTC_PCF8523::isrunning() {
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, RTCWireBus);
   return !((ctlreg >> 5) & 1);
 }
 
@@ -1221,14 +1229,18 @@ void RTC_PCF8523::writeSqwPinMode(Pcf8523SqwPinMode mode) {
 /**************************************************************************/
 void RTC_PCF8523::enableSecondTimer() {
   // Leave compatible settings intact
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
-  uint8_t clkreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, RTCWireBus);
+  uint8_t clkreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, RTCWireBus);
 
   // TAM pulse int. mode (shared with Timer A), CLKOUT (aka SQW) disabled
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, clkreg | 0xB8);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, clkreg | 0xB8,
+                     RTCWireBus);
 
   // SIE Second timer int. enable
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 2));
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg | (1 << 2),
+                     RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1238,10 +1250,12 @@ void RTC_PCF8523::enableSecondTimer() {
 /**************************************************************************/
 void RTC_PCF8523::disableSecondTimer() {
   // Leave compatible settings intact
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, RTCWireBus);
 
   // SIE Second timer int. disable
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 2));
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_1, ctlreg & ~(1 << 2),
+                     RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1267,21 +1281,26 @@ void RTC_PCF8523::enableCountdownTimer(PCF8523TimerClockFreq clkFreq,
   disableCountdownTimer();
 
   // Leave compatible settings intact
-  uint8_t ctlreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2);
-  uint8_t clkreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2, RTCWireBus);
+  uint8_t clkreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, RTCWireBus);
 
   // CTBIE Countdown Timer B Interrupt Enabled
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2, ctlreg |= 0x01);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2, ctlreg |= 0x01,
+                     RTCWireBus);
 
   // Timer B source clock frequency, optionally int. low pulse width
   write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_FRCTL,
-                     lowPulseWidth << 4 | clkFreq);
+                     lowPulseWidth << 4 | clkFreq, RTCWireBus);
 
   // Timer B value (number of source clock periods)
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_VALUE, numPeriods);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_VALUE, numPeriods,
+                     RTCWireBus);
 
   // TBM Timer B pulse int. mode, CLKOUT (aka SQW) disabled, TBC start Timer B
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, clkreg | 0x79);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, clkreg | 0x79,
+                     RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1313,10 +1332,12 @@ void RTC_PCF8523::enableCountdownTimer(PCF8523TimerClockFreq clkFreq,
 /**************************************************************************/
 void RTC_PCF8523::disableCountdownTimer() {
   // Leave compatible settings intact
-  uint8_t clkreg = read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL);
+  uint8_t clkreg =
+      read_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, RTCWireBus);
 
   // TBC disable to stop Timer B clock
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, ~1 & clkreg);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, ~1 & clkreg,
+                     RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1328,10 +1349,10 @@ void RTC_PCF8523::disableCountdownTimer() {
 /**************************************************************************/
 void RTC_PCF8523::deconfigureAllTimers() {
   disableSecondTimer(); // Surgically clears CONTROL_1
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2, 0);
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, 0);
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_FRCTL, 0);
-  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_VALUE, 0);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CONTROL_2, 0, RTCWireBus);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_CLKOUTCONTROL, 0, RTCWireBus);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_FRCTL, 0, RTCWireBus);
+  write_i2c_register(PCF8523_ADDRESS, PCF8523_TIMER_B_VALUE, 0, RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1407,7 +1428,8 @@ boolean RTC_PCF8563::begin(TwoWire *wireInstance) {
 /**************************************************************************/
 
 boolean RTC_PCF8563::lostPower(void) {
-  return (read_i2c_register(PCF8563_ADDRESS, PCF8563_VL_SECONDS) >> 7);
+  return (read_i2c_register(PCF8563_ADDRESS, PCF8563_VL_SECONDS, RTCWireBus) >>
+          7);
 }
 
 /**************************************************************************/
@@ -1460,9 +1482,11 @@ DateTime RTC_PCF8563::now() {
 */
 /**************************************************************************/
 void RTC_PCF8563::start(void) {
-  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, RTCWireBus);
   if (ctlreg & (1 << 5)) {
-    write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, ctlreg & ~(1 << 5));
+    write_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, ctlreg & ~(1 << 5),
+                       RTCWireBus);
   }
 }
 
@@ -1472,9 +1496,11 @@ void RTC_PCF8563::start(void) {
 */
 /**************************************************************************/
 void RTC_PCF8563::stop(void) {
-  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, RTCWireBus);
   if (!(ctlreg & (1 << 5))) {
-    write_i2c_register(PCF8523_ADDRESS, PCF8563_CONTROL_1, ctlreg | (1 << 5));
+    write_i2c_register(PCF8523_ADDRESS, PCF8563_CONTROL_1, ctlreg | (1 << 5),
+                       RTCWireBus);
   }
 }
 
@@ -1485,7 +1511,8 @@ void RTC_PCF8563::stop(void) {
 */
 /**************************************************************************/
 uint8_t RTC_PCF8563::isrunning() {
-  uint8_t ctlreg = read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1);
+  uint8_t ctlreg =
+      read_i2c_register(PCF8563_ADDRESS, PCF8563_CONTROL_1, RTCWireBus);
   return !((ctlreg >> 5) & 1);
 }
 
@@ -1559,7 +1586,7 @@ boolean RTC_DS3231::begin(TwoWire *wireInstance) {
 */
 /**************************************************************************/
 bool RTC_DS3231::lostPower(void) {
-  return (read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG) >> 7);
+  return (read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus) >> 7);
 }
 
 /**************************************************************************/
@@ -1581,9 +1608,10 @@ void RTC_DS3231::adjust(const DateTime &dt) {
   RTCWireBus->_I2C_WRITE(bin2bcd(dt.year() - 2000U));
   RTCWireBus->endTransmission();
 
-  uint8_t statreg = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t statreg =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   statreg &= ~0x80; // flip OSF bit
-  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, statreg);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, statreg, RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1639,15 +1667,16 @@ Ds3231SqwPinMode RTC_DS3231::readSqwPinMode() {
 /**************************************************************************/
 void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
   uint8_t ctrl;
-  ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+  ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, RTCWireBus);
 
   ctrl &= ~0x04; // turn off INTCON
   ctrl &= ~0x18; // set freq bits to 0
 
   ctrl |= mode;
-  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl, RTCWireBus);
 
-  // Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL), HEX);
+  // Serial.println( read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL,
+  // RTCWireBus), HEX);
 }
 
 /**************************************************************************/
@@ -1684,7 +1713,7 @@ float RTC_DS3231::getTemperature() {
 */
 /**************************************************************************/
 bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
-  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, RTCWireBus);
   if (!(ctrl & 0x04)) {
     return false;
   }
@@ -1710,7 +1739,7 @@ bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
   RTCWireBus->endTransmission();
 
   ctrl |= 0x01; // AI1E
-  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl, RTCWireBus);
   return true;
 }
 
@@ -1723,7 +1752,7 @@ bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
 */
 /**************************************************************************/
 bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
-  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, RTCWireBus);
   if (!(ctrl & 0x04)) {
     return false;
   }
@@ -1747,7 +1776,7 @@ bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
   RTCWireBus->endTransmission();
 
   ctrl |= 0x02; // AI2E
-  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl, RTCWireBus);
   return true;
 }
 
@@ -1758,9 +1787,9 @@ bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
 */
 /**************************************************************************/
 void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
-  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+  uint8_t ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, RTCWireBus);
   ctrl &= ~(1 << (alarm_num - 1));
-  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl);
+  write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl, RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1770,9 +1799,10 @@ void RTC_DS3231::disableAlarm(uint8_t alarm_num) {
 */
 /**************************************************************************/
 void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
-  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t status =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   status &= ~(0x1 << (alarm_num - 1));
-  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status, RTCWireBus);
 }
 
 /**************************************************************************/
@@ -1783,7 +1813,8 @@ void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
 */
 /**************************************************************************/
 bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
-  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t status =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   return (status >> (alarm_num - 1)) & 0x1;
 }
 
@@ -1795,10 +1826,12 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 */
 /**************************************************************************/
 void RTC_DS3231::enable32K(void) {
-  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t status =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   status |= (0x1 << 0x03);
-  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
-  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status, RTCWireBus);
+  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG,
+  // RTCWireBus), BIN);
 }
 
 /**************************************************************************/
@@ -1807,10 +1840,12 @@ void RTC_DS3231::enable32K(void) {
 */
 /**************************************************************************/
 void RTC_DS3231::disable32K(void) {
-  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t status =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   status &= ~(0x1 << 0x03);
-  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status);
-  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG), BIN);
+  write_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, status, RTCWireBus);
+  // Serial.println(read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG,
+  // RTCWireBus), BIN);
 }
 
 /**************************************************************************/
@@ -1820,6 +1855,7 @@ void RTC_DS3231::disable32K(void) {
 */
 /**************************************************************************/
 bool RTC_DS3231::isEnabled32K(void) {
-  uint8_t status = read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG);
+  uint8_t status =
+      read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG, RTCWireBus);
   return (status >> 0x03) & 0x1;
 }
