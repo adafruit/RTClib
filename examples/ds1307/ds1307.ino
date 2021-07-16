@@ -15,7 +15,7 @@ void setup () {
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    
+    exit(1);
   }
 
   if (! rtc.isrunning()) {
