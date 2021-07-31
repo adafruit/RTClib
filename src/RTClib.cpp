@@ -808,6 +808,7 @@ static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
 /**************************************************************************/
 /*!
     @brief  Start I2C for the DS1307 and test succesful connection
+    @param  wireInstance pointer to the I2C bus
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
@@ -1053,6 +1054,7 @@ DateTime RTC_Micros::now() {
 /**************************************************************************/
 /*!
     @brief  Start I2C for the PCF8523 and test succesful connection
+    @param  wireInstance pointer to the I2C bus
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
@@ -1402,6 +1404,7 @@ void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
 /**************************************************************************/
 /*!
     @brief  Start I2C for the PCF8563 and test succesful connection
+    @param  wireInstance pointer to the I2C bus
     @return True if Wire can find PCF8563 or false otherwise.
 */
 /**************************************************************************/
@@ -1564,6 +1567,7 @@ static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 /**************************************************************************/
 /*!
     @brief  Start I2C for the DS3231 and test succesful connection
+    @param  wireInstance pointer to the I2C bus
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
