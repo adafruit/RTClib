@@ -28,6 +28,7 @@
     - RTC_DS1307
     - RTC_DS3231
     - RTC_PCF8523
+    - RTC_PCF8563
   - RTC emulated in software; do not expect much accuracy out of these:
     - RTC_Millis is based on `millis()`
     - RTC_Micros is based on `micros()`; its drift rate can be tuned by
