@@ -464,15 +464,27 @@ public:
       @brief  Start the RTC
       @param dt DateTime object with the date/time to set
   */
-  static void begin(const DateTime &dt) { adjust(dt); }
-  static void adjust(const DateTime &dt);
-  static DateTime now();
+  void begin(const DateTime &dt) { adjust(dt); }
+  void adjust(const DateTime &dt);
+  DateTime now();
 
 protected:
-  static uint32_t lastUnix;   ///< Unix time from the previous call to now() -
-                              ///< prevents rollover issues
-  static uint32_t lastMillis; ///< the millis() value corresponding to the last
-                              ///< **full second** of Unix time
+  /*!
+      Unix time from the previous call to now().
+
+      This, together with `lastMillis`, defines the alignment between
+      the `millis()` timescale and the Unix timescale. Both variables
+      are updated on each call to now(), which prevents rollover issues.
+  */
+  uint32_t lastUnix;
+  /*!
+      `millis()` value corresponding `lastUnix`.
+
+      Note that this is **not** the `millis()` value of the last call to
+      now(): it's the `millis()` value corresponding to the last **full
+      second** of Unix time preceding the last call to now().
+  */
+  uint32_t lastMillis;
 };
 
 /**************************************************************************/
@@ -490,18 +502,27 @@ public:
       @brief  Start the RTC
       @param dt DateTime object with the date/time to set
   */
-  static void begin(const DateTime &dt) { adjust(dt); }
-  static void adjust(const DateTime &dt);
-  static void adjustDrift(int ppm);
-  static DateTime now();
+  void begin(const DateTime &dt) { adjust(dt); }
+  void adjust(const DateTime &dt);
+  void adjustDrift(int ppm);
+  DateTime now();
 
 protected:
-  static uint32_t microsPerSecond; ///< Number of microseconds reported by
-                                   ///< micros() per "true" (calibrated) second
-  static uint32_t lastUnix;   ///< Unix time from the previous call to now() -
-                              ///< prevents rollover issues
-  static uint32_t lastMicros; ///< micros() value corresponding to the last full
-                              ///< second of Unix time
+  /*!
+      Number of microseconds reported by `micros()` per "true"
+      (calibrated) second.
+  */
+  uint32_t microsPerSecond = 1000000;
+  /*!
+      Unix time from the previous call to now().
+
+      The timing logic is identical to RTC_Millis.
+  */
+  uint32_t lastUnix;
+  /*!
+      `micros()` value corresponding to `lastUnix`.
+  */
+  uint32_t lastMicros;
 };
 
 #endif // _RTCLIB_H_

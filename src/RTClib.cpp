@@ -977,14 +977,6 @@ void RTC_DS1307::writenvram(uint8_t address, uint8_t data) {
   writenvram(address, &data, 1);
 }
 
-/** Alignment between the millis() timescale and the Unix timescale. These
-  two variables are updated on each call to now(), which prevents
-  rollover issues. Note that lastMillis is **not** the millis() value
-  of the last call to now(): it's the millis() value corresponding to
-  the last **full second** of Unix time. */
-uint32_t RTC_Millis::lastMillis;
-uint32_t RTC_Millis::lastUnix;
-
 /**************************************************************************/
 /*!
     @brief  Set the current date/time of the RTC_Millis clock.
@@ -1011,14 +1003,6 @@ DateTime RTC_Millis::now() {
   return lastUnix;
 }
 
-/** Number of microseconds reported by micros() per "true" (calibrated) second.
- */
-uint32_t RTC_Micros::microsPerSecond = 1000000;
-
-/** The timing logic is identical to RTC_Millis. */
-uint32_t RTC_Micros::lastMicros;
-uint32_t RTC_Micros::lastUnix;
-
 /**************************************************************************/
 /*!
     @brief  Set the current date/time of the RTC_Micros clock.
@@ -1033,10 +1017,9 @@ void RTC_Micros::adjust(const DateTime &dt) {
 /**************************************************************************/
 /*!
     @brief  Adjust the RTC_Micros clock to compensate for system clock drift
-    @param ppm Adjustment to make
+    @param ppm Adjustment to make. A positive adjustment makes the clock faster.
 */
 /**************************************************************************/
-// A positive adjustment makes the clock faster.
 void RTC_Micros::adjustDrift(int ppm) { microsPerSecond = 1000000 - ppm; }
 
 /**************************************************************************/
