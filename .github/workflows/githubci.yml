@@ -29,4 +29,4 @@ jobs:
       env:
         GH_REPO_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
         PRETTYNAME : "RTClib"
-      run: bash ci/doxy_gen_and_deploy.sh
+      run: bash ci/doxy_gen_and_deploy.sh src

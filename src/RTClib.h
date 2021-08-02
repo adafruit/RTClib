@@ -287,7 +287,7 @@ public:
   void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
 
 protected:
-  TwoWire *RTCWireBus;
+  TwoWire *RTCWireBus; ///< I2C bus connected to the RTC
 };
 
 /** DS3231 SQW pin mode settings */
@@ -347,7 +347,7 @@ public:
   float getTemperature(); // in Celsius degree
 
 protected:
-  TwoWire *RTCWireBus;
+  TwoWire *RTCWireBus; ///< I2C bus connected to the RTC
 };
 
 /** PCF8523 INT/SQW pin mode settings */
@@ -418,7 +418,7 @@ public:
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 
 protected:
-  TwoWire *RTCWireBus;
+  TwoWire *RTCWireBus; ///< I2C bus connected to the RTC
 };
 
 /** PCF8563 CLKOUT pin mode settings */
@@ -449,7 +449,7 @@ public:
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
 
 protected:
-  TwoWire *RTCWireBus;
+  TwoWire *RTCWireBus; ///< I2C bus connected to the RTC
 };
 
 /**************************************************************************/
