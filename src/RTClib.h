@@ -389,6 +389,7 @@ public:
               storing in the DS3231: from 1 (Monday) to 7 (Sunday).
       @param  d Day of the week as represented by the library:
               from 0 (Sunday) to 6 (Saturday).
+      @return the converted value
   */
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
