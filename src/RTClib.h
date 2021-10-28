@@ -325,7 +325,18 @@ protected:
 /**************************************************************************/
 class RTC_I2C {
 protected:
+  /*!
+      @brief  Convert a binary coded decimal value to binary. RTC stores
+    time/date values as BCD.
+      @param val BCD value
+      @return Binary value
+  */
   static uint8_t bcd2bin(uint8_t val) { return val - 6 * (val >> 4); }
+  /*!
+      @brief  Convert a binary value to BCD format for the RTC registers
+      @param val Binary value
+      @return BCD value
+  */
   static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
   Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
   uint8_t read_register(uint8_t reg);
@@ -373,6 +384,12 @@ public:
   void disable32K(void);
   bool isEnabled32K(void);
   float getTemperature(); // in Celsius degree
+  /*!
+      @brief  Convert the day of the week to a representation suitable for
+              storing in the DS3231: from 1 (Monday) to 7 (Sunday).
+      @param  d Day of the week as represented by the library:
+              from 0 (Sunday) to 6 (Saturday).
+  */
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
 
