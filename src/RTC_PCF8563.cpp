@@ -61,7 +61,7 @@ void RTC_PCF8563::adjust(const DateTime &dt) {
 /**************************************************************************/
 DateTime RTC_PCF8563::now() {
   uint8_t buffer[7];
-  buffer[0] = 3;
+  buffer[0] = PCF8563_VL_SECONDS; // start at location 2, VL_SECONDS
   i2c_dev->write_then_read(buffer, 1, buffer, 7);
 
   return DateTime(bcd2bin(buffer[6]) + 2000U, bcd2bin(buffer[5] & 0x1F),
