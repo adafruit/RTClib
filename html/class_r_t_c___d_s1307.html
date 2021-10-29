@@ -60,7 +60,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_r_t_c___d_s1307-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RTC_DS1307 Class Reference</div>  </div>
@@ -71,6 +70,15 @@ $(function() {
  <a href="class_r_t_c___d_s1307.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_r_t_clib_8h_source.html">RTClib.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for RTC_DS1307:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_r_t_c___d_s1307.png" usemap="#RTC_5FDS1307_map" alt=""/>
+  <map id="RTC_5FDS1307_map" name="RTC_5FDS1307_map">
+<area href="class_r_t_c___i2_c.html" title="A generic I2C RTC base class. DO NOT USE DIRECTLY. " alt="RTC_I2C" shape="rect" coords="0,0,88,24"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -104,13 +112,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9687ba44a4f9c75cc067806e38b237e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a9687ba44a4f9c75cc067806e38b237e9">writenvram</a> (uint8_t address, uint8_t *buf, uint8_t size)</td></tr>
 <tr class="memdesc:a9687ba44a4f9c75cc067806e38b237e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data to the DS1307 NVRAM.  <a href="#a9687ba44a4f9c75cc067806e38b237e9">More...</a><br /></td></tr>
 <tr class="separator:a9687ba44a4f9c75cc067806e38b237e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a107e415a91a1faaae472fa20b115bca2"><td class="memItemLeft" align="right" valign="top"><a id="a107e415a91a1faaae472fa20b115bca2"></a>
-TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a107e415a91a1faaae472fa20b115bca2">RTCWireBus</a></td></tr>
-<tr class="memdesc:a107e415a91a1faaae472fa20b115bca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C bus connected to the RTC. <br /></td></tr>
-<tr class="separator:a107e415a91a1faaae472fa20b115bca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>RTC based on the DS1307 chip connected via I2C and the Wire library. </p>
@@ -409,7 +410,7 @@ TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="_r_t_clib_8h_source.html">RTClib.h</a></li>
-<li>src/<a class="el" href="_r_t_clib_8cpp.html">RTClib.cpp</a></li>
+<li>src/RTC_DS1307.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

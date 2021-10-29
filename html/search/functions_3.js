@@ -8,5 +8,6 @@ var searchData=
   ['disable32k',['disable32K',['../class_r_t_c___d_s3231.html#a68799885fdc7b5b9958b579376eb23a7',1,'RTC_DS3231']]],
   ['disablealarm',['disableAlarm',['../class_r_t_c___d_s3231.html#a9f5191fed61fd8a4716572d43f300a5a',1,'RTC_DS3231']]],
   ['disablecountdowntimer',['disableCountdownTimer',['../class_r_t_c___p_c_f8523.html#a8f25e43db2c61ed164d4520c2a1a563b',1,'RTC_PCF8523']]],
-  ['disablesecondtimer',['disableSecondTimer',['../class_r_t_c___p_c_f8523.html#a6101663e87ffc018721c0a9a12107550',1,'RTC_PCF8523']]]
+  ['disablesecondtimer',['disableSecondTimer',['../class_r_t_c___p_c_f8523.html#a6101663e87ffc018721c0a9a12107550',1,'RTC_PCF8523']]],
+  ['dowtods3231',['dowToDS3231',['../class_r_t_c___d_s3231.html#a9026a1086c2874301690b5c6a2713644',1,'RTC_DS3231']]]
 ];

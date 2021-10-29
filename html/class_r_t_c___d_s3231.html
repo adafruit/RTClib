@@ -60,7 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_r_t_c___d_s3231-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RTC_DS3231 Class Reference</div>  </div>
@@ -71,6 +71,15 @@ $(function() {
  <a href="class_r_t_c___d_s3231.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_r_t_clib_8h_source.html">RTClib.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for RTC_DS3231:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_r_t_c___d_s3231.png" usemap="#RTC_5FDS3231_map" alt=""/>
+  <map id="RTC_5FDS3231_map" name="RTC_5FDS3231_map">
+<area href="class_r_t_c___i2_c.html" title="A generic I2C RTC base class. DO NOT USE DIRECTLY. " alt="RTC_I2C" shape="rect" coords="0,0,88,24"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -121,12 +130,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a6eb180c4c14a22322a9ea3e58b51798b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current temperature from the DS3231's temperature sensor.  <a href="#a6eb180c4c14a22322a9ea3e58b51798b">More...</a><br /></td></tr>
 <tr class="separator:a6eb180c4c14a22322a9ea3e58b51798b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a15c85e08c67f1c52f7b9dcc0636b445f"><td class="memItemLeft" align="right" valign="top"><a id="a15c85e08c67f1c52f7b9dcc0636b445f"></a>
-TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a15c85e08c67f1c52f7b9dcc0636b445f">RTCWireBus</a></td></tr>
-<tr class="memdesc:a15c85e08c67f1c52f7b9dcc0636b445f"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C bus connected to the RTC. <br /></td></tr>
-<tr class="separator:a15c85e08c67f1c52f7b9dcc0636b445f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9026a1086c2874301690b5c6a2713644"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a9026a1086c2874301690b5c6a2713644">dowToDS3231</a> (uint8_t d)</td></tr>
+<tr class="memdesc:a9026a1086c2874301690b5c6a2713644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the day of the week to a representation suitable for storing in the DS3231: from 1 (Monday) to 7 (Sunday).  <a href="#a9026a1086c2874301690b5c6a2713644">More...</a><br /></td></tr>
+<tr class="separator:a9026a1086c2874301690b5c6a2713644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>RTC based on the DS3231 chip connected via I2C and the Wire library. </p>
@@ -488,9 +496,44 @@ TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 
 </div>
 </div>
+<a id="a9026a1086c2874301690b5c6a2713644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9026a1086c2874301690b5c6a2713644">&#9670;&nbsp;</a></span>dowToDS3231()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint8_t RTC_DS3231::dowToDS3231 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert the day of the week to a representation suitable for storing in the DS3231: from 1 (Monday) to 7 (Sunday). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>Day of the week as represented by the library: from 0 (Sunday) to 6 (Saturday). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the converted value </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="_r_t_clib_8h_source.html">RTClib.h</a></li>
-<li>src/<a class="el" href="_r_t_clib_8cpp.html">RTClib.cpp</a></li>
+<li>src/RTC_DS3231.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

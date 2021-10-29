@@ -70,8 +70,8 @@ $(function() {
 <div class="title">RTClib.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
-<code>#include &lt;Wire.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;Adafruit_I2CDevice.h&gt;</code><br />
+<code>#include &lt;Arduino.h&gt;</code><br />
 </div>
 <p><a href="_r_t_clib_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -82,6 +82,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_time_span.html">TimeSpan</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timespan which can represent changes in time with seconds accuracy.  <a href="class_time_span.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___i2_c.html">RTC_I2C</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generic I2C RTC base class. DO NOT USE DIRECTLY.  <a href="class_r_t_c___i2_c.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html">RTC_DS1307</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RTC based on the DS1307 chip connected via I2C and the Wire library.  <a href="class_r_t_c___d_s1307.html#details">More...</a><br /></td></tr>
@@ -104,104 +107,6 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ad25274a8c8a482383c086226b505ec27"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ad25274a8c8a482383c086226b505ec27">PCF8523_ADDRESS</a>&#160;&#160;&#160;0x68</td></tr>
-<tr class="memdesc:ad25274a8c8a482383c086226b505ec27"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C address for PCF8523.  <a href="#ad25274a8c8a482383c086226b505ec27">More...</a><br /></td></tr>
-<tr class="separator:ad25274a8c8a482383c086226b505ec27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67871d89f1920336a3236bc9242d9adc"><td class="memItemLeft" align="right" valign="top"><a id="a67871d89f1920336a3236bc9242d9adc"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a67871d89f1920336a3236bc9242d9adc">PCF8523_CLKOUTCONTROL</a>&#160;&#160;&#160;0x0F</td></tr>
-<tr class="memdesc:a67871d89f1920336a3236bc9242d9adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer and CLKOUT control register. <br /></td></tr>
-<tr class="separator:a67871d89f1920336a3236bc9242d9adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af914a4b88d76872bb612e3d0b82a4084"><td class="memItemLeft" align="right" valign="top"><a id="af914a4b88d76872bb612e3d0b82a4084"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#af914a4b88d76872bb612e3d0b82a4084">PCF8523_CONTROL_1</a>&#160;&#160;&#160;0x00</td></tr>
-<tr class="memdesc:af914a4b88d76872bb612e3d0b82a4084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control and status register 1. <br /></td></tr>
-<tr class="separator:af914a4b88d76872bb612e3d0b82a4084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d49d1e4a4564d545de494e480cc0478"><td class="memItemLeft" align="right" valign="top"><a id="a7d49d1e4a4564d545de494e480cc0478"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a7d49d1e4a4564d545de494e480cc0478">PCF8523_CONTROL_2</a>&#160;&#160;&#160;0x01</td></tr>
-<tr class="memdesc:a7d49d1e4a4564d545de494e480cc0478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control and status register 2. <br /></td></tr>
-<tr class="separator:a7d49d1e4a4564d545de494e480cc0478"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7ccab90cfcb90f39c7ffee193e8aa5f"><td class="memItemLeft" align="right" valign="top"><a id="ac7ccab90cfcb90f39c7ffee193e8aa5f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ac7ccab90cfcb90f39c7ffee193e8aa5f">PCF8523_CONTROL_3</a>&#160;&#160;&#160;0x02</td></tr>
-<tr class="memdesc:ac7ccab90cfcb90f39c7ffee193e8aa5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control and status register 3. <br /></td></tr>
-<tr class="separator:ac7ccab90cfcb90f39c7ffee193e8aa5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2dbad69d6de9fb68abe238dabf085c6"><td class="memItemLeft" align="right" valign="top"><a id="ac2dbad69d6de9fb68abe238dabf085c6"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ac2dbad69d6de9fb68abe238dabf085c6">PCF8523_TIMER_B_FRCTL</a>&#160;&#160;&#160;0x12</td></tr>
-<tr class="memdesc:ac2dbad69d6de9fb68abe238dabf085c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer B source clock frequency control. <br /></td></tr>
-<tr class="separator:ac2dbad69d6de9fb68abe238dabf085c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac78c8d4df672bcdc149399fad866afa2"><td class="memItemLeft" align="right" valign="top"><a id="ac78c8d4df672bcdc149399fad866afa2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ac78c8d4df672bcdc149399fad866afa2">PCF8523_TIMER_B_VALUE</a>&#160;&#160;&#160;0x13</td></tr>
-<tr class="memdesc:ac78c8d4df672bcdc149399fad866afa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer B value (number clock periods) <br /></td></tr>
-<tr class="separator:ac78c8d4df672bcdc149399fad866afa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d912786bf7684920de9c17d2332b9be"><td class="memItemLeft" align="right" valign="top"><a id="a5d912786bf7684920de9c17d2332b9be"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a5d912786bf7684920de9c17d2332b9be">PCF8523_OFFSET</a>&#160;&#160;&#160;0x0E</td></tr>
-<tr class="memdesc:a5d912786bf7684920de9c17d2332b9be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset register. <br /></td></tr>
-<tr class="separator:a5d912786bf7684920de9c17d2332b9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc73dd7806192e16dcae13315f88bfb4"><td class="memItemLeft" align="right" valign="top"><a id="afc73dd7806192e16dcae13315f88bfb4"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#afc73dd7806192e16dcae13315f88bfb4">PCF8523_STATUSREG</a>&#160;&#160;&#160;0x03</td></tr>
-<tr class="memdesc:afc73dd7806192e16dcae13315f88bfb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status register. <br /></td></tr>
-<tr class="separator:afc73dd7806192e16dcae13315f88bfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bb78124c90eb983197e2b8aeb4896bd"><td class="memItemLeft" align="right" valign="top"><a id="a3bb78124c90eb983197e2b8aeb4896bd"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a3bb78124c90eb983197e2b8aeb4896bd">PCF8563_ADDRESS</a>&#160;&#160;&#160;0x51</td></tr>
-<tr class="memdesc:a3bb78124c90eb983197e2b8aeb4896bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C address for PCF8563. <br /></td></tr>
-<tr class="separator:a3bb78124c90eb983197e2b8aeb4896bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73854f0fe40d125756643fbf82cddd2f"><td class="memItemLeft" align="right" valign="top"><a id="a73854f0fe40d125756643fbf82cddd2f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a73854f0fe40d125756643fbf82cddd2f">PCF8563_CLKOUTCONTROL</a>&#160;&#160;&#160;0x0D</td></tr>
-<tr class="memdesc:a73854f0fe40d125756643fbf82cddd2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">CLKOUT control register. <br /></td></tr>
-<tr class="separator:a73854f0fe40d125756643fbf82cddd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a805fe09d3b526d9555677446e2db35fa"><td class="memItemLeft" align="right" valign="top"><a id="a805fe09d3b526d9555677446e2db35fa"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a805fe09d3b526d9555677446e2db35fa">PCF8563_CONTROL_1</a>&#160;&#160;&#160;0x00</td></tr>
-<tr class="memdesc:a805fe09d3b526d9555677446e2db35fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control and status register 1. <br /></td></tr>
-<tr class="separator:a805fe09d3b526d9555677446e2db35fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a663ad981540d21c8cdd06c33cc5f609b"><td class="memItemLeft" align="right" valign="top"><a id="a663ad981540d21c8cdd06c33cc5f609b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a663ad981540d21c8cdd06c33cc5f609b">PCF8563_CONTROL_2</a>&#160;&#160;&#160;0x01</td></tr>
-<tr class="memdesc:a663ad981540d21c8cdd06c33cc5f609b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control and status register 2. <br /></td></tr>
-<tr class="separator:a663ad981540d21c8cdd06c33cc5f609b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a835f85d72c5303cb4acab2c838b6ba59"><td class="memItemLeft" align="right" valign="top"><a id="a835f85d72c5303cb4acab2c838b6ba59"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a835f85d72c5303cb4acab2c838b6ba59">PCF8563_VL_SECONDS</a>&#160;&#160;&#160;0x02</td></tr>
-<tr class="memdesc:a835f85d72c5303cb4acab2c838b6ba59"><td class="mdescLeft">&#160;</td><td class="mdescRight">register address for VL_SECONDS <br /></td></tr>
-<tr class="separator:a835f85d72c5303cb4acab2c838b6ba59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2d6409dd5fa90f8a44243b90c7f29f1"><td class="memItemLeft" align="right" valign="top"><a id="ad2d6409dd5fa90f8a44243b90c7f29f1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ad2d6409dd5fa90f8a44243b90c7f29f1">PCF8563_CLKOUT_MASK</a>&#160;&#160;&#160;0x83</td></tr>
-<tr class="memdesc:ad2d6409dd5fa90f8a44243b90c7f29f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">bitmask for SqwPinMode on CLKOUT pin <br /></td></tr>
-<tr class="separator:ad2d6409dd5fa90f8a44243b90c7f29f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a647261f334080cbf95e4f8dd79f73769"><td class="memItemLeft" align="right" valign="top"><a id="a647261f334080cbf95e4f8dd79f73769"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a647261f334080cbf95e4f8dd79f73769">DS1307_ADDRESS</a>&#160;&#160;&#160;0x68</td></tr>
-<tr class="memdesc:a647261f334080cbf95e4f8dd79f73769"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C address for DS1307. <br /></td></tr>
-<tr class="separator:a647261f334080cbf95e4f8dd79f73769"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a755ece3794b7a21d8b55c2706ecd8f4b"><td class="memItemLeft" align="right" valign="top"><a id="a755ece3794b7a21d8b55c2706ecd8f4b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a755ece3794b7a21d8b55c2706ecd8f4b">DS1307_CONTROL</a>&#160;&#160;&#160;0x07</td></tr>
-<tr class="memdesc:a755ece3794b7a21d8b55c2706ecd8f4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control register. <br /></td></tr>
-<tr class="separator:a755ece3794b7a21d8b55c2706ecd8f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76dff6c291c0d31905a2267026588c87"><td class="memItemLeft" align="right" valign="top"><a id="a76dff6c291c0d31905a2267026588c87"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a76dff6c291c0d31905a2267026588c87">DS1307_NVRAM</a>&#160;&#160;&#160;0x08</td></tr>
-<tr class="memdesc:a76dff6c291c0d31905a2267026588c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start of RAM registers - 56 bytes, 0x08 to 0x3f. <br /></td></tr>
-<tr class="separator:a76dff6c291c0d31905a2267026588c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8076305a342fb38bb70a8dc3555993ae"><td class="memItemLeft" align="right" valign="top"><a id="a8076305a342fb38bb70a8dc3555993ae"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a8076305a342fb38bb70a8dc3555993ae">DS3231_ADDRESS</a>&#160;&#160;&#160;0x68</td></tr>
-<tr class="memdesc:a8076305a342fb38bb70a8dc3555993ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C address for DS3231. <br /></td></tr>
-<tr class="separator:a8076305a342fb38bb70a8dc3555993ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a702f90628f57f4fae86f4958a9a8ada3"><td class="memItemLeft" align="right" valign="top"><a id="a702f90628f57f4fae86f4958a9a8ada3"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a702f90628f57f4fae86f4958a9a8ada3">DS3231_TIME</a>&#160;&#160;&#160;0x00</td></tr>
-<tr class="memdesc:a702f90628f57f4fae86f4958a9a8ada3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time register. <br /></td></tr>
-<tr class="separator:a702f90628f57f4fae86f4958a9a8ada3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae686654358c903a88f4f1b58a03a9b1e"><td class="memItemLeft" align="right" valign="top"><a id="ae686654358c903a88f4f1b58a03a9b1e"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ae686654358c903a88f4f1b58a03a9b1e">DS3231_ALARM1</a>&#160;&#160;&#160;0x07</td></tr>
-<tr class="memdesc:ae686654358c903a88f4f1b58a03a9b1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alarm 1 register. <br /></td></tr>
-<tr class="separator:ae686654358c903a88f4f1b58a03a9b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="memItemLeft" align="right" valign="top"><a id="aaddd22823b5cb6dfe38bf2293c04eaa2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#aaddd22823b5cb6dfe38bf2293c04eaa2">DS3231_ALARM2</a>&#160;&#160;&#160;0x0B</td></tr>
-<tr class="memdesc:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alarm 2 register. <br /></td></tr>
-<tr class="separator:aaddd22823b5cb6dfe38bf2293c04eaa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9d0b2aca525ae194ad728b90fdbad98"><td class="memItemLeft" align="right" valign="top"><a id="aa9d0b2aca525ae194ad728b90fdbad98"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#aa9d0b2aca525ae194ad728b90fdbad98">DS3231_CONTROL</a>&#160;&#160;&#160;0x0E</td></tr>
-<tr class="memdesc:aa9d0b2aca525ae194ad728b90fdbad98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control register. <br /></td></tr>
-<tr class="separator:aa9d0b2aca525ae194ad728b90fdbad98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac946da50dc8b349bf14cbcf91320d389"><td class="memItemLeft" align="right" valign="top"><a id="ac946da50dc8b349bf14cbcf91320d389"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#ac946da50dc8b349bf14cbcf91320d389">DS3231_STATUSREG</a>&#160;&#160;&#160;0x0F</td></tr>
-<tr class="memdesc:ac946da50dc8b349bf14cbcf91320d389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status register. <br /></td></tr>
-<tr class="separator:ac946da50dc8b349bf14cbcf91320d389"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d99b60759deb0fb9090174d92e4bfcc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a5d99b60759deb0fb9090174d92e4bfcc">DS3231_TEMPERATUREREG</a>&#160;&#160;&#160;0x11</td></tr>
-<tr class="memdesc:a5d99b60759deb0fb9090174d92e4bfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">temperature value  <a href="#a5d99b60759deb0fb9090174d92e4bfcc">More...</a><br /></td></tr>
-<tr class="separator:a5d99b60759deb0fb9090174d92e4bfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a427ffe4394306d962b8972b3bc952e1c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_r_t_clib_8h.html#a427ffe4394306d962b8972b3bc952e1c">SECONDS_PER_DAY</a>&#160;&#160;&#160;86400L</td></tr>
 <tr class="memdesc:a427ffe4394306d962b8972b3bc952e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">60 * 60 * 24  <a href="#a427ffe4394306d962b8972b3bc952e1c">More...</a><br /></td></tr>
 <tr class="separator:a427ffe4394306d962b8972b3bc952e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -312,40 +217,6 @@ Enumerations</h2></td></tr>
 <p>For details on using this library with an RTC module like the DS1307, PCF8523, or DS3231, see the guide at: <a href="https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview">https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview</a></p>
 <p>Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit! </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ad25274a8c8a482383c086226b505ec27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad25274a8c8a482383c086226b505ec27">&#9670;&nbsp;</a></span>PCF8523_ADDRESS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PCF8523_ADDRESS&#160;&#160;&#160;0x68</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>I2C address for PCF8523. </p>
-<p>Registers </p>
-
-</div>
-</div>
-<a id="a5d99b60759deb0fb9090174d92e4bfcc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d99b60759deb0fb9090174d92e4bfcc">&#9670;&nbsp;</a></span>DS3231_TEMPERATUREREG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DS3231_TEMPERATUREREG&#160;&#160;&#160;0x11</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>temperature value </p>
-<p>Temperature register (high byte - low byte is at 0x12), 10-bit </p>
-
-</div>
-</div>
 <a id="a427ffe4394306d962b8972b3bc952e1c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a427ffe4394306d962b8972b3bc952e1c">&#9670;&nbsp;</a></span>SECONDS_PER_DAY</h2>
 
