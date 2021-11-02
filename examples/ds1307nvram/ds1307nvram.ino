@@ -23,7 +23,7 @@ void setup () {
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    abort();
+    while (1) delay(10);
   }
 
   // Print old RAM contents on startup.

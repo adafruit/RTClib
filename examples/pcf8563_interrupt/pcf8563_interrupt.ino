@@ -6,7 +6,7 @@ RTC_PCF8563 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 // use D2 for INT0; attach to CLKOUT pin on RTC
-const uint8_t INT_PIN = 2; 
+const uint8_t INT_PIN = 2;
 
 // flag to update serial; set in interrupt callback
 volatile uint8_t tick_tock = 1;
@@ -23,7 +23,7 @@ void setup () {
   while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
 
-  
+
   pinMode(INT_PIN, INPUT);        // set up interrupt pin
   digitalWrite(INT_PIN, HIGH);    // turn on pullup resistors
   // attach interrupt to set_tick_tock callback on rising edge of INT0
@@ -32,7 +32,7 @@ void setup () {
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    abort();
+    while (1) delay(10);
   }
 
   if (rtc.lostPower()) {
@@ -51,7 +51,7 @@ void setup () {
   }
 
 
-  
+
   // When time needs to be re-set on a previously configured device, the
   // following line sets the RTC to the date & time this sketch was compiled
   // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -63,7 +63,7 @@ void setup () {
   // to be restarted by clearing the STOP bit. Let's do this to ensure
   // the RTC is running.
   rtc.start();
-    
+
   // turn on 1Hz clock out, used as INT0 for serial update every second
   rtc.writeSqwPinMode(PCF8563_SquareWave1Hz);
 }
@@ -72,7 +72,7 @@ void loop () {
 
   // check if time display should be output
   if(tick_tock) {
- 
+
     DateTime now = rtc.now();
 
     char time_format[] = "hh:mm:ss AP";
@@ -81,7 +81,7 @@ void loop () {
     Serial.println(now.toString(time_format));
     Serial.println(now.toString(date_format));
     Serial.println();
- 
+
     tick_tock = 0;
 
   }
