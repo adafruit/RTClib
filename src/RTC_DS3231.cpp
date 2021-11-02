@@ -71,7 +71,7 @@ DateTime RTC_DS3231::now() {
   buffer[0] = 0;
   i2c_dev->write_then_read(buffer, 1, buffer, 7);
 
-  return DateTime(bcd2bin(buffer[6]) + 2000U, bcd2bin(buffer[5]),
+  return DateTime(bcd2bin(buffer[6]) + 2000U, bcd2bin(buffer[5] & 0x7F),
                   bcd2bin(buffer[4]), bcd2bin(buffer[2]), bcd2bin(buffer[1]),
                   bcd2bin(buffer[0] & 0x7F));
 }

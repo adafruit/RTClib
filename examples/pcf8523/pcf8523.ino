@@ -15,7 +15,7 @@ void setup () {
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    abort();
+    while (1) delay(10);
   }
 
   if (! rtc.initialized() || rtc.lostPower()) {
@@ -44,7 +44,7 @@ void setup () {
   // to be restarted by clearing the STOP bit. Let's do this to ensure
   // the RTC is running.
   rtc.start();
-  
+
    // The PCF8523 can be calibrated for:
   //        - Aging adjustment
   //        - Temperature compensation
