@@ -438,7 +438,7 @@ bool DateTime::isValid() const {
 */
 /**************************************************************************/
 
-char *DateTime::toString(char *buffer) {
+char *DateTime::toString(char *buffer) const {
   uint8_t apTag =
       (strstr(buffer, "ap") != nullptr) || (strstr(buffer, "AP") != nullptr);
   uint8_t hourReformatted = 0, isPM = false;
