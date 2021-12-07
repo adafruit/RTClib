@@ -74,6 +74,17 @@ enum Ds3231Alarm2Mode {
   DS3231_A2_Day = 0x8        /**< Alarm when day (day of week), hours
                                   and minutes match */
 };
+/** DS3232 Alarm modes for alarm 2 */
+enum Ds3232Alarm2Mode {
+  DS32312_A2_PerMinute = 0x7, /**< Alarm once per minute
+                                  (whenever seconds are 0) */
+  DS3232_A2_Minute = 0x6,    /**< Alarm when minutes match */
+  DS3232_A2_Hour = 0x4,      /**< Alarm when hours and minutes match */
+  DS3232_A2_Date = 0x0,      /**< Alarm when date (day of month), hours
+                                  and minutes match */
+  DS3232_A2_Day = 0x8        /**< Alarm when day (day of week), hours
+                                  and minutes match */
+};
 /** PCF8523 INT/SQW pin mode settings */
 enum Pcf8523SqwPinMode {
   PCF8523_OFF = 7,             /**< Off */
@@ -150,7 +161,7 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
-  char *toString(char *buffer) const;
+  char *toString(char *buffer);
 
   /*!
       @brief  Return the year.
@@ -207,11 +218,11 @@ public:
     TIMESTAMP_TIME, //!< `hh:mm:ss`
     TIMESTAMP_DATE  //!< `YYYY-MM-DD`
   };
-  String timestamp(timestampOpt opt = TIMESTAMP_FULL) const;
+  String timestamp(timestampOpt opt = TIMESTAMP_FULL);
 
-  DateTime operator+(const TimeSpan &span) const;
-  DateTime operator-(const TimeSpan &span) const;
-  TimeSpan operator-(const DateTime &right) const;
+  DateTime operator+(const TimeSpan &span);
+  DateTime operator-(const TimeSpan &span);
+  TimeSpan operator-(const DateTime &right);
   bool operator<(const DateTime &right) const;
 
   /*!
@@ -311,8 +322,8 @@ public:
   */
   int32_t totalseconds() const { return _seconds; }
 
-  TimeSpan operator+(const TimeSpan &right) const;
-  TimeSpan operator-(const TimeSpan &right) const;
+  TimeSpan operator+(const TimeSpan &right);
+  TimeSpan operator-(const TimeSpan &right);
 
 protected:
   int32_t _seconds; ///< Actual TimeSpan value is stored as seconds
@@ -359,7 +370,7 @@ public:
   uint8_t readnvram(uint8_t address);
   void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
   void writenvram(uint8_t address, uint8_t data);
-  void writenvram(uint8_t address, const uint8_t *buf, uint8_t size);
+  void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
 };
 
 /**************************************************************************/
@@ -393,7 +404,41 @@ public:
   */
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
-
+/**************************************************************************/
+/*!
+    @brief  RTC based on the DS3232 chip connected via I2C and the Wire library
+*/
+/**************************************************************************/
+class RTC_DS3232 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  void adjust(const DateTime &dt);
+  bool lostPower(void);
+  DateTime now();
+  Ds3231SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Ds3232SqwPinMode mode);
+  bool setAlarm1(const DateTime &dt, Ds3232Alarm1Mode alarm_mode);
+  bool setAlarm2(const DateTime &dt, Ds3232Alarm2Mode alarm_mode);
+  void disableAlarm(uint8_t alarm_num);
+  void clearAlarm(uint8_t alarm_num);
+  bool alarmFired(uint8_t alarm_num);
+  void enable32K(void);
+  void disable32K(void);
+  bool isEnabled32K(void);
+  float getTemperature(); // in Celsius degree
+  /*!
+      @brief  Convert the day of the week to a representation suitable for
+              storing in the DS3232: from 1 (Monday) to 7 (Sunday).
+      @param  d Day of the week as represented by the library:
+              from 0 (Sunday) to 6 (Saturday).
+      @return the converted value
+  */
+  static uint8_t dowToDS3232(uint8_t d) { return d == 0 ? 7 : d; }
+  uint8_t readnvram(uint8_t address);
+  void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
+  void writenvram(uint8_t address, uint8_t data);
+  void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
+};
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
