@@ -161,7 +161,7 @@ public:
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
   bool isValid() const;
-  char *toString(char *buffer);
+  char *toString(char *buffer) const;
 
   /*!
       @brief  Return the year.
@@ -218,11 +218,11 @@ public:
     TIMESTAMP_TIME, //!< `hh:mm:ss`
     TIMESTAMP_DATE  //!< `YYYY-MM-DD`
   };
-  String timestamp(timestampOpt opt = TIMESTAMP_FULL);
+  String timestamp(timestampOpt opt = TIMESTAMP_FULL) const;
 
-  DateTime operator+(const TimeSpan &span);
-  DateTime operator-(const TimeSpan &span);
-  TimeSpan operator-(const DateTime &right);
+  DateTime operator+(const TimeSpan &span) const;
+  DateTime operator-(const TimeSpan &span) const;
+  TimeSpan operator-(const DateTime &right) const;
   bool operator<(const DateTime &right) const;
 
   /*!
@@ -322,8 +322,8 @@ public:
   */
   int32_t totalseconds() const { return _seconds; }
 
-  TimeSpan operator+(const TimeSpan &right);
-  TimeSpan operator-(const TimeSpan &right);
+  TimeSpan operator+(const TimeSpan &right) const;
+  TimeSpan operator-(const TimeSpan &right) const;
 
 protected:
   int32_t _seconds; ///< Actual TimeSpan value is stored as seconds
@@ -370,9 +370,8 @@ public:
   uint8_t readnvram(uint8_t address);
   void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
   void writenvram(uint8_t address, uint8_t data);
-  void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
+  void writenvram(uint8_t address, const uint8_t *buf, uint8_t size);
 };
-
 /**************************************************************************/
 /*!
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
