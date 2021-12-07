@@ -109,9 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac60cf11ebb0a4dc1fe6097787caecd75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#ac60cf11ebb0a4dc1fe6097787caecd75">writenvram</a> (uint8_t address, uint8_t data)</td></tr>
 <tr class="memdesc:ac60cf11ebb0a4dc1fe6097787caecd75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shortcut to write one byte to NVRAM.  <a href="#ac60cf11ebb0a4dc1fe6097787caecd75">More...</a><br /></td></tr>
 <tr class="separator:ac60cf11ebb0a4dc1fe6097787caecd75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9687ba44a4f9c75cc067806e38b237e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a9687ba44a4f9c75cc067806e38b237e9">writenvram</a> (uint8_t address, uint8_t *buf, uint8_t size)</td></tr>
-<tr class="memdesc:a9687ba44a4f9c75cc067806e38b237e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data to the DS1307 NVRAM.  <a href="#a9687ba44a4f9c75cc067806e38b237e9">More...</a><br /></td></tr>
-<tr class="separator:a9687ba44a4f9c75cc067806e38b237e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3099cef99081a64bec954399a424ef61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s1307.html#a3099cef99081a64bec954399a424ef61">writenvram</a> (uint8_t address, const uint8_t *buf, uint8_t size)</td></tr>
+<tr class="memdesc:a3099cef99081a64bec954399a424ef61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data to the DS1307 NVRAM.  <a href="#a3099cef99081a64bec954399a424ef61">More...</a><br /></td></tr>
+<tr class="separator:a3099cef99081a64bec954399a424ef61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>RTC based on the DS1307 chip connected via I2C and the Wire library. </p>
@@ -364,8 +364,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9687ba44a4f9c75cc067806e38b237e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9687ba44a4f9c75cc067806e38b237e9">&#9670;&nbsp;</a></span>writenvram() <span class="overload">[2/2]</span></h2>
+<a id="a3099cef99081a64bec954399a424ef61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3099cef99081a64bec954399a424ef61">&#9670;&nbsp;</a></span>writenvram() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -379,7 +379,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
         </tr>
         <tr>

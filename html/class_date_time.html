@@ -104,9 +104,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a21b2a59fbde555e5c5688d44e9d95aec">isValid</a> () const</td></tr>
 <tr class="memdesc:a21b2a59fbde555e5c5688d44e9d95aec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether this <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is valid.  <a href="#a21b2a59fbde555e5c5688d44e9d95aec">More...</a><br /></td></tr>
 <tr class="separator:a21b2a59fbde555e5c5688d44e9d95aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b">toString</a> (char *buffer)</td></tr>
-<tr class="memdesc:a3753bf2ae254315a56f7ee38ff0b188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> as a string in a user-defined format.  <a href="#a3753bf2ae254315a56f7ee38ff0b188b">More...</a><br /></td></tr>
-<tr class="separator:a3753bf2ae254315a56f7ee38ff0b188b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27aad4b627b20de84c23d2b0ed657cba"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a27aad4b627b20de84c23d2b0ed657cba">toString</a> (char *buffer) const</td></tr>
+<tr class="memdesc:a27aad4b627b20de84c23d2b0ed657cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> as a string in a user-defined format.  <a href="#a27aad4b627b20de84c23d2b0ed657cba">More...</a><br /></td></tr>
+<tr class="separator:a27aad4b627b20de84c23d2b0ed657cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a04bc8f3d3452bf8fcc5f1e82d86d7fe8">year</a> () const</td></tr>
 <tr class="memdesc:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the year.  <a href="#a04bc8f3d3452bf8fcc5f1e82d86d7fe8">More...</a><br /></td></tr>
 <tr class="separator:a04bc8f3d3452bf8fcc5f1e82d86d7fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,18 +140,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4629e7b2ffeac4a0c8f8c3f9c545990"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ae4629e7b2ffeac4a0c8f8c3f9c545990">unixtime</a> (void) const</td></tr>
 <tr class="memdesc:ae4629e7b2ffeac4a0c8f8c3f9c545990"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return Unix time: seconds since 1 Jan 1970.  <a href="#ae4629e7b2ffeac4a0c8f8c3f9c545990">More...</a><br /></td></tr>
 <tr class="separator:ae4629e7b2ffeac4a0c8f8c3f9c545990"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fda98373c9162c3b7c6fa304256a380"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a7fda98373c9162c3b7c6fa304256a380">timestamp</a> (<a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285a">timestampOpt</a> opt=<a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285aa784e65d72227eca32bea310d8e067f62">TIMESTAMP_FULL</a>)</td></tr>
-<tr class="memdesc:a7fda98373c9162c3b7c6fa304256a380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a ISO 8601 timestamp as a <code>String</code> object.  <a href="#a7fda98373c9162c3b7c6fa304256a380">More...</a><br /></td></tr>
-<tr class="separator:a7fda98373c9162c3b7c6fa304256a380"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae043350a8bfa362aabbc9f5ee658b4e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ae043350a8bfa362aabbc9f5ee658b4e6">operator+</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span)</td></tr>
-<tr class="memdesc:ae043350a8bfa362aabbc9f5ee658b4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a <a class="el" href="class_time_span.html" title="Timespan which can represent changes in time with seconds accuracy. ">TimeSpan</a> to the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object.  <a href="#ae043350a8bfa362aabbc9f5ee658b4e6">More...</a><br /></td></tr>
-<tr class="separator:ae043350a8bfa362aabbc9f5ee658b4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbdcc7a6b55924552e72696d9e5bbb98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#acbdcc7a6b55924552e72696d9e5bbb98">operator-</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span)</td></tr>
-<tr class="memdesc:acbdcc7a6b55924552e72696d9e5bbb98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract a <a class="el" href="class_time_span.html" title="Timespan which can represent changes in time with seconds accuracy. ">TimeSpan</a> from the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object.  <a href="#acbdcc7a6b55924552e72696d9e5bbb98">More...</a><br /></td></tr>
-<tr class="separator:acbdcc7a6b55924552e72696d9e5bbb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a005fb6b5723a393da66e821a93cec5a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_time_span.html">TimeSpan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a005fb6b5723a393da66e821a93cec5a5">operator-</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;right)</td></tr>
-<tr class="memdesc:a005fb6b5723a393da66e821a93cec5a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract one <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> from another.  <a href="#a005fb6b5723a393da66e821a93cec5a5">More...</a><br /></td></tr>
-<tr class="separator:a005fb6b5723a393da66e821a93cec5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab13d6eeee16d78b845f6eed5764951e3"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ab13d6eeee16d78b845f6eed5764951e3">timestamp</a> (<a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285a">timestampOpt</a> opt=<a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285aa784e65d72227eca32bea310d8e067f62">TIMESTAMP_FULL</a>) const</td></tr>
+<tr class="memdesc:ab13d6eeee16d78b845f6eed5764951e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a ISO 8601 timestamp as a <code>String</code> object.  <a href="#ab13d6eeee16d78b845f6eed5764951e3">More...</a><br /></td></tr>
+<tr class="separator:ab13d6eeee16d78b845f6eed5764951e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d6b85fa26106369e81da7b824e78936"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a8d6b85fa26106369e81da7b824e78936">operator+</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span) const</td></tr>
+<tr class="memdesc:a8d6b85fa26106369e81da7b824e78936"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a <a class="el" href="class_time_span.html" title="Timespan which can represent changes in time with seconds accuracy. ">TimeSpan</a> to the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object.  <a href="#a8d6b85fa26106369e81da7b824e78936">More...</a><br /></td></tr>
+<tr class="separator:a8d6b85fa26106369e81da7b824e78936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef3bee1f4e9de8d79426f35db1e0dbe4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#aef3bee1f4e9de8d79426f35db1e0dbe4">operator-</a> (const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;span) const</td></tr>
+<tr class="memdesc:aef3bee1f4e9de8d79426f35db1e0dbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract a <a class="el" href="class_time_span.html" title="Timespan which can represent changes in time with seconds accuracy. ">TimeSpan</a> from the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object.  <a href="#aef3bee1f4e9de8d79426f35db1e0dbe4">More...</a><br /></td></tr>
+<tr class="separator:aef3bee1f4e9de8d79426f35db1e0dbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac901785851a822ae9051c7916559198f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_time_span.html">TimeSpan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#ac901785851a822ae9051c7916559198f">operator-</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;right) const</td></tr>
+<tr class="memdesc:ac901785851a822ae9051c7916559198f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract one <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> from another.  <a href="#ac901785851a822ae9051c7916559198f">More...</a><br /></td></tr>
+<tr class="separator:ac901785851a822ae9051c7916559198f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f1288d0205e97f86dfecfc7fd7b4e60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_date_time.html#a6f1288d0205e97f86dfecfc7fd7b4e60">operator&lt;</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;right) const</td></tr>
 <tr class="memdesc:a6f1288d0205e97f86dfecfc7fd7b4e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if one <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> is less (earlier) than another.  <a href="#a6f1288d0205e97f86dfecfc7fd7b4e60">More...</a><br /></td></tr>
 <tr class="separator:a6f1288d0205e97f86dfecfc7fd7b4e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,7 +214,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Format of the ISO 8601 timestamp generated by <code><a class="el" href="class_date_time.html#a7fda98373c9162c3b7c6fa304256a380" title="Return a ISO 8601 timestamp as a String object. ">timestamp()</a></code>. Each option corresponds to a <code><a class="el" href="class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b" title="Writes the DateTime as a string in a user-defined format. ">toString()</a></code> format as follows: </p>
+<p>Format of the ISO 8601 timestamp generated by <code><a class="el" href="class_date_time.html#ab13d6eeee16d78b845f6eed5764951e3" title="Return a ISO 8601 timestamp as a String object. ">timestamp()</a></code>. Each option corresponds to a <code><a class="el" href="class_date_time.html#a27aad4b627b20de84c23d2b0ed657cba" title="Writes the DateTime as a string in a user-defined format. ">toString()</a></code> format as follows: </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a3f65aa183f72c285a03f7dd04321285aa784e65d72227eca32bea310d8e067f62"></a>TIMESTAMP_FULL&#160;</td><td class="fielddoc"><p><code>YYYY-MM-DDThh:mm:ss</code> </p>
 </td></tr>
@@ -479,8 +479,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="a3753bf2ae254315a56f7ee38ff0b188b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3753bf2ae254315a56f7ee38ff0b188b">&#9670;&nbsp;</a></span>toString()</h2>
+<a id="a27aad4b627b20de84c23d2b0ed657cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27aad4b627b20de84c23d2b0ed657cba">&#9670;&nbsp;</a></span>toString()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -490,7 +490,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -526,7 +526,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>If either "AP" or "ap" is used, the "hh" specifier uses 12-hour mode (range: 01&ndash;12). Otherwise it works in 24-hour mode (range: 00&ndash;23).</p>
 <p>The specifiers within <em>buffer</em> will be overwritten with the appropriate values from the <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a>. Any characters not belonging to one of the above specifiers are left as-is.</p>
 <p><b>Example</b>: The format "DDD, DD MMM YYYY hh:mm:ss" generates an output of the form "Thu, 16 Apr 2020 18:34:56.</p>
-<dl class="section see"><dt>See also</dt><dd>The <code><a class="el" href="class_date_time.html#a7fda98373c9162c3b7c6fa304256a380" title="Return a ISO 8601 timestamp as a String object. ">timestamp()</a></code> method provides similar functionnality, but it returns a <code>String</code> object and supports a limited choice of predefined formats.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>The <code><a class="el" href="class_date_time.html#ab13d6eeee16d78b845f6eed5764951e3" title="Return a ISO 8601 timestamp as a String object. ">timestamp()</a></code> method provides similar functionnality, but it returns a <code>String</code> object and supports a limited choice of predefined formats.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">buffer</td><td>Array of <code>char</code> for holding the format description and the formatted <a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a>. Before calling this method, the buffer should be initialized by the user with the format string. The method will overwrite the buffer with the formatted date and/or time.</td></tr>
@@ -817,8 +817,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="a7fda98373c9162c3b7c6fa304256a380"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fda98373c9162c3b7c6fa304256a380">&#9670;&nbsp;</a></span>timestamp()</h2>
+<a id="ab13d6eeee16d78b845f6eed5764951e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab13d6eeee16d78b845f6eed5764951e3">&#9670;&nbsp;</a></span>timestamp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -828,14 +828,14 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285a">timestampOpt</a>&#160;</td>
           <td class="paramname"><em>opt</em> = <code><a class="el" href="class_date_time.html#a3f65aa183f72c285a03f7dd04321285aa784e65d72227eca32bea310d8e067f62">TIMESTAMP_FULL</a></code></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Return a ISO 8601 timestamp as a <code>String</code> object. </p>
 <p>The generated timestamp conforms to one of the predefined, ISO 8601-compatible formats for representing the date (if <em>opt</em> is <code>TIMESTAMP_DATE</code>), the time (<code>TIMESTAMP_TIME</code>), or both (<code>TIMESTAMP_FULL</code>).</p>
-<dl class="section see"><dt>See also</dt><dd>The <code><a class="el" href="class_date_time.html#a3753bf2ae254315a56f7ee38ff0b188b" title="Writes the DateTime as a string in a user-defined format. ">toString()</a></code> method provides more general string formatting.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>The <code><a class="el" href="class_date_time.html#a27aad4b627b20de84c23d2b0ed657cba" title="Writes the DateTime as a string in a user-defined format. ">toString()</a></code> method provides more general string formatting.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">opt</td><td>Format of the timestamp </td></tr>
@@ -846,8 +846,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="ae043350a8bfa362aabbc9f5ee658b4e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae043350a8bfa362aabbc9f5ee658b4e6">&#9670;&nbsp;</a></span>operator+()</h2>
+<a id="a8d6b85fa26106369e81da7b824e78936"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d6b85fa26106369e81da7b824e78936">&#9670;&nbsp;</a></span>operator+()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -857,7 +857,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;&#160;</td>
           <td class="paramname"><em>span</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -873,8 +873,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="acbdcc7a6b55924552e72696d9e5bbb98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbdcc7a6b55924552e72696d9e5bbb98">&#9670;&nbsp;</a></span>operator-() <span class="overload">[1/2]</span></h2>
+<a id="aef3bee1f4e9de8d79426f35db1e0dbe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef3bee1f4e9de8d79426f35db1e0dbe4">&#9670;&nbsp;</a></span>operator-() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -884,7 +884,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_time_span.html">TimeSpan</a> &amp;&#160;</td>
           <td class="paramname"><em>span</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -900,8 +900,8 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 </div>
 </div>
-<a id="a005fb6b5723a393da66e821a93cec5a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a005fb6b5723a393da66e821a93cec5a5">&#9670;&nbsp;</a></span>operator-() <span class="overload">[2/2]</span></h2>
+<a id="ac901785851a822ae9051c7916559198f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac901785851a822ae9051c7916559198f">&#9670;&nbsp;</a></span>operator-() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -911,7 +911,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_date_time.html">DateTime</a> &amp;&#160;</td>
           <td class="paramname"><em>right</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
