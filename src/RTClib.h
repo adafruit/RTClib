@@ -74,6 +74,28 @@ enum Ds3231Alarm2Mode {
   DS3231_A2_Day = 0x8        /**< Alarm when day (day of week), hours
                                   and minutes match */
 };
+
+/** DS3232 SQW pin mode settings */
+enum Ds3232SqwPinMode {
+  DS3232_OFF = 0x1C,            /**< Off */
+  DS3232_SquareWave1Hz = 0x00,  /**<  1Hz square wave */
+  DS3232_SquareWave1kHz = 0x08, /**<  1kHz square wave */
+  DS3232_SquareWave4kHz = 0x10, /**<  4kHz square wave */
+  DS3232_SquareWave8kHz = 0x18  /**<  8kHz square wave */
+};
+
+/** DS3232 Alarm modes for alarm 1 */
+enum Ds3232Alarm1Mode {
+  DS3232_A1_PerSecond = 0x0F, /**< Alarm once per second */
+  DS3232_A1_Second = 0x0E,    /**< Alarm when seconds match */
+  DS3232_A1_Minute = 0x0C,    /**< Alarm when minutes and seconds match */
+  DS3232_A1_Hour = 0x08,      /**< Alarm when hours, minutes
+                                   and seconds match */
+  DS3232_A1_Date = 0x00,      /**< Alarm when date (day of month), hours,
+                                   minutes and seconds match */
+  DS3232_A1_Day = 0x10        /**< Alarm when day (day of week), hours,
+                                   minutes and seconds match */
+};
 /** DS3232 Alarm modes for alarm 2 */
 enum Ds3232Alarm2Mode {
   DS32312_A2_PerMinute = 0x7, /**< Alarm once per minute
@@ -372,6 +394,7 @@ public:
   void writenvram(uint8_t address, uint8_t data);
   void writenvram(uint8_t address, const uint8_t *buf, uint8_t size);
 };
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
@@ -414,7 +437,7 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
-  Ds3231SqwPinMode readSqwPinMode();
+  Ds3232SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Ds3232SqwPinMode mode);
   bool setAlarm1(const DateTime &dt, Ds3232Alarm1Mode alarm_mode);
   bool setAlarm2(const DateTime &dt, Ds3232Alarm2Mode alarm_mode);
@@ -436,7 +459,7 @@ public:
   uint8_t readnvram(uint8_t address);
   void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
   void writenvram(uint8_t address, uint8_t data);
-  void writenvram(uint8_t address, uint8_t *buf, uint8_t size);
+  void writenvram(uint8_t address, const uint8_t *buf, uint8_t size);
 };
 /**************************************************************************/
 /*!
