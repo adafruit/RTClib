@@ -438,7 +438,7 @@ bool DateTime::isValid() const {
 */
 /**************************************************************************/
 
-char *DateTime::toString(char *buffer) {
+char *DateTime::toString(char *buffer) const {
   uint8_t apTag =
       (strstr(buffer, "ap") != nullptr) || (strstr(buffer, "AP") != nullptr);
   uint8_t hourReformatted = 0, isPM = false;
@@ -601,7 +601,7 @@ uint32_t DateTime::secondstime(void) const {
     @return New DateTime object with span added to it.
 */
 /**************************************************************************/
-DateTime DateTime::operator+(const TimeSpan &span) {
+DateTime DateTime::operator+(const TimeSpan &span) const {
   return DateTime(unixtime() + span.totalseconds());
 }
 
@@ -612,7 +612,7 @@ DateTime DateTime::operator+(const TimeSpan &span) {
     @return New DateTime object with span subtracted from it.
 */
 /**************************************************************************/
-DateTime DateTime::operator-(const TimeSpan &span) {
+DateTime DateTime::operator-(const TimeSpan &span) const {
   return DateTime(unixtime() - span.totalseconds());
 }
 
@@ -628,7 +628,7 @@ DateTime DateTime::operator-(const TimeSpan &span) {
     @return TimeSpan of the difference between DateTimes.
 */
 /**************************************************************************/
-TimeSpan DateTime::operator-(const DateTime &right) {
+TimeSpan DateTime::operator-(const DateTime &right) const {
   return TimeSpan(unixtime() - right.unixtime());
 }
 
@@ -689,7 +689,7 @@ bool DateTime::operator==(const DateTime &right) const {
     @return Timestamp string, e.g. "2020-04-16T18:34:56".
 */
 /**************************************************************************/
-String DateTime::timestamp(timestampOpt opt) {
+String DateTime::timestamp(timestampOpt opt) const {
   char buffer[25]; // large enough for any DateTime, including invalid ones
 
   // Generate timestamp according to opt
@@ -748,7 +748,7 @@ TimeSpan::TimeSpan(const TimeSpan &copy) : _seconds(copy._seconds) {}
     @return New TimeSpan object, sum of left and right
 */
 /**************************************************************************/
-TimeSpan TimeSpan::operator+(const TimeSpan &right) {
+TimeSpan TimeSpan::operator+(const TimeSpan &right) const {
   return TimeSpan(_seconds + right._seconds);
 }
 
@@ -759,6 +759,6 @@ TimeSpan TimeSpan::operator+(const TimeSpan &right) {
     @return New TimeSpan object, right subtracted from left
 */
 /**************************************************************************/
-TimeSpan TimeSpan::operator-(const TimeSpan &right) {
+TimeSpan TimeSpan::operator-(const TimeSpan &right) const {
   return TimeSpan(_seconds - right._seconds);
 }

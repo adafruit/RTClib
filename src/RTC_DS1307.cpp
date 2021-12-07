@@ -104,7 +104,7 @@ void RTC_DS1307::readnvram(uint8_t *buf, uint8_t size, uint8_t address) {
     @param size Number of bytes in buf to write to NVRAM
 */
 /**************************************************************************/
-void RTC_DS1307::writenvram(uint8_t address, uint8_t *buf, uint8_t size) {
+void RTC_DS1307::writenvram(uint8_t address, const uint8_t *buf, uint8_t size) {
   uint8_t addrByte = DS1307_NVRAM + address;
   i2c_dev->write(buf, size, true, &addrByte, 1);
 }
