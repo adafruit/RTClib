@@ -5,7 +5,7 @@ This is a fork of JeeLab's fantastic real time clock library for Arduino.
 Works great with Adafruit RTC breakouts:
 
 - [DS3231 Precision RTC](https://www.adafruit.com/product/3013)
-- [DS3232 Precision RTC] (https://www.maximintegrated.com/en/products/analog/real-time-clocks/DS3232M.html)
+- [DS3232 Precision RTC](https://www.maximintegrated.com/en/products/analog/real-time-clocks/DS3232M.html)
 - [PCF8523 RTC](https://www.adafruit.com/product/3295)
 - [DS1307 RTC](https://www.adafruit.com/product/3296)
 
