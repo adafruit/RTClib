@@ -250,6 +250,41 @@ bool RTC_DS3232::isEnabled32K(void) {
   return (read_register(DS3232_STATUSREG) >> 0x03) & 0x01;
 }
 /**************************************************************************/
+
+/**************************************************************************/
+/*!
+        @brief  Enable BB32KHZ Output
+        @details The 32kHz output is enabled by default. It requires an external
+        pull-up resistor to function correctly
+*/
+/**************************************************************************/
+void RTC_DS3232::enableBB32KHZ(void) {
+  uint8_t status = read_register(DS3232_STATUSREG);
+  status |= (0x1 << 0x06);
+  write_register(DS3232_STATUSREG, status);
+}
+
+/**************************************************************************/
+/*!
+        @brief  Disable BB32KHZ Output
+*/
+/**************************************************************************/
+void RTC_DS3232::disableBB32KHZ(void) {
+  uint8_t status = read_register(DS3232_STATUSREG);
+  status &= ~(0x1 << 0x06);
+  write_register(DS3232_STATUSREG, status);
+}
+
+/**************************************************************************/
+/*!
+        @brief  Get status of BB32KHZ Output
+        @return True if enabled otherwise false
+*/
+/**************************************************************************/
+bool RTC_DS3232::isEnabledBB32KHZ(void) {
+  return (read_register(DS3232_STATUSREG) >> 0x06) & 0x01;
+}
+/**************************************************************************/
 /*!
         @brief  Read data from the DS3232's NVRAM
         @param buf Pointer to a buffer to store the data - make sure it's large
@@ -258,11 +293,64 @@ bool RTC_DS3232::isEnabled32K(void) {
         @param address Starting NVRAM address, from 0 to 236
 */
 /**************************************************************************/
+/*!
+        @brief  Clear Oscillator Stop Flag (OSF). Bit 7 of STATUSREG (0Fh)
+        @details A logic 1 in this bit indicates that the oscillator either is stopped or was
+				stopped for some period and may be used to judge the validity of the timekeeping data. 
+				This bit is set to logic 1 any time that the oscillator stops. 
+				The following are examples of conditions that can cause the OSF bit to be set:
+				1) The first time power is applied.
+				2) The voltages present on both VCC and VBAT are insufficient to support oscillation.
+				3) The EOSC bit is turned off in battery-backed mode.
+				4) External influences on the crystal (i.e., noise, leakage, etc.).
+				This bit remains at logic 1 until written to logic 0.
+*/
+/**************************************************************************/
+void RTC_DS3232::clearOSF(void) {
+
+  uint8_t statreg = read_register(DS3232_STATUSREG);
+  statreg &= ~0x80; // flip OSF bit
+  write_register(DS3232_STATUSREG, statreg);
+}
+/**************************************************************************/
+/*!
+        @brief  Enable EOSF. Enable Oscillator (EOSC) Bit 7 of Control Register (0Eh)
+        @details When set to logic 0, the oscillator is started (inverted logic). 
+				When set to logic 1, the oscillator is stopped when the DS3232 switches to battery power. 
+		This bit is clear (logic 0) when power is first applied. 
+		When the DS3232 is powered by VCC, the oscillator is always on regardless of the status of the EOSC bit. 
+		When EOSC is disabled, all register data is static.
+*/
+/**************************************************************************/
+void RTC_DS3232::enableEOSC(void) {
+  uint8_t status = read_register(DS3232_CONTROL);
+  status &= ~(0x1 << 0x07);
+  write_register(DS3232_CONTROL, status);
+}
+/**************************************************************************/
+/*!
+        @brief  Disable EOSF. When set to logic 1, the oscillator is stopped (inverted logic)
+*/
+/**************************************************************************/
+void RTC_DS3232::disableEOSC(void) {
+  uint8_t status = read_register(DS3232_CONTROL);
+  status |= (0x1 << 0x07);
+  write_register(DS3232_CONTROL, status);
+}
+/**************************************************************************/
+/*!
+        @brief  Get status of EOSF
+        @return When set to logic 0, the oscillator is started (inverted logic)
+*/
+/**************************************************************************/
+bool RTC_DS3232::isEnabledEOSC(void) {
+  return (read_register(DS3232_CONTROL) >> 0x07) & 0x01;
+}
+/**************************************************************************/
 void RTC_DS3232::readnvram(uint8_t *buf, uint8_t size, uint8_t address) {
   uint8_t addrByte = DS3232_NVRAM + address;
   i2c_dev->write_then_read(&addrByte, 1, buf, size);
 }
-
 /**************************************************************************/
 /*!
         @brief  Write data to the DS3232 NVRAM

@@ -468,6 +468,13 @@ public:
   void enable32K(void);
   void disable32K(void);
   bool isEnabled32K(void);
+  void enableBB32KHZ(void);
+  void disableBB32KHZ(void);
+  bool isEnabledBB32KHZ(void);  
+  void clearOSF(void);
+  void enableEOSC(void);
+  void disableEOSC(void);
+  bool isEnabledEOSC(void);
   float getTemperature(); // in Celsius degree
   /*!
           @brief  Convert the day of the week to a representation suitable for
