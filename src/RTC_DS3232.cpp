@@ -284,14 +284,7 @@ void RTC_DS3232::disableBB32KHZ(void) {
 bool RTC_DS3232::isEnabledBB32KHZ(void) {
   return (read_register(DS3232_STATUSREG) >> 0x06) & 0x01;
 }
-/**************************************************************************/
-/*!
-        @brief  Read data from the DS3232's NVRAM
-        @param buf Pointer to a buffer to store the data - make sure it's large
-   enough to hold size bytes
-        @param size Number of bytes to read
-        @param address Starting NVRAM address, from 0 to 236
-*/
+
 /**************************************************************************/
 /*!
         @brief  Clear Oscillator Stop Flag (OSF). Bit 7 of STATUSREG (0Fh)
@@ -349,6 +342,15 @@ void RTC_DS3232::disableEOSC(void) {
 bool RTC_DS3232::isEnabledEOSC(void) {
   return (read_register(DS3232_CONTROL) >> 0x07) & 0x01;
 }
+
+/**************************************************************************/
+/*!
+        @brief  Read data from the DS3232's NVRAM
+        @param buf Pointer to a buffer to store the data - make sure it's large
+   enough to hold size bytes
+        @param size Number of bytes to read
+        @param address Starting NVRAM address, from 0 to 236
+*/
 /**************************************************************************/
 void RTC_DS3232::readnvram(uint8_t *buf, uint8_t size, uint8_t address) {
   uint8_t addrByte = DS3232_NVRAM + address;
