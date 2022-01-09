@@ -470,7 +470,7 @@ public:
   bool isEnabled32K(void);
   void enableBB32KHZ(void);
   void disableBB32KHZ(void);
-  bool isEnabledBB32KHZ(void);  
+  bool isEnabledBB32KHZ(void);
   void clearOSF(void);
   void enableEOSC(void);
   void disableEOSC(void);

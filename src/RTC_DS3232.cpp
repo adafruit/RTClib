@@ -295,15 +295,15 @@ bool RTC_DS3232::isEnabledBB32KHZ(void) {
 /**************************************************************************/
 /*!
         @brief  Clear Oscillator Stop Flag (OSF). Bit 7 of STATUSREG (0Fh)
-        @details A logic 1 in this bit indicates that the oscillator either is stopped or was
-				stopped for some period and may be used to judge the validity of the timekeeping data. 
-				This bit is set to logic 1 any time that the oscillator stops. 
-				The following are examples of conditions that can cause the OSF bit to be set:
-				1) The first time power is applied.
-				2) The voltages present on both VCC and VBAT are insufficient to support oscillation.
-				3) The EOSC bit is turned off in battery-backed mode.
-				4) External influences on the crystal (i.e., noise, leakage, etc.).
-				This bit remains at logic 1 until written to logic 0.
+        @details A logic 1 in this bit indicates that the oscillator either is
+         stopped or was stopped for some period and may be used to judge the
+   validity of the timekeeping data. This bit is set to logic 1 any time that
+   the oscillator stops. The following are examples of conditions that can cause
+   the OSF bit to be set: 1) The first time power is applied. 2) The voltages
+         present on both VCC and VBAT are insufficient to support oscillation.
+   3) The EOSC bit is turned off in battery-backed mode. 4) External influences
+   on the crystal (i.e., noise, leakage, etc.). This bit remains at logic 1
+   until written to logic 0.
 */
 /**************************************************************************/
 void RTC_DS3232::clearOSF(void) {
@@ -314,12 +314,14 @@ void RTC_DS3232::clearOSF(void) {
 }
 /**************************************************************************/
 /*!
-        @brief  Enable EOSF. Enable Oscillator (EOSC) Bit 7 of Control Register (0Eh)
-        @details When set to logic 0, the oscillator is started (inverted logic). 
-				When set to logic 1, the oscillator is stopped when the DS3232 switches to battery power. 
-		This bit is clear (logic 0) when power is first applied. 
-		When the DS3232 is powered by VCC, the oscillator is always on regardless of the status of the EOSC bit. 
-		When EOSC is disabled, all register data is static.
+        @brief  Enable EOSF. Enable Oscillator (EOSC) Bit 7 of Control Register
+   (0Eh)
+        @details When set to logic 0, the oscillator is started (inverted
+   logic). When set to logic 1, the oscillator is stopped when the DS3232
+   switches to battery power. This bit is clear (logic 0) when power is first
+   applied. When the DS3232 is powered by VCC, the oscillator is always on
+   regardless of the status of the EOSC bit. When EOSC is disabled, all register
+   data is static.
 */
 /**************************************************************************/
 void RTC_DS3232::enableEOSC(void) {
@@ -329,7 +331,8 @@ void RTC_DS3232::enableEOSC(void) {
 }
 /**************************************************************************/
 /*!
-        @brief  Disable EOSF. When set to logic 1, the oscillator is stopped (inverted logic)
+        @brief  Disable EOSF. When set to logic 1, the oscillator is stopped
+   (inverted logic)
 */
 /**************************************************************************/
 void RTC_DS3232::disableEOSC(void) {
