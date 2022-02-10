@@ -213,7 +213,9 @@ DateTime RTC_DS3231::getAlarm1() {
     day = bcd2bin(buffer[3] & 0x3F);
   }
 
-  return DateTime(2000U, 1, day, hour, minutes, seconds);
+  // On the first week of May 2000, the day-of-the-week number
+  // matches the date number.
+  return DateTime(2000, 5, day, hour, minutes, seconds);
 }
 
 /**************************************************************************/
@@ -247,7 +249,9 @@ DateTime RTC_DS3231::getAlarm2() {
     day = bcd2bin(buffer[2] & 0x3F);
   }
 
-  return DateTime(2000U, 1, day, hour, minutes, 0);
+  // On the first week of May 2000, the day-of-the-week number
+  // matches the date number.
+  return DateTime(2000, 5, day, hour, minutes, 0);
 }
 
 /**************************************************************************/
