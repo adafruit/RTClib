@@ -396,6 +396,38 @@ public:
 
 /**************************************************************************/
 /*!
+    @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire library
+*/
+/**************************************************************************/
+class RTC_RV3032C7 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  void adjust(const DateTime &dt);
+  bool lostPower(void);
+  DateTime now();
+  Ds3231SqwPinMode readSqwPinMode();             // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
+  void writeSqwPinMode(Ds3231SqwPinMode mode);   // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
+  bool setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode);  // TODO: replace Ds3231Alarm1Mode with proper RV3032C7 type
+  bool setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode);  // TODO: replace Ds3231Alarm1Mode with proper RV3032C7 type
+  void disableAlarm(uint8_t alarm_num);
+  void clearAlarm(uint8_t alarm_num);
+  bool alarmFired(uint8_t alarm_num);
+  void enable32K(void);
+  void disable32K(void);
+  bool isEnabled32K(void);
+  float getTemperature(); // in Celsius degree
+  /*!
+      @brief  Convert the day of the week to a representation suitable for
+              storing in the RV3032C7: from 1 (Monday) to 7 (Sunday).
+      @param  d Day of the week as represented by the library:
+              from 0 (Sunday) to 6 (Saturday).
+      @return the converted value
+  */
+  static uint8_t dowToRV3032C7(uint8_t d) { return d == 0 ? 7 : d; }
+};
+
+/**************************************************************************/
+/*!
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
