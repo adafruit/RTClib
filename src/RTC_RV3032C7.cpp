@@ -1,14 +1,39 @@
 #include "RTClib.h"
+// TODO: only what is needed in basic example implemented right now. 
 
-#define RV3032C7_ADDRESS 0x68   ///< I2C address for RV3032C7
-#define RV3032C7_TIME 0x00      ///< Time register
-#define RV3032C7_ALARM1 0x07    ///< Alarm 1 register
-#define RV3032C7_ALARM2 0x0B    ///< Alarm 2 register
-#define RV3032C7_CONTROL 0x0E   ///< Control register
-#define RV3032C7_STATUSREG 0x0F ///< Status register
-#define RV3032C7_TEMPERATUREREG                                                  \
-  0x11 ///< Temperature register (high byte - low byte is at 0x12), 10-bit
+//#define DEBUG_SERIAL Serial
+#define DEBUG_SERIAL SerialUSB
+//#ifdef DEBUG_SERIAL
+//     #include <Arduino.h>
+//#endif  
+
+#define RV3032C7_ADDRESS 0x51    ///< I2C address for RV3032C7
+#define RV3032C7_100TH_SEC 0x00  ///< Time - 100th seconds
+#define RV3032C7_SECONDS 0x01    ///< time - seconds
+#define RV3032C7_ALARM1 0x08     ///< Alarm 1 register
+#define RV3032C7_ALARM2 0x0B     ///< Alarm 2 register
+#define RV3032C7_STATUSREG 0x0D  ///< Status register
+#define RV3032C7_CONTROL1 0x10   ///< Control register
+#define RV3032C7_CONTROL2 0x11   ///< Control register
+#define RV3032C7_CONTROL3 0x12   ///< Control register
+#define RV3032C7_TEMPERATUREREG                            \
+  0x0E ///< Temperature register (bit 4-7 = lowest 4 bits. 
+       ///  high byte is at 0x0F), 12-bit
        ///< temperature value
+#define RV3032C7_TEMPERATURE8BIT 0x0F  ///< 8-bit temperature
+
+// Status register flags
+#define RV3032C7_THF 0x80   ///< Temp. High 
+#define RV3032C7_TLF 0x40   ///< Temp. Low 
+#define RV3032C7_UF 0x20    ///< Periodic Time Update
+#define RV3032C7_TF 0x10    ///< Periodic Coundown Timer
+#define RV3032C7_AF 0x08    ///< Alarm
+#define RV3032C7_EVF 0x04   ///< External Event
+#define RV3032C7_PORF 0x02  ///< Power On Reset
+#define RV3032C7_VLF 0x01   ///< Voltage Low
+
+// Control register flags
+#define RV3032C7_STOP 0x01      ///< Control2, STOP bit 
 
 /**************************************************************************/
 /*!
@@ -28,24 +53,24 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
 
 /**************************************************************************/
 /*!
-    @brief  Check the status register Oscillator Stop Flag to see if the RV3032C7
+    @brief  Check the status register PORF flag to see if the RV3032C7
    stopped due to power loss
     @return True if the bit is set (oscillator stopped) or false if it is
-   running
+   running. TODO: add an option to check for loss of precision (VLF flag)
 */
 /**************************************************************************/
 bool RTC_RV3032C7::lostPower(void) {
-  return read_register(RV3032C7_STATUSREG) >> 7;
+  return (read_register(RV3032C7_STATUSREG) & RV3032C7_PORF) != 0 ? true : false;
 }
 
 /**************************************************************************/
 /*!
-    @brief  Set the date and flip the Oscillator Stop Flag
+    @brief  Set the date and make sure the Oscillator Stop bit is cleared
     @param dt DateTime object containing the date/time to set
 */
 /**************************************************************************/
 void RTC_RV3032C7::adjust(const DateTime &dt) {
-  uint8_t buffer[8] = {RV3032C7_TIME,
+  uint8_t buffer[8] = {RV3032C7_SECONDS,
                        bin2bcd(dt.second()),
                        bin2bcd(dt.minute()),
                        bin2bcd(dt.hour()),
@@ -55,9 +80,32 @@ void RTC_RV3032C7::adjust(const DateTime &dt) {
                        bin2bcd(dt.year() - 2000U)};
   i2c_dev->write(buffer, 8);
 
-  uint8_t statreg = read_register(RV3032C7_STATUSREG);
-  statreg &= ~0x80; // flip OSF bit
-  write_register(RV3032C7_STATUSREG, statreg);
+  // Clear the Power On Reset Flag (PORF)
+   uint8_t stat = read_register(RV3032C7_STATUSREG);  // TODO: remove read_register, not needed after initial debug period
+   #ifdef DEBUG_SERIAL
+       DEBUG_SERIAL.print(F("RTCLib RV3032C7_STATUSREG=")); DEBUG_SERIAL.println(stat, BIN);
+   #endif  
+   write_register(RV3032C7_STATUSREG, ~RV3032C7_PORF);
+   stat = read_register(RV3032C7_STATUSREG);  
+   #ifdef DEBUG_SERIAL
+       DEBUG_SERIAL.print(F("STATUS after clearing PORF=")); DEBUG_SERIAL.println(stat, BIN);
+   #endif  
+
+  /*
+  // Check STOP bit, clear if set
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+
+  #ifdef DEBUG_SERIAL
+      DEBUG_SERIAL.print(F("RTCLib RV3032C7_CONTROL2=")); DEBUG_SERIAL.println(ctrl2, BIN);
+  #endif  
+  if ( (ctrl2 & RV3032C7_STOP) >0) {  // Oscillator is stopped
+       ctrl2 &= ~RV3032C7_STOP;       // clear STOP bit
+       #ifdef DEBUG_SERIAL
+           DEBUG_SERIAL.print(F("RTCLib RV3032C7_CONTROL2=")); DEBUG_SERIAL.println(ctrl2, BIN);
+       #endif  
+       //write_register(RV3032C7_CONTROL2, ctrl2);
+  }
+  */
 }
 
 /**************************************************************************/
@@ -68,12 +116,12 @@ void RTC_RV3032C7::adjust(const DateTime &dt) {
 /**************************************************************************/
 DateTime RTC_RV3032C7::now() {
   uint8_t buffer[7];
-  buffer[0] = 0;
+  buffer[0] = RV3032C7_SECONDS;
   i2c_dev->write_then_read(buffer, 1, buffer, 7);
 
-  return DateTime(bcd2bin(buffer[6]) + 2000U, bcd2bin(buffer[5] & 0x7F),
+  return DateTime(bcd2bin(buffer[6]) + 2000U, bcd2bin(buffer[5]),
                   bcd2bin(buffer[4]), bcd2bin(buffer[2]), bcd2bin(buffer[1]),
-                  bcd2bin(buffer[0] & 0x7F));
+                  bcd2bin(buffer[0])); // Note: RV3032C7 unused bits read = 0
 }
 
 /**************************************************************************/
@@ -84,7 +132,7 @@ DateTime RTC_RV3032C7::now() {
 /**************************************************************************/
 Ds3231SqwPinMode RTC_RV3032C7::readSqwPinMode() {
   int mode;
-  mode = read_register(RV3032C7_CONTROL) & 0x1C;
+  mode = read_register(RV3032C7_CONTROL1) & 0x1C;
   if (mode & 0x04)
     mode = DS3231_OFF;
   return static_cast<Ds3231SqwPinMode>(mode);
@@ -97,12 +145,12 @@ Ds3231SqwPinMode RTC_RV3032C7::readSqwPinMode() {
 */
 /**************************************************************************/
 void RTC_RV3032C7::writeSqwPinMode(Ds3231SqwPinMode mode) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL);
+  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
 
   ctrl &= ~0x04; // turn off INTCON
   ctrl &= ~0x18; // set freq bits to 0
 
-  write_register(RV3032C7_CONTROL, ctrl | mode);
+  //write_register(RV3032C7_CONTROL1, ctrl | mode);
 }
 
 /**************************************************************************/
@@ -112,9 +160,14 @@ void RTC_RV3032C7::writeSqwPinMode(Ds3231SqwPinMode mode) {
 */
 /**************************************************************************/
 float RTC_RV3032C7::getTemperature() {
-  uint8_t buffer[2] = {RV3032C7_TEMPERATUREREG, 0};
-  i2c_dev->write_then_read(buffer, 1, buffer, 2);
-  return (float)buffer[0] + (buffer[1] >> 6) * 0.25f;
+  uint8_t buffer1[2]; 
+  uint8_t buffer2[2];
+  do {  // no blocking, so read twice as suggested in the app. manual
+      buffer1[0] = buffer2[0] = RV3032C7_TEMPERATUREREG;
+      i2c_dev->write_then_read(buffer1, 1, buffer1, 2);  
+      i2c_dev->write_then_read(buffer2, 1, buffer2, 2);
+  } while ( (buffer1[0] != buffer2[0]) || (buffer1[1] != buffer2[1]) );   
+  return float( int(buffer1[1]<<4) + (buffer1[0]>>4) )  * 0.0625f;
 }
 
 /**************************************************************************/
@@ -126,7 +179,7 @@ float RTC_RV3032C7::getTemperature() {
 */
 /**************************************************************************/
 bool RTC_RV3032C7::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL);
+  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
   if (!(ctrl & 0x04)) {
     return false;
   }
@@ -145,7 +198,7 @@ bool RTC_RV3032C7::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
                        uint8_t(bin2bcd(day) | A1M4 | DY_DT)};
   i2c_dev->write(buffer, 5);
 
-  write_register(RV3032C7_CONTROL, ctrl | 0x01); // AI1E
+  write_register(RV3032C7_CONTROL1, ctrl | 0x01); // AI1E
 
   return true;
 }
@@ -159,7 +212,7 @@ bool RTC_RV3032C7::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
 */
 /**************************************************************************/
 bool RTC_RV3032C7::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL);
+  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
   if (!(ctrl & 0x04)) {
     return false;
   }
@@ -176,7 +229,7 @@ bool RTC_RV3032C7::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
                        uint8_t(bin2bcd(day) | A2M4 | DY_DT)};
   i2c_dev->write(buffer, 4);
 
-  write_register(RV3032C7_CONTROL, ctrl | 0x02); // AI2E
+  write_register(RV3032C7_CONTROL1, ctrl | 0x02); // AI2E
 
   return true;
 }
@@ -188,9 +241,9 @@ bool RTC_RV3032C7::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
 */
 /**************************************************************************/
 void RTC_RV3032C7::disableAlarm(uint8_t alarm_num) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL);
+  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
   ctrl &= ~(1 << (alarm_num - 1));
-  write_register(RV3032C7_CONTROL, ctrl);
+  write_register(RV3032C7_CONTROL1, ctrl);
 }
 
 /**************************************************************************/
