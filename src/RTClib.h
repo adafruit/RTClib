@@ -136,6 +136,15 @@ enum RV3032C7AlarmMode {
   RV3032C7_A_All = 0x00,        /**< Alarm when minutes, hours & date match */
 };
 
+/** RV3032C7 Event type */
+enum RV3032C7EventType {
+  RV3032C7_EV_Poll = 0x00,      /**< Polling, no interrupts */
+  RV3032C7_EV_Pollclock = 0x02, /**< Activate clock on CLKOUT */
+  RV3032C7_EV_Int = 0x01,       /**< Trigger interrupt on INT pin */
+  RV3032C7_EV_IntClock = 0x03,  /**< Interrupt + clock */
+};
+
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
