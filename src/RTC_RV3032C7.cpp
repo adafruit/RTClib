@@ -10,12 +10,14 @@
 #define RV3032C7_ADDRESS 0x51    ///< I2C address for RV3032C7
 #define RV3032C7_100TH_SEC 0x00  ///< Time - 100th seconds
 #define RV3032C7_SECONDS 0x01    ///< time - seconds
-#define RV3032C7_ALARM1 0x08     ///< Alarm 1 register
-#define RV3032C7_ALARM2 0x0B     ///< Alarm 2 register
+#define RV3032C7_ALARM1 0x08     ///< Alarm 1 register - Minutes
+#define RV3032C7_ALARM2 0x09     ///< Alarm 2 register - Hours
+#define RV3032C7_ALARM3 0x0A     ///< Alarm 2 register - Date
 #define RV3032C7_STATUSREG 0x0D  ///< Status register
 #define RV3032C7_CONTROL1 0x10   ///< Control register
 #define RV3032C7_CONTROL2 0x11   ///< Control register
 #define RV3032C7_CONTROL3 0x12   ///< Control register
+#define RV3032C7_INT_MASK 0x14   ///< Clock Interrupt Mask Register
 #define RV3032C7_TEMPERATUREREG                            \
   0x0E ///< Temperature register (bit 4-7 = lowest 4 bits. 
        ///  high byte is at 0x0F), 12-bit
@@ -33,7 +35,16 @@
 #define RV3032C7_VLF 0x01   ///< Voltage Low
 
 // Control register flags
-#define RV3032C7_STOP 0x01      ///< Control2, STOP bit 
+#define RV3032C7_STOP 0x01   ///< Control2, STOP bit 
+#define RV3032C7_EIE 0x04    ///< Control2, External Event Interrupt Enable bit 
+#define RV3032C7_AIE 0x08    ///< Control2, Alarm Interrupt Enable bit 
+#define RV3032C7_TIE 0x10    ///< Control2, Periodic Countdown Timer Interrupt Enable bit 
+#define RV3032C7_UIE 0x20    ///< Control2, Periodic Time Update Interrupt Enable bit 
+#define RV3032C7_CLKIE 0x40  ///< Control2, Interrupt Controlled Clock Output Enable bit 
+  
+//Clock Interrupt Mask register flags (only those used in this file)
+#define RV3032C7_CAIE 0x10  ///<Clock output when Alarm Interrupt Enable bit
+
 
 /**************************************************************************/
 /*!
@@ -178,30 +189,28 @@ float RTC_RV3032C7::getTemperature() {
     @return False if control register is not set, otherwise true
 */
 /**************************************************************************/
-bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,  RV3032C7EventType event_type = RV3032C7_EV_Int) {
-  /*
-  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
-  if (!(ctrl & 0x04)) {
-    return false;
+bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV3032C7EventType event_type) {
+  uint8_t A1M1 = (alarm_mode & 0x01) << 7; // Minutes bit 7.
+  uint8_t A1M2 = (alarm_mode & 0x02) << 6; // Hour bit 7.
+  uint8_t A1M3 = (alarm_mode & 0x04) << 5; // Day/Date bit 7.
+  uint8_t buffer[4] = {RV3032C7_ALARM1, uint8_t(bin2bcd(dt.minute()) | A1M1),
+                       uint8_t(bin2bcd(dt.hour()) | A1M2),
+                       uint8_t(bin2bcd(dt.day()) | A1M3 )};
+
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  write_register(RV3032C7_CONTROL2, ctrl2 & (~RV3032C7_AIE) ); // Avoid spurious interrupts
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
+  i2c_dev->write(buffer, 4);
+  if (event_type & 0x01) { // Enable Interrupt at alarm match
+      write_register(RV3032C7_CONTROL2, ctrl2 | RV3032C7_AIE ); // Set AIE
+  } // else it is already cleared
+  if (event_type & 0x02) { // Enable Clock Output at alarm match
+      write_register(RV3032C7_INT_MASK, intmask | RV3032C7_CAIE ); // Set CAIE
+  } else { // Disable Clock Output at alarm match
+      write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE) ); // Clear CAIE    
   }
-
-  uint8_t A1M1 = (alarm_mode & 0x01) << 7; // Seconds bit 7.
-  uint8_t A1M2 = (alarm_mode & 0x02) << 6; // Minutes bit 7.
-  uint8_t A1M3 = (alarm_mode & 0x04) << 5; // Hour bit 7.
-  uint8_t A1M4 = (alarm_mode & 0x08) << 4; // Day/Date bit 7.
-  uint8_t DY_DT = (alarm_mode & 0x10)
-                  << 2; // Day/Date bit 6. Date when 0, day of week when 1.
-  uint8_t day = (DY_DT) ? dowToRV3032C7(dt.dayOfTheWeek()) : dt.day();
-
-  uint8_t buffer[5] = {RV3032C7_ALARM1, uint8_t(bin2bcd(dt.second()) | A1M1),
-                       uint8_t(bin2bcd(dt.minute()) | A1M2),
-                       uint8_t(bin2bcd(dt.hour()) | A1M3),
-                       uint8_t(bin2bcd(day) | A1M4 | DY_DT)};
-  i2c_dev->write(buffer, 5);
-
-  write_register(RV3032C7_CONTROL1, ctrl | 0x01); // AI1E
-*/
-  return true;
+  return true;  // No check needed for now, may be added in the future   
 }
 
 /**************************************************************************/
@@ -211,11 +220,11 @@ bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,  RV3032C7EventTy
 */
 /**************************************************************************/
 void RTC_RV3032C7::disableAlarm(void) {
-  /*
-  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
-  ctrl &= ~(1 << (alarm_num - 1));
-  write_register(RV3032C7_CONTROL1, ctrl);
-  */
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  write_register(RV3032C7_CONTROL2, ctrl2 & (~RV3032C7_AIE) ); // Disable Alarm Interrupt
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
+  write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE) ); // Clear CAIE
 }
 
 /**************************************************************************/
@@ -225,11 +234,7 @@ void RTC_RV3032C7::disableAlarm(void) {
 */
 /**************************************************************************/
 void RTC_RV3032C7::clearAlarm(void) {
-  /*
-  uint8_t status = read_register(RV3032C7_STATUSREG);
-  status &= ~(0x1 << (alarm_num - 1));
-  write_register(RV3032C7_STATUSREG, status);
-  */
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
 }
 
 /**************************************************************************/
@@ -240,10 +245,7 @@ void RTC_RV3032C7::clearAlarm(void) {
 */
 /**************************************************************************/
 bool RTC_RV3032C7::alarmFired(void) {
-  /*
-  return (read_register(RV3032C7_STATUSREG) >> (alarm_num - 1)) & 0x1;
-  */
-  return false;
+  return ((read_register(RV3032C7_STATUSREG) & RV3032C7_AF) != 0 );
 }
 
 /**************************************************************************/
