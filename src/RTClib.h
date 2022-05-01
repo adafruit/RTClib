@@ -124,6 +124,18 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** RV3032C7 Alarm mode */
+enum RV3032C7AlarmMode {
+  RV3032C7_A_PerMinute = 0x07,  /**< Alarm once per minute */
+  RV3032C7_A_Minute = 0x06,     /**< Alarm when minutes match */
+  RV3032C7_A_Hour = 0x05,       /**< Alarm when hours match */
+  RV3032C7_A_MinuteHour = 0x04, /**< Alarm when minutes & hours match */
+  RV3032C7_A_Date = 0x03,       /**< Alarm when date (day of month) match */
+  RV3032C7_A_MinuteDate = 0x02, /**< Alarm when minutes & date match */
+  RV3032C7_A_HourDate = 0x01,   /**< Alarm when hours & date match */
+  RV3032C7_A_All = 0x00,        /**< Alarm when minutes, hours & date match */
+};
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
