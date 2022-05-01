@@ -167,7 +167,7 @@ float RTC_RV3032C7::getTemperature() {
       i2c_dev->write_then_read(buffer1, 1, buffer1, 2);  
       i2c_dev->write_then_read(buffer2, 1, buffer2, 2);
   } while ( (buffer1[0] != buffer2[0]) || (buffer1[1] != buffer2[1]) );   
-  return float( int(buffer1[1]<<4) + (buffer1[0]>>4) )  * 0.0625f;
+  return float( int((int8_t) buffer1[1])*16 + (buffer1[0]>>4) )  * 0.0625f;
 }
 
 /**************************************************************************/
@@ -178,7 +178,8 @@ float RTC_RV3032C7::getTemperature() {
     @return False if control register is not set, otherwise true
 */
 /**************************************************************************/
-bool RTC_RV3032C7::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
+bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,  RV3032C7EventType event_type = RV3032C7_EV_Int) {
+  /*
   uint8_t ctrl = read_register(RV3032C7_CONTROL1);
   if (!(ctrl & 0x04)) {
     return false;
@@ -199,38 +200,7 @@ bool RTC_RV3032C7::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
   i2c_dev->write(buffer, 5);
 
   write_register(RV3032C7_CONTROL1, ctrl | 0x01); // AI1E
-
-  return true;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Set alarm 2 for RV3032C7
-        @param 	dt DateTime object
-        @param 	alarm_mode Desired mode, see Ds3231Alarm2Mode enum
-    @return False if control register is not set, otherwise true
 */
-/**************************************************************************/
-bool RTC_RV3032C7::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
-  if (!(ctrl & 0x04)) {
-    return false;
-  }
-
-  uint8_t A2M2 = (alarm_mode & 0x01) << 7; // Minutes bit 7.
-  uint8_t A2M3 = (alarm_mode & 0x02) << 6; // Hour bit 7.
-  uint8_t A2M4 = (alarm_mode & 0x04) << 5; // Day/Date bit 7.
-  uint8_t DY_DT = (alarm_mode & 0x08)
-                  << 3; // Day/Date bit 6. Date when 0, day of week when 1.
-  uint8_t day = (DY_DT) ? dowToRV3032C7(dt.dayOfTheWeek()) : dt.day();
-
-  uint8_t buffer[4] = {RV3032C7_ALARM2, uint8_t(bin2bcd(dt.minute()) | A2M2),
-                       uint8_t(bin2bcd(dt.hour()) | A2M3),
-                       uint8_t(bin2bcd(day) | A2M4 | DY_DT)};
-  i2c_dev->write(buffer, 4);
-
-  write_register(RV3032C7_CONTROL1, ctrl | 0x02); // AI2E
-
   return true;
 }
 
@@ -240,10 +210,12 @@ bool RTC_RV3032C7::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
         @param 	alarm_num Alarm number to disable
 */
 /**************************************************************************/
-void RTC_RV3032C7::disableAlarm(uint8_t alarm_num) {
+void RTC_RV3032C7::disableAlarm(void) {
+  /*
   uint8_t ctrl = read_register(RV3032C7_CONTROL1);
   ctrl &= ~(1 << (alarm_num - 1));
   write_register(RV3032C7_CONTROL1, ctrl);
+  */
 }
 
 /**************************************************************************/
@@ -252,10 +224,12 @@ void RTC_RV3032C7::disableAlarm(uint8_t alarm_num) {
         @param 	alarm_num Alarm number to clear
 */
 /**************************************************************************/
-void RTC_RV3032C7::clearAlarm(uint8_t alarm_num) {
+void RTC_RV3032C7::clearAlarm(void) {
+  /*
   uint8_t status = read_register(RV3032C7_STATUSREG);
   status &= ~(0x1 << (alarm_num - 1));
   write_register(RV3032C7_STATUSREG, status);
+  */
 }
 
 /**************************************************************************/
@@ -265,8 +239,11 @@ void RTC_RV3032C7::clearAlarm(uint8_t alarm_num) {
         @return True if alarm has been fired otherwise false
 */
 /**************************************************************************/
-bool RTC_RV3032C7::alarmFired(uint8_t alarm_num) {
+bool RTC_RV3032C7::alarmFired(void) {
+  /*
   return (read_register(RV3032C7_STATUSREG) >> (alarm_num - 1)) & 0x1;
+  */
+  return false;
 }
 
 /**************************************************************************/
