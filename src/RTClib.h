@@ -406,6 +406,34 @@ public:
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
 
+
+/**************************************************************************/
+/*!
+    @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
+*/
+/**************************************************************************/
+class RTC_PCF8523 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  void adjust(const DateTime &dt);
+  boolean lostPower(void);
+  boolean initialized(void);
+  DateTime now();
+  void start(void);
+  void stop(void);
+  uint8_t isrunning();
+  Pcf8523SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Pcf8523SqwPinMode mode);
+  void enableSecondTimer(void);
+  void disableSecondTimer(void);
+  void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods,
+                            uint8_t lowPulseWidth);
+  void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods);
+  void disableCountdownTimer(void);
+  void deconfigureAllTimers(void);
+  void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+};
+
 /**************************************************************************/
 /*!
     @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire library
@@ -436,33 +464,6 @@ public:
       @return the converted value
   */
   static uint8_t dowToRV3032C7(uint8_t d) { return d == 0 ? 7 : d; }
-};
-
-/**************************************************************************/
-/*!
-    @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
-*/
-/**************************************************************************/
-class RTC_PCF8523 : RTC_I2C {
-public:
-  boolean begin(TwoWire *wireInstance = &Wire);
-  void adjust(const DateTime &dt);
-  boolean lostPower(void);
-  boolean initialized(void);
-  DateTime now();
-  void start(void);
-  void stop(void);
-  uint8_t isrunning();
-  Pcf8523SqwPinMode readSqwPinMode();
-  void writeSqwPinMode(Pcf8523SqwPinMode mode);
-  void enableSecondTimer(void);
-  void disableSecondTimer(void);
-  void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods,
-                            uint8_t lowPulseWidth);
-  void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods);
-  void disableCountdownTimer(void);
-  void deconfigureAllTimers(void);
-  void calibrate(Pcf8523OffsetMode mode, int8_t offset);
 };
 
 /**************************************************************************/
