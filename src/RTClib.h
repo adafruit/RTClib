@@ -447,11 +447,10 @@ public:
   DateTime now();
   Ds3231SqwPinMode readSqwPinMode();             // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
   void writeSqwPinMode(Ds3231SqwPinMode mode);   // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
-  bool setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode);  // TODO: replace Ds3231Alarm1Mode with proper RV3032C7 type
-  bool setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode);  // TODO: replace Ds3231Alarm1Mode with proper RV3032C7 type
-  void disableAlarm(uint8_t alarm_num);
-  void clearAlarm(uint8_t alarm_num);
-  bool alarmFired(uint8_t alarm_num);
+  bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode);  // TODO: replace Ds3231Alarm1Mode with proper RV3032C7 type
+  void disableAlarm(void);
+  void clearAlarm(void);
+  bool alarmFired(void);
   void enable32K(void);
   void disable32K(void);
   bool isEnabled32K(void);
