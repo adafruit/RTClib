@@ -445,6 +445,24 @@ public:
 
 /**************************************************************************/
 /*!
+    @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
+*/
+/**************************************************************************/
+class RTC_PCF8563 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  boolean lostPower(void);
+  void adjust(const DateTime &dt);
+  DateTime now();
+  void start(void);
+  void stop(void);
+  uint8_t isrunning();
+  Pcf8563SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Pcf8563SqwPinMode mode);
+};
+
+/**************************************************************************/
+/*!
     @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
@@ -472,24 +490,6 @@ public:
       @return the converted value
   */
   static uint8_t dowToRV3032C7(uint8_t d) { return d == 0 ? 7 : d; }
-};
-
-/**************************************************************************/
-/*!
-    @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
-*/
-/**************************************************************************/
-class RTC_PCF8563 : RTC_I2C {
-public:
-  boolean begin(TwoWire *wireInstance = &Wire);
-  boolean lostPower(void);
-  void adjust(const DateTime &dt);
-  DateTime now();
-  void start(void);
-  void stop(void);
-  uint8_t isrunning();
-  Pcf8563SqwPinMode readSqwPinMode();
-  void writeSqwPinMode(Pcf8563SqwPinMode mode);
 };
 
 /**************************************************************************/
