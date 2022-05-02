@@ -24,6 +24,9 @@
        ///< temperature value
 #define RV3032C7_TEMPERATURE8BIT 0x0F  ///< 8-bit temperature
 
+// RAM Addresses that mirror EEPROM registers
+#define RV3032C7_PMU 0xC0  ///< Power Management Unit (PMU)
+
 // Status register flags
 #define RV3032C7_THF 0x80   ///< Temp. High 
 #define RV3032C7_TLF 0x40   ///< Temp. Low 
@@ -45,6 +48,8 @@
 //Clock Interrupt Mask register flags (only those used in this file)
 #define RV3032C7_CAIE 0x10  ///<Clock output when Alarm Interrupt Enable bit
 
+//Clock Interrupt Mask register flags (only those used in this file)
+#define RV3032C7_NCLKE 0x40 ///< Not CLKOUT Enable Bit in Power Management Unit (PMU)
 
 /**************************************************************************/
 /*!
@@ -250,34 +255,41 @@ bool RTC_RV3032C7::alarmFired(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Enable 32KHz Output
-    @details The 32kHz output is enabled by default. It requires an external
-    pull-up resistor to function correctly
+    @brief  Enable normal clock output on CLKOUT pin (default 32.768 kHz)
+    @details The CLKOUT output is enabled by default. It is a push-pull output
+    no pull-up resistor required. Limitation: at date change, 
+    the setting stored in EEPROM is restored. 
+    TODO: Add option to set specific frequency
+    TODO: Add option to update EEPROM
 */
 /**************************************************************************/
-void RTC_RV3032C7::enable32K(void) {
-  uint8_t status = read_register(RV3032C7_STATUSREG);
-  status |= (0x1 << 0x03);
-  write_register(RV3032C7_STATUSREG, status);
+void RTC_RV3032C7::enableClkOut(void) {
+  uint8_t pmureg = read_register(RV3032C7_PMU);
+  pmureg &= (~RV3032C7_NCLKE);
+  write_register(RV3032C7_PMU, pmureg);
 }
 
 /**************************************************************************/
 /*!
-    @brief  Disable 32KHz Output
+    @brief  Disable normal clock output on CLKOUT pin
+    @details Limitation: at date change, the setting stored in EEPROM is
+    restored. 
+    TODO: Add option to set specific frequency
+    TODO: Add option to update EEPROM
 */
 /**************************************************************************/
-void RTC_RV3032C7::disable32K(void) {
-  uint8_t status = read_register(RV3032C7_STATUSREG);
-  status &= ~(0x1 << 0x03);
-  write_register(RV3032C7_STATUSREG, status);
+void RTC_RV3032C7::disableClkOut(void) {
+  uint8_t pmureg = read_register(RV3032C7_PMU);
+  pmureg |= RV3032C7_NCLKE;
+  write_register(RV3032C7_PMU, pmureg);
 }
 
 /**************************************************************************/
 /*!
-    @brief  Get status of 32KHz Output
+    @brief  Get status of clock output on CLKOUT pin
     @return True if enabled otherwise false
 */
 /**************************************************************************/
-bool RTC_RV3032C7::isEnabled32K(void) {
-  return (read_register(RV3032C7_STATUSREG) >> 0x03) & 0x01;
+bool RTC_RV3032C7::isEnabledClkOut(void) {
+  return  (read_register(RV3032C7_PMU) & RV3032C7_NCLKE) == 0 ? true : false;
 }

@@ -478,9 +478,9 @@ public:
   void disableAlarm(void);
   void clearAlarm(void);
   bool alarmFired(void);
-  void enable32K(void);
-  void disable32K(void);
-  bool isEnabled32K(void);
+  void enableClkOut(void);
+  void disableClkOut(void);
+  bool isEnabledClkOut(void);
   float getTemperature(); // in Celsius degree
   /*!
       @brief  Convert the day of the week to a representation suitable for
