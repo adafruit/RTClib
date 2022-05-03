@@ -105,16 +105,16 @@ void RTC_RV3032C7::adjust(const DateTime &dt) {
                        bin2bcd(dt.year() - 2000U)};
   i2c_dev->write(buffer, 8);
 
-  // Clear the Power On Reset Flag (PORF)
-   uint8_t stat = read_register(RV3032C7_STATUSREG);  // TODO: remove read_register, not needed after initial debug period
-   #ifdef DEBUG_SERIAL
-       DEBUG_SERIAL.print(F("RTCLib RV3032C7_STATUSREG=")); DEBUG_SERIAL.println(stat, BIN);
-   #endif  
+   // Clear the Power On Reset Flag (PORF)
+   //uint8_t stat = read_register(RV3032C7_STATUSREG);  // TODO: remove read_register, not needed after initial debug period
+   //#ifdef DEBUG_SERIAL
+   //    DEBUG_SERIAL.print(F("RTCLib RV3032C7_STATUSREG=")); DEBUG_SERIAL.println(stat, BIN);
+   //#endif  
    write_register(RV3032C7_STATUSREG, ~RV3032C7_PORF);
-   stat = read_register(RV3032C7_STATUSREG);  
-   #ifdef DEBUG_SERIAL
-       DEBUG_SERIAL.print(F("STATUS after clearing PORF=")); DEBUG_SERIAL.println(stat, BIN);
-   #endif  
+   //stat = read_register(RV3032C7_STATUSREG);  
+   //#ifdef DEBUG_SERIAL
+   //    DEBUG_SERIAL.print(F("STATUS after clearing PORF=")); DEBUG_SERIAL.println(stat, BIN);
+   //#endif  
 
   /*
   // Check STOP bit, clear if set
