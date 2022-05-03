@@ -268,7 +268,6 @@ bool RTC_RV3032C7::alarmFired(void) {
     @details The CLKOUT output is enabled by default. It is a push-pull output
     no pull-up resistor required. 
     TODO: Add option to set specific frequency
-    TODO: Add option to update EEPROM
 */
 /**************************************************************************/
 void RTC_RV3032C7::enableClkOut(void) {
@@ -280,10 +279,11 @@ void RTC_RV3032C7::enableClkOut(void) {
 /**************************************************************************/
 /*!
     @brief  Disable normal clock output on CLKOUT pin
-    @details Limitation: at date change, the setting stored in EEPROM is
-    restored. 
-    TODO: Add option to set specific frequency
-    TODO: Add option to update EEPROM
+    @details Disable normal clock output on CLKOUT pin. 
+    When the clock is disabled, it can still be enabled via setAlarm  
+    with event_type set to RV3032C7_EV_PollClock or RV3032C7_EV_IntClock:
+    when the Alarm triggers CLKOUT is enabled. 
+    It will remain enabled until the alarm is cleared by clearAlarm().  
 */
 /**************************************************************************/
 void RTC_RV3032C7::disableClkOut(void) {
