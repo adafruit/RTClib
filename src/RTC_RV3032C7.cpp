@@ -2,7 +2,7 @@
 // TODO: only what is needed in basic example implemented right now. 
 
 //#define DEBUG_SERIAL Serial
-#define DEBUG_SERIAL SerialUSB
+//#define DEBUG_SERIAL SerialUSB
 //#ifdef DEBUG_SERIAL
 //     #include <Arduino.h>
 //#endif  
@@ -37,7 +37,9 @@
 #define RV3032C7_PORF 0x02  ///< Power On Reset
 #define RV3032C7_VLF 0x01   ///< Voltage Low
 
-// Control register flags
+// Control register flags (some)
+#define RV3032C7_XBIT 0x20   ///< Control1, "X" bit (must be set to 1)
+#define RV3032C7_EERD 0x04   ///< Control1, ROM Memory Refresh Disable bit.
 #define RV3032C7_STOP 0x01   ///< Control2, STOP bit 
 #define RV3032C7_EIE 0x04    ///< Control2, External Event Interrupt Enable bit 
 #define RV3032C7_AIE 0x08    ///< Control2, Alarm Interrupt Enable bit 
@@ -64,6 +66,13 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
   i2c_dev = new Adafruit_I2CDevice(RV3032C7_ADDRESS, wireInstance);
   if (!i2c_dev->begin())
     return false;
+    
+  // Next we turn off automatic refresh from EEPROM to behave like other chips in RTClib.
+  // Future updates may add more explit control over EEPROM refreshes
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  if ( (ctrl1 & RV3032C7_EERD) == 0 ) {
+      write_register(RV3032C7_CONTROL1, ctrl1 | RV3032C7_XBIT | RV3032C7_EERD);  
+  }
   return true;
 }
 
@@ -250,15 +259,14 @@ void RTC_RV3032C7::clearAlarm(void) {
 */
 /**************************************************************************/
 bool RTC_RV3032C7::alarmFired(void) {
-  return ((read_register(RV3032C7_STATUSREG) & RV3032C7_AF) != 0 );
+  return (read_register(RV3032C7_STATUSREG) & RV3032C7_AF) != 0 ? true : false;
 }
 
 /**************************************************************************/
 /*!
     @brief  Enable normal clock output on CLKOUT pin (default 32.768 kHz)
     @details The CLKOUT output is enabled by default. It is a push-pull output
-    no pull-up resistor required. Limitation: at date change, 
-    the setting stored in EEPROM is restored. 
+    no pull-up resistor required. 
     TODO: Add option to set specific frequency
     TODO: Add option to update EEPROM
 */
