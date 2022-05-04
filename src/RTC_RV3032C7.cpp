@@ -151,35 +151,6 @@ DateTime RTC_RV3032C7::now() {
 
 /**************************************************************************/
 /*!
-    @brief  Read the SQW pin mode
-    @return Pin mode, see Ds3231SqwPinMode enum
-*/
-/**************************************************************************/
-Ds3231SqwPinMode RTC_RV3032C7::readSqwPinMode() {
-  int mode;
-  mode = read_register(RV3032C7_CONTROL1) & 0x1C;
-  if (mode & 0x04)
-    mode = DS3231_OFF;
-  return static_cast<Ds3231SqwPinMode>(mode);
-}
-
-/**************************************************************************/
-/*!
-    @brief  Set the SQW pin mode
-    @param mode Desired mode, see Ds3231SqwPinMode enum
-*/
-/**************************************************************************/
-void RTC_RV3032C7::writeSqwPinMode(Ds3231SqwPinMode mode) {
-  uint8_t ctrl = read_register(RV3032C7_CONTROL1);
-
-  ctrl &= ~0x04; // turn off INTCON
-  ctrl &= ~0x18; // set freq bits to 0
-
-  //write_register(RV3032C7_CONTROL1, ctrl | mode);
-}
-
-/**************************************************************************/
-/*!
     @brief  Get the current temperature from the RV3032C7's temperature sensor
     @return Current temperature (float)
 */

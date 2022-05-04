@@ -472,8 +472,6 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
-  Ds3231SqwPinMode readSqwPinMode();             // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
-  void writeSqwPinMode(Ds3231SqwPinMode mode);   // TODO: replace Ds3231SqwPinMode with proper RV3032C7 type
   bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,  RV3032C7EventType event_type = RV3032C7_EV_Int);
   void disableAlarm(void);
   void clearAlarm(void);
