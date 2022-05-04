@@ -1,5 +1,6 @@
 #include "RTClib.h"
-// TODO: only what is needed in basic example implemented right now. 
+// TODO: only what is needed in basic examples is implemented right now. 
+//       The RV3032C7 chip supports a lot more functionality...
 
 //#define DEBUG_SERIAL Serial
 //#define DEBUG_SERIAL SerialUSB
@@ -20,9 +21,9 @@
 #define RV3032C7_INT_MASK 0x14   ///< Clock Interrupt Mask Register
 #define RV3032C7_TEMPERATUREREG                            \
   0x0E ///< Temperature register (bit 4-7 = lowest 4 bits. 
-       ///  high byte is at 0x0F), 12-bit
-       ///< temperature value
-#define RV3032C7_TEMPERATURE8BIT 0x0F  ///< 8-bit temperature
+       ///<  high byte is at RV3032C7_TEMPERATURE8BIT), 12-bit
+       ///<  Temperature value
+#define RV3032C7_TEMPERATURE8BIT 0x0F  ///< 8-bit temperature value
 
 // RAM Addresses that mirror EEPROM registers
 #define RV3032C7_PMU 0xC0  ///< Power Management Unit (PMU)
@@ -104,33 +105,6 @@ void RTC_RV3032C7::adjust(const DateTime &dt) {
                        bin2bcd(dt.month()),
                        bin2bcd(dt.year() - 2000U)};
   i2c_dev->write(buffer, 8);
-
-   // Clear the Power On Reset Flag (PORF)
-   //uint8_t stat = read_register(RV3032C7_STATUSREG);  // TODO: remove read_register, not needed after initial debug period
-   //#ifdef DEBUG_SERIAL
-   //    DEBUG_SERIAL.print(F("RTCLib RV3032C7_STATUSREG=")); DEBUG_SERIAL.println(stat, BIN);
-   //#endif  
-   write_register(RV3032C7_STATUSREG, ~RV3032C7_PORF);
-   //stat = read_register(RV3032C7_STATUSREG);  
-   //#ifdef DEBUG_SERIAL
-   //    DEBUG_SERIAL.print(F("STATUS after clearing PORF=")); DEBUG_SERIAL.println(stat, BIN);
-   //#endif  
-
-  /*
-  // Check STOP bit, clear if set
-  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
-
-  #ifdef DEBUG_SERIAL
-      DEBUG_SERIAL.print(F("RTCLib RV3032C7_CONTROL2=")); DEBUG_SERIAL.println(ctrl2, BIN);
-  #endif  
-  if ( (ctrl2 & RV3032C7_STOP) >0) {  // Oscillator is stopped
-       ctrl2 &= ~RV3032C7_STOP;       // clear STOP bit
-       #ifdef DEBUG_SERIAL
-           DEBUG_SERIAL.print(F("RTCLib RV3032C7_CONTROL2=")); DEBUG_SERIAL.println(ctrl2, BIN);
-       #endif  
-       //write_register(RV3032C7_CONTROL2, ctrl2);
-  }
-  */
 }
 
 /**************************************************************************/
