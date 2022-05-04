@@ -54,6 +54,9 @@
 //Clock Interrupt Mask register flags (only those used in this file)
 #define RV3032C7_NCLKE 0x40 ///< Not CLKOUT Enable Bit in Power Management Unit (PMU)
 
+//Temperature register flags (some flags ended up here, albeit unrelated to temperature)
+#define RV3032C7_CLKF 0x02 ///< Clock Output Interrupt Flag (CLKF)
+
 /**************************************************************************/
 /*!
     @brief  Start I2C for the RV3032C7 and test succesful connection
@@ -142,13 +145,14 @@ float RTC_RV3032C7::getTemperature() {
 
 /**************************************************************************/
 /*!
-    @brief  Set alarm 1 for RV3032C7
+    @brief  Set alarm 1 for RV3032C7 
         @param 	dt DateTime object
         @param 	alarm_mode Desired mode, see Ds3231Alarm1Mode enum
+        @param   event_type Desired event type, see RV3032C7EventTyp enum
     @return False if control register is not set, otherwise true
 */
 /**************************************************************************/
-bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV3032C7EventType event_type) {
+bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV3032C7EventType event_type) { 
   uint8_t A1M1 = (alarm_mode & 0x01) << 7; // Minutes bit 7.
   uint8_t A1M2 = (alarm_mode & 0x02) << 6; // Hour bit 7.
   uint8_t A1M3 = (alarm_mode & 0x04) << 5; // Day/Date bit 7.
@@ -162,11 +166,16 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV
   write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
   i2c_dev->write(buffer, 4);
   if (event_type & 0x01) { // Enable Interrupt at alarm match
-      write_register(RV3032C7_CONTROL2, ctrl2 | RV3032C7_AIE ); // Set AIE
+      ctrl2 |= RV3032C7_AIE;
+      write_register(RV3032C7_CONTROL2, ctrl2 ); // Set AIE
   } // else it is already cleared
-  if (event_type & 0x02) { // Enable Clock Output at alarm match
+  if (event_type & 0x02) { // Enable Clock Output at alarm match and select alarm as interrupt source
+      ctrl2 |= RV3032C7_CLKIE;                   // Set CLKIE
+      write_register(RV3032C7_CONTROL2, ctrl2 ); // write ctrl2 to register
       write_register(RV3032C7_INT_MASK, intmask | RV3032C7_CAIE ); // Set CAIE
-  } else { // Disable Clock Output at alarm match
+  } else { // Disable Clock Output at alarm match to be sure
+      ctrl2 &= (~RV3032C7_CLKIE);                // clear CLKIE
+      write_register(RV3032C7_CONTROL2, ctrl2 ); // write ctrl2 to register
       write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE) ); // Clear CAIE    
   }
   return true;  // No check needed for now, may be added in the future   
@@ -175,31 +184,37 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV
 /**************************************************************************/
 /*!
     @brief  Disable alarm
-        @param 	alarm_num Alarm number to disable
-*/
+    @details this function disables the alarm and then clears it (same as clearAlarm())
+ /
 /**************************************************************************/
 void RTC_RV3032C7::disableAlarm(void) {
   uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
-  write_register(RV3032C7_CONTROL2, ctrl2 & (~RV3032C7_AIE) ); // Disable Alarm Interrupt
-  write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
   write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE) ); // Clear CAIE
+  // TODO: if we ever implement other functions that can set CLKIE then 
+  // check intmask to see if we are the last user left before clearing the following flags 
+  write_register(RV3032C7_CONTROL2, ctrl2 & (~(RV3032C7_AIE | ~RV3032C7_CLKIE)) ); // Disable Alarm Interrupts
+  clearAlarm();
 }
 
 /**************************************************************************/
 /*!
     @brief  Clear status of alarm
-        @param 	alarm_num Alarm number to clear
+    @details this function clear the Alarm. This cause the INT PIN to go high (not active) and
+    (in case the alarm event was set to RV3032C7_EV_IntClock) the CLKOUT pin will 
 */
 /**************************************************************************/
 void RTC_RV3032C7::clearAlarm(void) {
   write_register(RV3032C7_STATUSREG, ~RV3032C7_AF ); // clear Alarm flag
+  // In addition we clear the CLKF flag since it can be set as well if RV3032C7_EV_IntClock
+  // TODO: if we ever implement other functions that can set CLKF then add option to clear only AF/CLKF 
+  uint8_t treg = read_register(RV3032C7_TEMPERATUREREG); // CLKF happens to be in the temperature register
+  write_register(RV3032C7_TEMPERATUREREG, treg & (~RV3032C7_CLKF) );
 }
 
 /**************************************************************************/
 /*!
     @brief  Get status of alarm
-        @param 	alarm_num Alarm number to check status of
         @return True if alarm has been fired otherwise false
 */
 /**************************************************************************/
@@ -212,7 +227,7 @@ bool RTC_RV3032C7::alarmFired(void) {
     @brief  Enable normal clock output on CLKOUT pin (default 32.768 kHz)
     @details The CLKOUT output is enabled by default. It is a push-pull output
     no pull-up resistor required. 
-    TODO: Add option to set specific frequency
+    TODO: Add option to set specific frequency 
 */
 /**************************************************************************/
 void RTC_RV3032C7::enableClkOut(void) {
@@ -226,9 +241,10 @@ void RTC_RV3032C7::enableClkOut(void) {
     @brief  Disable normal clock output on CLKOUT pin
     @details Disable normal clock output on CLKOUT pin. 
     When the clock is disabled, it can still be enabled via setAlarm  
-    with event_type set to RV3032C7_EV_PollClock or RV3032C7_EV_IntClock:
+    with event_type set to RV3032C7_EV_IntClock:
     when the Alarm triggers CLKOUT is enabled. 
     It will remain enabled until the alarm is cleared by clearAlarm().  
+    So this function may not actually stop the clock if there is an alarm active at the time it is called.
 */
 /**************************************************************************/
 void RTC_RV3032C7::disableClkOut(void) {
@@ -240,6 +256,8 @@ void RTC_RV3032C7::disableClkOut(void) {
 /**************************************************************************/
 /*!
     @brief  Get status of clock output on CLKOUT pin
+    @details only checks if the CLKOUT pin is enabled all the time. 
+    The pin could also be enabled by an alarm, this is not checked
     @return True if enabled otherwise false
 */
 /**************************************************************************/
