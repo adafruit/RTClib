@@ -23,6 +23,8 @@ PCF8523TimerClockFreq	KEYWORD1
 PCF8523TimerIntPulse	KEYWORD1
 Pcf8523OffsetMode	KEYWORD1
 Pcf8563SqwPinMode	KEYWORD1
+RV3032C7AlarmMode	KEYWORD1
+RV3032C7EventType	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -56,6 +58,7 @@ timestamp	KEYWORD2
 toString	KEYWORD2
 readnvram	KEYWORD2
 writenvram	KEYWORD2
+setAlarm	KEYWORD2
 setAlarm1	KEYWORD2
 setAlarm2	KEYWORD2
 disableAlarm	KEYWORD2
@@ -73,6 +76,9 @@ calibrate	KEYWORD2
 enable32K   KEYWORD2
 disable32K    KEYWORD2
 isEnabled32K    KEYWORD2
+enableClkOut    KEYWORD2
+disableClkOut    KEYWORD2
+isEnabledClkOut    KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
