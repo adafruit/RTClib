@@ -194,7 +194,7 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV
 /*!
     @brief  Disable alarm
     @details this function disables the alarm and then clears it (same as clearAlarm())
- /
+*/
 /**************************************************************************/
 void RTC_RV3032C7::disableAlarm(void) {
   uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
