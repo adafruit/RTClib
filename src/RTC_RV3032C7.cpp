@@ -59,7 +59,8 @@
 
 /**************************************************************************/
 /*!
-    @brief  Start I2C for the RV3032C7 and test succesful connection
+    @brief  Start I2C for the RV3032C7, test succesful connection
+            and make sure automatic refresh from EEPROM is off 
     @param  wireInstance pointer to the I2C bus
     @return True if Wire can find RV3032C7 or false otherwise.
 */
@@ -83,12 +84,14 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
 /**************************************************************************/
 /*!
     @brief  Check the status register PORF flag to see if the RV3032C7
-   stopped due to power loss
+   stopped due to power loss. After Power On, this function will
+   continue to return true until the time is set via adjust() 
     @return True if the bit is set (oscillator stopped) or false if it is
-   running. TODO: add an option to check for loss of precision (VLF flag)
+   running. 
 */
 /**************************************************************************/
 bool RTC_RV3032C7::lostPower(void) {
+  //TODO: add an option to check for loss of precision (VLF flag)
   return (read_register(RV3032C7_STATUSREG) & RV3032C7_PORF) != 0 ? true : false;
 }
 
@@ -108,6 +111,7 @@ void RTC_RV3032C7::adjust(const DateTime &dt) {
                        bin2bcd(dt.month()),
                        bin2bcd(dt.year() - 2000U)};
   i2c_dev->write(buffer, 8);
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_PORF ); // clear PORF flag
 }
 
 /**************************************************************************/
@@ -145,7 +149,12 @@ float RTC_RV3032C7::getTemperature() {
 
 /**************************************************************************/
 /*!
-    @brief  Set alarm 1 for RV3032C7 
+    @brief  Set alarm for RV3032C7.  
+        - If event_type is RV3032C7_EV_Poll the alarm status can be polled with alarmFired()
+        - If event_type is RV3032C7_EV_Int, in addition the INT PIN goes low (usually this is used to generate an interrupt)
+        - If event_type is RV3032C7_EV_Int, in addition the clock output on CLKOUT pin becomes active while the INT pin is low 
+        (even if it was turned off via disableClkOut)
+        
         @param 	dt DateTime object
         @param 	alarm_mode Desired mode, see Ds3231Alarm1Mode enum
         @param   event_type Desired event type, see RV3032C7EventTyp enum
@@ -168,7 +177,7 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode, RV
   if (event_type & 0x01) { // Enable Interrupt at alarm match
       ctrl2 |= RV3032C7_AIE;
       write_register(RV3032C7_CONTROL2, ctrl2 ); // Set AIE
-  } // else it is already cleared
+  }
   if (event_type & 0x02) { // Enable Clock Output at alarm match and select alarm as interrupt source
       ctrl2 |= RV3032C7_CLKIE;                   // Set CLKIE
       write_register(RV3032C7_CONTROL2, ctrl2 ); // write ctrl2 to register
@@ -192,16 +201,16 @@ void RTC_RV3032C7::disableAlarm(void) {
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
   write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE) ); // Clear CAIE
   // TODO: if we ever implement other functions that can set CLKIE then 
-  // check intmask to see if we are the last user left before clearing the following flags 
+  // check intmask to see if we are the last user left before clearing CLKIE
   write_register(RV3032C7_CONTROL2, ctrl2 & (~(RV3032C7_AIE | ~RV3032C7_CLKIE)) ); // Disable Alarm Interrupts
   clearAlarm();
 }
 
 /**************************************************************************/
 /*!
-    @brief  Clear status of alarm
-    @details this function clear the Alarm. This cause the INT PIN to go high (not active) and
-    (in case the alarm event was set to RV3032C7_EV_IntClock) the CLKOUT pin will 
+    @brief  Clear status of alarm so that alarmFired() will return false
+    This also cause the INT PIN to go high (not active). If CLKOUT was activated by the alarm, it 
+    will stop outputing the clock.
 */
 /**************************************************************************/
 void RTC_RV3032C7::clearAlarm(void) {
@@ -225,7 +234,7 @@ bool RTC_RV3032C7::alarmFired(void) {
 /**************************************************************************/
 /*!
     @brief  Enable normal clock output on CLKOUT pin (default 32.768 kHz)
-    @details The CLKOUT output is enabled by default. It is a push-pull output
+    @details The CLKOUT output is enabled by default. It is a push-pull output,
     no pull-up resistor required. 
     TODO: Add option to set specific frequency 
 */
@@ -257,7 +266,7 @@ void RTC_RV3032C7::disableClkOut(void) {
 /*!
     @brief  Get status of clock output on CLKOUT pin
     @details only checks if the CLKOUT pin is enabled all the time. 
-    The pin could also be enabled by an alarm, this is not checked
+    The pin could also be enabled by an alarm, this is intentionally not checked
     @return True if enabled otherwise false
 */
 /**************************************************************************/
