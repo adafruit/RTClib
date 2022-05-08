@@ -138,9 +138,9 @@ enum RV3032C7AlarmMode {
 
 /** RV3032C7 Event type */
 enum RV3032C7EventType {
-  RV3032C7_EV_Poll = 0x00,      /**< Polling, no interrupts */
+  RV3032C7_EV_Poll = 0x00,      /**< Polling via i2c, no interrupts */
   RV3032C7_EV_Int = 0x01,       /**< Trigger interrupt on INT pin */
-  RV3032C7_EV_IntClock = 0x03,  /**< Interrupt + clock */
+  RV3032C7_EV_IntClock = 0x03,  /**< Interrupt on INT pin + clock output on CLKOUT pin */
 };
 
 
