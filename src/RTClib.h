@@ -138,11 +138,11 @@ enum RV3032C7AlarmMode {
 
 /** RV3032C7 Event type */
 enum RV3032C7EventType {
-  RV3032C7_EV_Poll = 0x00,      /**< Polling via i2c, no interrupts */
-  RV3032C7_EV_Int = 0x01,       /**< Trigger interrupt on INT pin */
-  RV3032C7_EV_IntClock = 0x03,  /**< Interrupt on INT pin + clock output on CLKOUT pin */
+  RV3032C7_EV_Poll = 0x00, /**< Polling via i2c, no interrupts */
+  RV3032C7_EV_Int = 0x01,  /**< Trigger interrupt on INT pin */
+  RV3032C7_EV_IntClock =
+      0x03, /**< Interrupt on INT pin + clock output on CLKOUT pin */
 };
-
 
 /**************************************************************************/
 /*!
@@ -414,7 +414,6 @@ public:
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
 
-
 /**************************************************************************/
 /*!
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
@@ -462,7 +461,8 @@ public:
 
 /**************************************************************************/
 /*!
-    @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire library
+    @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire
+   library
 */
 /**************************************************************************/
 class RTC_RV3032C7 : RTC_I2C {
@@ -471,7 +471,8 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
-  bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,  RV3032C7EventType event_type = RV3032C7_EV_Int);
+  bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
+                RV3032C7EventType event_type = RV3032C7_EV_Int);
   void disableAlarm(void);
   void clearAlarm(void);
   bool alarmFired(void);
