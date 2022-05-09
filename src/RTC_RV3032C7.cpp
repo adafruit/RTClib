@@ -168,7 +168,6 @@ float RTC_RV3032C7::getTemperature() {
         (even if it was turned off via disableClkOut()). The clock will be
    output until the INT pin is cleared by clearAlarm() or disabled with
    disableAlarm().
-
         @param 	dt DateTime object
         @param 	alarm_mode Desired mode, see Ds3231Alarm1Mode enum
         @param   event_type Desired event type, see RV3032C7EventTyp enum
