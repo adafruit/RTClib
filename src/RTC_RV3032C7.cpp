@@ -169,9 +169,9 @@ float RTC_RV3032C7::getTemperature() {
    output until the INT pin is cleared by clearAlarm() or disabled with
    disableAlarm().
         @param 	dt DateTime object
-        @param 	alarm_mode Desired mode, see Ds3231Alarm1Mode enum
+        @param 	alarm_mode Desired mode, see RV3032C7AlarmMode enum
         @param   event_type Desired event type, see RV3032C7EventTyp enum
-    @return False if control register is not set, otherwise true
+    @return False if alarm registers are not set, otherwise true
 */
 /**************************************************************************/
 bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
