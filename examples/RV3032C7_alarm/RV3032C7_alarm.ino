@@ -48,7 +48,7 @@ void setup() {
     )) {
         Serial.println("Error, alarm wasn't set!");
     }else {
-        Serial.println("Alarm will happen in 60 seconds!");
+        Serial.println("Alarm will happen within 60 seconds!");
     }
 }
 
