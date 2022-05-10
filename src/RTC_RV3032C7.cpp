@@ -54,9 +54,12 @@
 // Clock Interrupt Mask register flags (only those used in this file)
 #define RV3032C7_CAIE 0x10 ///< Clock output when Alarm Interrupt Enable bit
 
-// Clock Interrupt Mask register flags (only those used in this file)
+// Power Management Unit (PMU) register flags (only those used in this file)
 #define RV3032C7_NCLKE                                                         \
   0x40 ///< Not CLKOUT Enable Bit in Power Management Unit (PMU)
+#define RV3032C7_BSM                                                           \
+  0x30 ///< Backup Switchover Mode                                                         \
+
 
 // Temperature register flags (some flags ended up here, albeit unrelated to
 // temperature)
@@ -83,7 +86,15 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
   if ((ctrl1 & RV3032C7_EERD) == 0) {
     write_register(RV3032C7_CONTROL1, ctrl1 | RV3032C7_XBIT | RV3032C7_EERD);
   }
-  // TODO: activate backup power source
+  // Finally, we check if Backup Switchover Mode (BSM) is 00b in the PMU
+  // register (default for a new chip). If it is, we set it to Level Switching
+  // Mode (LSM) as this most users of this library expect backup power from a
+  // primary battery to work
+  uint8_t pmu = read_register(RV3032C7_PMU);
+  if ((pmu & RV3032C7_BSM) == 0) { // Backup Switchover is disabled
+    write_register(RV3032C7_PMU,
+                   pmu | 0x20); // Enable Level Switching Mode (LSM)
+  }
   return true;
 }
 
