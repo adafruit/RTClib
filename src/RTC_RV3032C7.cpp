@@ -104,7 +104,7 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
    stopped due to power loss. After Power On, this function will
    continue to return true until the time is set via adjust()
     @return True if the oscillator stopped or false if it is
-   running since last time the time was set by adjust().
+   running without interruption since last time the time was set by adjust().
 */
 /**************************************************************************/
 bool RTC_RV3032C7::lostPower(void) {
