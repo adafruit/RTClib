@@ -230,9 +230,8 @@ void RTC_RV3032C7::disableAlarm(void) {
   write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE)); // Clear CAIE
   // TODO: if we ever implement other functions that can set CLKIE then
   // check intmask to see if we are the last user left before clearing CLKIE
-  write_register(
-      RV3032C7_CONTROL2,
-      ctrl2 & (~(RV3032C7_AIE | ~RV3032C7_CLKIE))); // Disable Alarm Interrupts
+  ctrl2 &= ~(RV3032C7_AIE | RV3032C7_CLKIE);
+  write_register(RV3032C7_CONTROL2, ctrl2); // Disable Alarm Interrupts
   clearAlarm();
 }
 
