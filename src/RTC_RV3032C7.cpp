@@ -80,7 +80,6 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
   i2c_dev->begin(false); // no detection as the I2C i/f might become
                          // unresponsive when switched from VDD to Vbackup
   short retries = 0;
-  boolean detected = false;
   while (
       !i2c_dev->detected()) { // retry 3 times to make sure we reinitialize an
                               // unresponsive chip (see RV3032C7 app. manual)
