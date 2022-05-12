@@ -77,8 +77,17 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(RV3032C7_ADDRESS, wireInstance);
-  if (!i2c_dev->begin())
-    return false;
+  i2c_dev->begin(false); // no detection as the I2C i/f might become
+                         // unresponsive when switched from VDD to Vbackup
+  short retries = 0;
+  boolean detected = false;
+  while (
+      !i2c_dev->detected()) { // retry 3 times to make sure we reinitialize an
+                              // unresponsive chip (see RV3032C7 app. manual)
+    if (++retries >= 3) {
+      return false;
+    }
+  }
 
   // Next we turn off automatic refresh from EEPROM to behave like other chips
   // in RTClib. Future updates may add more explit control over EEPROM refreshes
