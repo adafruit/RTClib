@@ -97,8 +97,7 @@ boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
   }
   // Finally, we check if Backup Switchover Mode (BSM) is 00b in the PMU
   // register (default for a new chip). If it is, we set it to Level Switching
-  // Mode (LSM) as this most users of this library expect backup power from a
-  // primary battery to work
+  // Mode (LSM) as most users of this library expect backup power to work
   uint8_t pmu = read_register(RV3032C7_PMU);
   if ((pmu & RV3032C7_BSM) == 0) { // Backup Switchover is disabled
     write_register(RV3032C7_PMU,
