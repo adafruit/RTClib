@@ -17,7 +17,7 @@
     @return True if Wire can find PCF8523 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_PCF8523::begin(TwoWire *wireInstance) {
+bool RTC_PCF8523::begin(TwoWire *wireInstance) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(PCF8523_ADDRESS, wireInstance);
@@ -37,7 +37,7 @@ boolean RTC_PCF8523::begin(TwoWire *wireInstance) {
    after the bit is cleared, for instance with adjust()
 */
 /**************************************************************************/
-boolean RTC_PCF8523::lostPower(void) {
+bool RTC_PCF8523::lostPower(void) {
   return read_register(PCF8523_STATUSREG) >> 7;
 }
 
@@ -48,7 +48,7 @@ boolean RTC_PCF8523::lostPower(void) {
     @return True if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
-boolean RTC_PCF8523::initialized(void) {
+bool RTC_PCF8523::initialized(void) {
   return (read_register(PCF8523_CONTROL_3) & 0xE0) != 0xE0;
 }
 

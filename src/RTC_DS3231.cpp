@@ -17,7 +17,7 @@
     @return True if Wire can find DS3231 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS3231::begin(TwoWire *wireInstance) {
+bool RTC_DS3231::begin(TwoWire *wireInstance) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(DS3231_ADDRESS, wireInstance);
