@@ -11,7 +11,7 @@
     @return True if Wire can find DS1307 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_DS1307::begin(TwoWire *wireInstance) {
+bool RTC_DS1307::begin(TwoWire *wireInstance) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(DS1307_ADDRESS, wireInstance);
