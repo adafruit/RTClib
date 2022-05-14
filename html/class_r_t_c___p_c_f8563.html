@@ -82,12 +82,12 @@ Inheritance diagram for RTC_PCF8563:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a808dbb8142c70c075808d397a9cefce8"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8563.html#a808dbb8142c70c075808d397a9cefce8">begin</a> (TwoWire *wireInstance=&amp;Wire)</td></tr>
-<tr class="memdesc:a808dbb8142c70c075808d397a9cefce8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start I2C for the PCF8563 and test succesful connection.  <a href="#a808dbb8142c70c075808d397a9cefce8">More...</a><br /></td></tr>
-<tr class="separator:a808dbb8142c70c075808d397a9cefce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2de6ea3cc5712efc02cb62589d912ce"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8563.html#ab2de6ea3cc5712efc02cb62589d912ce">lostPower</a> (void)</td></tr>
-<tr class="memdesc:ab2de6ea3cc5712efc02cb62589d912ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the status of the VL bit in the VL_SECONDS register.  <a href="#ab2de6ea3cc5712efc02cb62589d912ce">More...</a><br /></td></tr>
-<tr class="separator:ab2de6ea3cc5712efc02cb62589d912ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28016b2aae5bd67471c50dbb64d7b81"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8563.html#ad28016b2aae5bd67471c50dbb64d7b81">begin</a> (TwoWire *wireInstance=&amp;Wire)</td></tr>
+<tr class="memdesc:ad28016b2aae5bd67471c50dbb64d7b81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start I2C for the PCF8563 and test succesful connection.  <a href="#ad28016b2aae5bd67471c50dbb64d7b81">More...</a><br /></td></tr>
+<tr class="separator:ad28016b2aae5bd67471c50dbb64d7b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae264d5b935bd313b8ad4be8c319080c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8563.html#ae264d5b935bd313b8ad4be8c319080c3">lostPower</a> (void)</td></tr>
+<tr class="memdesc:ae264d5b935bd313b8ad4be8c319080c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the status of the VL bit in the VL_SECONDS register.  <a href="#ae264d5b935bd313b8ad4be8c319080c3">More...</a><br /></td></tr>
+<tr class="separator:ae264d5b935bd313b8ad4be8c319080c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a131456dcfbc1cb18a1545d374cebf763"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___p_c_f8563.html#a131456dcfbc1cb18a1545d374cebf763">adjust</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;dt)</td></tr>
 <tr class="memdesc:a131456dcfbc1cb18a1545d374cebf763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the date and time.  <a href="#a131456dcfbc1cb18a1545d374cebf763">More...</a><br /></td></tr>
 <tr class="separator:a131456dcfbc1cb18a1545d374cebf763"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,14 +115,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>RTC based on the PCF8563 chip connected via I2C and the Wire library. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a808dbb8142c70c075808d397a9cefce8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a808dbb8142c70c075808d397a9cefce8">&#9670;&nbsp;</a></span>begin()</h2>
+<a id="ad28016b2aae5bd67471c50dbb64d7b81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad28016b2aae5bd67471c50dbb64d7b81">&#9670;&nbsp;</a></span>begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RTC_PCF8563::begin </td>
+          <td class="memname">bool RTC_PCF8563::begin </td>
           <td>(</td>
           <td class="paramtype">TwoWire *&#160;</td>
           <td class="paramname"><em>wireInstance</em> = <code>&amp;Wire</code></td><td>)</td>
@@ -142,14 +142,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="ab2de6ea3cc5712efc02cb62589d912ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2de6ea3cc5712efc02cb62589d912ce">&#9670;&nbsp;</a></span>lostPower()</h2>
+<a id="ae264d5b935bd313b8ad4be8c319080c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae264d5b935bd313b8ad4be8c319080c3">&#9670;&nbsp;</a></span>lostPower()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean RTC_PCF8563::lostPower </td>
+          <td class="memname">bool RTC_PCF8563::lostPower </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
