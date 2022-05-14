@@ -73,7 +73,7 @@
     @return True if Wire can find RV3032C7 or false otherwise.
 */
 /**************************************************************************/
-boolean RTC_RV3032C7::begin(TwoWire *wireInstance) {
+bool RTC_RV3032C7::begin(TwoWire *wireInstance) {
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(RV3032C7_ADDRESS, wireInstance);
