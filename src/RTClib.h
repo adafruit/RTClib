@@ -370,7 +370,7 @@ protected:
 /**************************************************************************/
 class RTC_DS1307 : RTC_I2C {
 public:
-  boolean begin(TwoWire *wireInstance = &Wire);
+  bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
   uint8_t isrunning(void);
   DateTime now();
@@ -389,7 +389,7 @@ public:
 /**************************************************************************/
 class RTC_DS3231 : RTC_I2C {
 public:
-  boolean begin(TwoWire *wireInstance = &Wire);
+  bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
@@ -421,10 +421,10 @@ public:
 /**************************************************************************/
 class RTC_PCF8523 : RTC_I2C {
 public:
-  boolean begin(TwoWire *wireInstance = &Wire);
+  bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
-  boolean lostPower(void);
-  boolean initialized(void);
+  bool lostPower(void);
+  bool initialized(void);
   DateTime now();
   void start(void);
   void stop(void);
@@ -448,8 +448,8 @@ public:
 /**************************************************************************/
 class RTC_PCF8563 : RTC_I2C {
 public:
-  boolean begin(TwoWire *wireInstance = &Wire);
-  boolean lostPower(void);
+  bool begin(TwoWire *wireInstance = &Wire);
+  bool lostPower(void);
   void adjust(const DateTime &dt);
   DateTime now();
   void start(void);
