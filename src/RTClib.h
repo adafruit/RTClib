@@ -115,6 +115,18 @@ enum Pcf8523OffsetMode {
   PCF8523_OneMinute = 0x80 /**< Offset made every minute */
 };
 
+/** PCF8523 alarm modes */
+enum Pcf8523AlarmMode {
+  PCF8523_AlarmMinute = 0x1,      /**< Alarm when minutes match */
+
+  PCF8523_AlarmHour = 0x3,        /**< Alarm when hours and minutes match */
+
+  PCF8523_AlarmDate = 0x07,       /**< Alarm when date (day of month), hours
+                                       and minutes match */
+  PCF8523_AlarmWeekday = 0x0B,    /**< Alarm when day (day of week), hours
+                                       and minutes match */
+};
+
 /** PCF8563 CLKOUT pin mode settings */
 enum Pcf8563SqwPinMode {
   PCF8563_SquareWaveOFF = 0x00,  /**< Off */
@@ -413,6 +425,10 @@ public:
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
   void enableSecondTimer(void);
   void disableSecondTimer(void);
+  void enableAlarmTimer(const DateTime &dt, const Pcf8523AlarmMode alarmMode,
+                        uint8_t alarmWeekday);
+  void enableAlarmTimer(const DateTime &dt, const Pcf8523AlarmMode alarmMode);
+  void disableAlarmTimer();
   void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods,
                             uint8_t lowPulseWidth);
   void enableCountdownTimer(PCF8523TimerClockFreq clkFreq, uint8_t numPeriods);
