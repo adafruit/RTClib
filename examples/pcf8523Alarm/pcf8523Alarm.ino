@@ -5,11 +5,7 @@
 
 RTC_PCF8523 rtc;
 
-bool alarm_triggered = false;
-
-void setAlarmExample();
-void alarmISR();
-void handleAlarmTriggered();
+volatile bool alarm_triggered = false;
 
 void setup() {
     Serial.begin(57600);
@@ -26,7 +22,10 @@ void setup() {
 
 void loop() {
     if (alarm_triggered) {
-        handleAlarmTriggered();
+        alarm_triggered = false;
+        rtc.disableAlarm();
+        Serial.println("Alarm triggered.\n");
+        doAlarmExample();
     } else {
         Serial.println("Alarm not triggered. The time is " + rtc.now().timestamp());
         delay(1000);
@@ -50,30 +49,22 @@ void doAlarmExample()
     // Good to clear other timers and such.
     rtc.deconfigureAllTimers();
 
-    rtc.enableAlarmTimer(alarm_time, PCF8523_AlarmDate);
+    rtc.enableAlarm(alarm_time, PCF8523_AlarmDate);
 
-    // Print the current time for demonstration purposes.
-    char current_time_buf[] = "YYYY, MMM, DD, DDD, hh:mm:ss AP";
-    Serial.println(String("Current Time: ") + current_time.toString(current_time_buf));
+    // Print the current time in ISO8601 format.
+    Serial.println(String("Current Time: ") + current_time.timestamp());
     Serial.flush();
 
-    // Print when the alarm should trigger.
-    char alarm_time_buf[] = "YYYY, MMM, DD, DDD, hh:mm:00 AP";
+    // Print when the alarm should trigger. Using a custom ISO8601 format
+    // because as stated above, PCF8523 can only trigger on the :00th second
+    // so seconds don't matter.
+    char alarm_time_buf[] = "YYYY-MM-DDThh:mm:00";
     Serial.println(String("Alarm Time: ") + alarm_time.toString(alarm_time_buf));
     Serial.flush();
 
     // Set the interrupt.
     pinMode(INTERRUPT_PIN, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), alarmISR, LOW);
-}
-
-void handleAlarmTriggered()
-{
-    alarm_triggered = false;
-    rtc.disableAlarmTimer();
-    Serial.println("Alarm triggered.\n");
-    doAlarmExample();
-
 }
 
 void alarmISR()

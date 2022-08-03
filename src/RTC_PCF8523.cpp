@@ -190,8 +190,8 @@ void RTC_PCF8523::disableSecondTimer() {
     @param alarmMode Sets the alarm mode from the Pcf8523AlarmMode enum.
 */
 /**************************************************************************/
-void RTC_PCF8523::enableAlarmTimer(const DateTime &dt,
-                                   const Pcf8523AlarmMode alarmMode) {
+void RTC_PCF8523::enableAlarm(const DateTime &dt,
+                              const Pcf8523AlarmMode alarmMode) {
   // Disable square wave generation on SQW/INT pin, otherwise interrupt
   // will trigger.
   writeSqwPinMode(PCF8523_OFF);
@@ -233,7 +233,7 @@ void RTC_PCF8523::enableAlarmTimer(const DateTime &dt,
    writeSqwPinMode() to reactivate if required.
 */
 /**************************************************************************/
-void RTC_PCF8523::disableAlarmTimer() {
+void RTC_PCF8523::disableAlarm() {
   write_register(PCF8523_CONTROL_2, ~(1 << 3)
       & read_register(PCF8523_CONTROL_2)); // Clear alarm interrupt bit
   write_register(PCF8523_CONTROL_1, ~(1 << 1)
