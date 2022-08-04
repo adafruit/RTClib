@@ -117,14 +117,14 @@ enum Pcf8523OffsetMode {
 
 /** PCF8523 alarm modes */
 enum Pcf8523AlarmMode {
-  PCF8523_AlarmMinute = 0x01,      /**< Alarm when minutes match */
+  PCF8523_AlarmMinute = 0x01, /**< Alarm when minutes match */
 
-  PCF8523_AlarmHour = 0x03,        /**< Alarm when hours and minutes match */
+  PCF8523_AlarmHour = 0x03, /**< Alarm when hours and minutes match */
 
-  PCF8523_AlarmDate = 0x07,       /**< Alarm when date (day of month), hours
-                                       and minutes match */
-  PCF8523_AlarmWeekday = 0x0B,    /**< Alarm when day (day of week), hours
-                                       and minutes match */
+  PCF8523_AlarmDate = 0x07,    /**< Alarm when date (day of month), hours
+                                    and minutes match */
+  PCF8523_AlarmWeekday = 0x0B, /**< Alarm when day (day of week), hours
+                                    and minutes match */
 };
 
 /** PCF8563 CLKOUT pin mode settings */
