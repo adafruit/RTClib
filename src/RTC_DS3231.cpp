@@ -183,6 +183,139 @@ bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
 
 /**************************************************************************/
 /*!
+    @brief  Get the date/time value of Alarm1
+    @return DateTime object with the Alarm1 data set in the
+            day, hour, minutes, and seconds fields
+*/
+/**************************************************************************/
+DateTime RTC_DS3231::getAlarm1() {
+  uint8_t buffer[5] = {DS3231_ALARM1, 0, 0, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 5);
+
+  uint8_t seconds = bcd2bin(buffer[0] & 0x7F);
+  uint8_t minutes = bcd2bin(buffer[1] & 0x7F);
+  // Fetching the hour assumes 24 hour time (never 12)
+  // because this library exclusively stores the time
+  // in 24 hour format. Note that the DS3231 supports
+  // 12 hour storage, and sets bits to indicate the type
+  // that is stored.
+  uint8_t hour = bcd2bin(buffer[2] & 0x3F);
+
+  // Determine if the alarm is set to fire based on the
+  // day of the week, or an explicit date match.
+  bool isDayOfWeek = (buffer[3] & 0x40) >> 6;
+  uint8_t day;
+  if (isDayOfWeek) {
+    // Alarm set to match on day of the week
+    day = bcd2bin(buffer[3] & 0x0F);
+  } else {
+    // Alarm set to match on day of the month
+    day = bcd2bin(buffer[3] & 0x3F);
+  }
+
+  // On the first week of May 2000, the day-of-the-week number
+  // matches the date number.
+  return DateTime(2000, 5, day, hour, minutes, seconds);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the date/time value of Alarm2
+    @return DateTime object with the Alarm2 data set in the
+            day, hour, and minutes fields
+*/
+/**************************************************************************/
+DateTime RTC_DS3231::getAlarm2() {
+  uint8_t buffer[4] = {DS3231_ALARM2, 0, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 4);
+
+  uint8_t minutes = bcd2bin(buffer[0] & 0x7F);
+  // Fetching the hour assumes 24 hour time (never 12)
+  // because this library exclusively stores the time
+  // in 24 hour format. Note that the DS3231 supports
+  // 12 hour storage, and sets bits to indicate the type
+  // that is stored.
+  uint8_t hour = bcd2bin(buffer[1] & 0x3F);
+
+  // Determine if the alarm is set to fire based on the
+  // day of the week, or an explicit date match.
+  bool isDayOfWeek = (buffer[2] & 0x40) >> 6;
+  uint8_t day;
+  if (isDayOfWeek) {
+    // Alarm set to match on day of the week
+    day = bcd2bin(buffer[2] & 0x0F);
+  } else {
+    // Alarm set to match on day of the month
+    day = bcd2bin(buffer[2] & 0x3F);
+  }
+
+  // On the first week of May 2000, the day-of-the-week number
+  // matches the date number.
+  return DateTime(2000, 5, day, hour, minutes, 0);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the mode for Alarm1
+    @return Ds3231Alarm1Mode enum value for the current Alarm1 mode
+*/
+/**************************************************************************/
+Ds3231Alarm1Mode RTC_DS3231::getAlarm1Mode() {
+  uint8_t buffer[5] = {DS3231_ALARM1, 0, 0, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 5);
+
+  uint8_t alarm_mode = (buffer[0] & 0x80) >> 7    // A1M1 - Seconds bit
+                       | (buffer[1] & 0x80) >> 6  // A1M2 - Minutes bit
+                       | (buffer[2] & 0x80) >> 5  // A1M3 - Hour bit
+                       | (buffer[3] & 0x80) >> 4  // A1M4 - Day/Date bit
+                       | (buffer[3] & 0x40) >> 2; // DY_DT
+
+  // Determine which mode the fetched alarm bits map to
+  switch (alarm_mode) {
+  case DS3231_A1_PerSecond:
+  case DS3231_A1_Second:
+  case DS3231_A1_Minute:
+  case DS3231_A1_Hour:
+  case DS3231_A1_Date:
+  case DS3231_A1_Day:
+    return (Ds3231Alarm1Mode)alarm_mode;
+  default:
+    // Default if the alarm mode cannot be read
+    return DS3231_A1_Date;
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the mode for Alarm2
+    @return Ds3231Alarm2Mode enum value for the current Alarm2 mode
+*/
+/**************************************************************************/
+Ds3231Alarm2Mode RTC_DS3231::getAlarm2Mode() {
+  uint8_t buffer[4] = {DS3231_ALARM2, 0, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 4);
+
+  uint8_t alarm_mode = (buffer[0] & 0x80) >> 7    // A2M2 - Minutes bit
+                       | (buffer[1] & 0x80) >> 6  // A2M3 - Hour bit
+                       | (buffer[2] & 0x80) >> 5  // A2M4 - Day/Date bit
+                       | (buffer[2] & 0x40) >> 3; // DY_DT
+
+  // Determine which mode the fetched alarm bits map to
+  switch (alarm_mode) {
+  case DS3231_A2_PerMinute:
+  case DS3231_A2_Minute:
+  case DS3231_A2_Hour:
+  case DS3231_A2_Date:
+  case DS3231_A2_Day:
+    return (Ds3231Alarm2Mode)alarm_mode;
+  default:
+    // Default if the alarm mode cannot be read
+    return DS3231_A2_Date;
+  }
+}
+
+/**************************************************************************/
+/*!
     @brief  Disable alarm
         @param 	alarm_num Alarm number to disable
 */
