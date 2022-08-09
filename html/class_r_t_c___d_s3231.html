@@ -107,6 +107,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a686299444985b8c36d12a7ce32c9add6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a686299444985b8c36d12a7ce32c9add6">setAlarm2</a> (const <a class="el" href="class_date_time.html">DateTime</a> &amp;dt, <a class="el" href="_r_t_clib_8h.html#abf9692bbba5b3b3adbb6939fe05c0cb3">Ds3231Alarm2Mode</a> alarm_mode)</td></tr>
 <tr class="memdesc:a686299444985b8c36d12a7ce32c9add6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set alarm 2 for DS3231.  <a href="#a686299444985b8c36d12a7ce32c9add6">More...</a><br /></td></tr>
 <tr class="separator:a686299444985b8c36d12a7ce32c9add6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8079cc5cedf5ad3178fd8f6b0f2c25c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#aa8079cc5cedf5ad3178fd8f6b0f2c25c">getAlarm1</a> ()</td></tr>
+<tr class="memdesc:aa8079cc5cedf5ad3178fd8f6b0f2c25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the date/time value of Alarm1.  <a href="#aa8079cc5cedf5ad3178fd8f6b0f2c25c">More...</a><br /></td></tr>
+<tr class="separator:aa8079cc5cedf5ad3178fd8f6b0f2c25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7075b5983e9f61175d1335d9796b272"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_date_time.html">DateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#aa7075b5983e9f61175d1335d9796b272">getAlarm2</a> ()</td></tr>
+<tr class="memdesc:aa7075b5983e9f61175d1335d9796b272"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the date/time value of Alarm2.  <a href="#aa7075b5983e9f61175d1335d9796b272">More...</a><br /></td></tr>
+<tr class="separator:aa7075b5983e9f61175d1335d9796b272"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af22bd04a5b78398f35c11207f9fc266b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_r_t_clib_8h.html#a0dbe1ce2f8afb1c70ee1bef0eb84c297">Ds3231Alarm1Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#af22bd04a5b78398f35c11207f9fc266b">getAlarm1Mode</a> ()</td></tr>
+<tr class="memdesc:af22bd04a5b78398f35c11207f9fc266b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the mode for Alarm1.  <a href="#af22bd04a5b78398f35c11207f9fc266b">More...</a><br /></td></tr>
+<tr class="separator:af22bd04a5b78398f35c11207f9fc266b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74aaeb9b1b27cc07b0828f20f7a56b4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_r_t_clib_8h.html#abf9692bbba5b3b3adbb6939fe05c0cb3">Ds3231Alarm2Mode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a74aaeb9b1b27cc07b0828f20f7a56b4c">getAlarm2Mode</a> ()</td></tr>
+<tr class="memdesc:a74aaeb9b1b27cc07b0828f20f7a56b4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the mode for Alarm2.  <a href="#a74aaeb9b1b27cc07b0828f20f7a56b4c">More...</a><br /></td></tr>
+<tr class="separator:a74aaeb9b1b27cc07b0828f20f7a56b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f5191fed61fd8a4716572d43f300a5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_r_t_c___d_s3231.html#a9f5191fed61fd8a4716572d43f300a5a">disableAlarm</a> (uint8_t alarm_num)</td></tr>
 <tr class="memdesc:a9f5191fed61fd8a4716572d43f300a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable alarm.  <a href="#a9f5191fed61fd8a4716572d43f300a5a">More...</a><br /></td></tr>
 <tr class="separator:a9f5191fed61fd8a4716572d43f300a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -352,6 +364,86 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>False if control register is not set, otherwise true </dd></dl>
+
+</div>
+</div>
+<a id="aa8079cc5cedf5ad3178fd8f6b0f2c25c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8079cc5cedf5ad3178fd8f6b0f2c25c">&#9670;&nbsp;</a></span>getAlarm1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_date_time.html">DateTime</a> RTC_DS3231::getAlarm1 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the date/time value of Alarm1. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object with the Alarm1 data set in the day, hour, minutes, and seconds fields </dd></dl>
+
+</div>
+</div>
+<a id="aa7075b5983e9f61175d1335d9796b272"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7075b5983e9f61175d1335d9796b272">&#9670;&nbsp;</a></span>getAlarm2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_date_time.html">DateTime</a> RTC_DS3231::getAlarm2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the date/time value of Alarm2. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_date_time.html" title="Simple general-purpose date/time class (no TZ / DST / leap seconds). ">DateTime</a> object with the Alarm2 data set in the day, hour, and minutes fields </dd></dl>
+
+</div>
+</div>
+<a id="af22bd04a5b78398f35c11207f9fc266b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af22bd04a5b78398f35c11207f9fc266b">&#9670;&nbsp;</a></span>getAlarm1Mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_r_t_clib_8h.html#a0dbe1ce2f8afb1c70ee1bef0eb84c297">Ds3231Alarm1Mode</a> RTC_DS3231::getAlarm1Mode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the mode for Alarm1. </p>
+<dl class="section return"><dt>Returns</dt><dd>Ds3231Alarm1Mode enum value for the current Alarm1 mode </dd></dl>
+
+</div>
+</div>
+<a id="a74aaeb9b1b27cc07b0828f20f7a56b4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74aaeb9b1b27cc07b0828f20f7a56b4c">&#9670;&nbsp;</a></span>getAlarm2Mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="_r_t_clib_8h.html#abf9692bbba5b3b3adbb6939fe05c0cb3">Ds3231Alarm2Mode</a> RTC_DS3231::getAlarm2Mode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the mode for Alarm2. </p>
+<dl class="section return"><dt>Returns</dt><dd>Ds3231Alarm2Mode enum value for the current Alarm2 mode </dd></dl>
 
 </div>
 </div>
