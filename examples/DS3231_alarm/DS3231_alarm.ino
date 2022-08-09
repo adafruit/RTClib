@@ -70,11 +70,11 @@ void loop() {
     DateTime alarm1 = rtc.getAlarm1();
     Ds3231Alarm1Mode alarm1mode = rtc.getAlarm1Mode();
     char alarm1Date[12] = "DD hh:mm:ss";
-    rtc.getAlarm1().toString(alarm1Date);
+    alarm1.toString(alarm1Date);
     Serial.print(" [Alarm1: ");
     Serial.print(alarm1Date);
     Serial.print(", Mode: ");
-    switch (rtc.getAlarm1Mode()) {
+    switch (alarm1mode) {
       case DS3231_A1_PerSecond: Serial.print("PerSecond"); break;
       case DS3231_A1_Second: Serial.print("Second"); break;
       case DS3231_A1_Minute: Serial.print("Minute"); break;
