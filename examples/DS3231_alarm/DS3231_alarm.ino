@@ -65,12 +65,32 @@ void loop() {
     char date[10] = "hh:mm:ss";
     rtc.now().toString(date);
     Serial.print(date);
+
+    // the stored alarm value + mode
+    DateTime alarm1 = rtc.getAlarm1();
+    Ds3231Alarm1Mode alarm1mode = rtc.getAlarm1Mode();
+    char alarm1Date[12] = "DD hh:mm:ss";
+    alarm1.toString(alarm1Date);
+    Serial.print(" [Alarm1: ");
+    Serial.print(alarm1Date);
+    Serial.print(", Mode: ");
+    switch (alarm1mode) {
+      case DS3231_A1_PerSecond: Serial.print("PerSecond"); break;
+      case DS3231_A1_Second: Serial.print("Second"); break;
+      case DS3231_A1_Minute: Serial.print("Minute"); break;
+      case DS3231_A1_Hour: Serial.print("Hour"); break;
+      case DS3231_A1_Date: Serial.print("Date"); break;
+      case DS3231_A1_Day: Serial.print("Day"); break;
+    }
+
     // the value at SQW-Pin (because of pullup 1 means no alarm)
-    Serial.print(" SQW: ");
+    Serial.print("] SQW: ");
     Serial.print(digitalRead(CLOCK_INTERRUPT_PIN));
-    // whether a alarm happened happened
-    Serial.print(" Alarm1: ");
+
+    // whether a alarm fired
+    Serial.print(" Fired: ");
     Serial.print(rtc.alarmFired(1));
+
     // Serial.print(" Alarm2: ");
     // Serial.println(rtc.alarmFired(2));
     // control register values (see https://datasheets.maximintegrated.com/en/ds/DS3231.pdf page 13)
@@ -79,10 +99,11 @@ void loop() {
 
     // resetting SQW and alarm 1 flag
     // using setAlarm1, the next alarm could now be configurated
-    if(rtc.alarmFired(1)) {
+    if (rtc.alarmFired(1)) {
         rtc.clearAlarm(1);
-        Serial.println("Alarm cleared");
+        Serial.print(" - Alarm cleared");
     }
+    Serial.println();
 
     delay(2000);
 }
