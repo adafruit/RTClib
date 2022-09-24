@@ -59,6 +59,9 @@ toString	KEYWORD2
 readnvram	KEYWORD2
 writenvram	KEYWORD2
 setAlarm	KEYWORD2
+getAlarm	KEYWORD2
+getAlarmMode	KEYWORD2
+getAlarmEventType	KEYWORD2
 setAlarm1	KEYWORD2
 setAlarm2	KEYWORD2
 disableAlarm	KEYWORD2

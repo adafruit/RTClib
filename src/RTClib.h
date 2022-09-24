@@ -144,6 +144,8 @@ enum RV3032C7EventType {
       0x03, /**< Interrupt on INT pin + clock output on CLKOUT pin */
 };
 
+#define RV3032C7InvalidDate DateTime(2000, 5, 0x00, 0x00, 0x00)
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -473,6 +475,9 @@ public:
   DateTime now();
   bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
                 RV3032C7EventType event_type = RV3032C7_EV_Int);
+  DateTime getAlarm();
+  RV3032C7AlarmMode getAlarmMode();
+  RV3032C7EventType getAlarmEventType();
   void disableAlarm(void);
   void clearAlarm(void);
   bool alarmFired(void);

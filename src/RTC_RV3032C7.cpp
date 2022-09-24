@@ -226,6 +226,66 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
 
 /**************************************************************************/
 /*!
+    @brief  Get the date/time value of the Alarm
+    @return DateTime object with the Alarm data set in the
+            day, hour, minutes, and seconds fields
+
+    At power on and after disableAlarm() returns RV3032C7InvalidDate
+*/
+/**************************************************************************/
+DateTime RTC_RV3032C7::getAlarm() {
+  uint8_t buffer[3] = {RV3032C7_ALARM1, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 3);
+
+  uint8_t minutes = bcd2bin(buffer[0] & 0x7F);
+  uint8_t hour = bcd2bin(buffer[1] & 0x3F); // Only 24 hour format supported by RV3032C7 (same as this library)
+  uint8_t day = bcd2bin(buffer[2] & 0x3F);
+
+  // Chosen in order to match the year and month returned by RTC_DS3231::getAlarm();
+  return DateTime(2000, 5, day, hour, minutes);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the mode for the Alarm
+    @return RV3032C7AlarmMode enum value for the current Alarm mode
+*/
+/**************************************************************************/
+RV3032C7AlarmMode RTC_RV3032C7::getAlarmMode() {
+  uint8_t buffer[3] = {RV3032C7_ALARM1, 0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 3);
+  uint8_t alarm_mode = (buffer[0] & 0x80) >> 7    // A1M1 - Minutes bit
+                       | (buffer[1] & 0x80) >> 6  // A1M2 - Hour bit
+                       | (buffer[2] & 0x80) >> 5; // A1M3 - Date bit
+  return (RV3032C7AlarmMode)alarm_mode; // No need to check because all possible values are valid
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the event type for the Alarm
+    @return RV3032C7EventType enum value for the current Alarm event type
+*/
+/**************************************************************************/
+RV3032C7EventType RTC_RV3032C7::getAlarmEventType() {
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  uint8_t event_type= (ctrl2 & RV3032C7_AIE) >> 3;
+  if ( ((intmask & RV3032C7_CAIE) != 0) &&  ((ctrl2 & RV3032C7_AIE) != 0) ) {
+      event_type |= 0x02; 
+  }
+  switch(event_type) {
+      case RV3032C7_EV_Poll:   
+      case RV3032C7_EV_Int:
+      case RV3032C7_EV_IntClock:
+          return (RV3032C7EventType) event_type;
+      default:
+          return RV3032C7_EV_Poll;
+  }
+}
+
+
+/**************************************************************************/
+/*!
     @brief  Disable alarm
     @details this function disables the alarm and in addition clears it (same as
    clearAlarm())
@@ -239,6 +299,11 @@ void RTC_RV3032C7::disableAlarm(void) {
   // check intmask to see if we are the last user left before clearing CLKIE
   ctrl2 &= ~(RV3032C7_AIE | RV3032C7_CLKIE);
   write_register(RV3032C7_CONTROL2, ctrl2); // Disable Alarm Interrupts
+  
+  // reset to power on default, preventing any further match 
+  uint8_t buffer[4] = {RV3032C7_ALARM1, 0x00, 0x00, 0x00};
+  i2c_dev->write(buffer, 4);
+  
   clearAlarm();
 }
 

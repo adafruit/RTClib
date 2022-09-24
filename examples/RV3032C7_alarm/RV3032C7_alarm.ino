@@ -57,23 +57,57 @@ void loop() {
     char date[10] = "hh:mm:ss";
     rtc.now().toString(date);
     Serial.print(date);
+    
+    // the stored alarm value + mode + event type
+    DateTime alarm = rtc.getAlarm();
+    if (alarm==RV3032C7InvalidDate) {
+       Serial.print(" [Alarm: off]");
+    } else {
+       RV3032C7AlarmMode alarmMode = rtc.getAlarmMode();
+       RV3032C7EventType eventType = rtc.getAlarmEventType();
+       char alarmDate[12] = "DD hh:mm:ss";
+       alarm.toString(alarmDate);
+       Serial.print(" [Alarm: ");
+       Serial.print(alarmDate);
+       Serial.print(", Mode: ");
+       switch (alarmMode) {
+         case RV3032C7_A_PerMinute: Serial.print("PerMinute"); break;
+         case RV3032C7_A_Minute: Serial.print("Minute"); break; 
+         case RV3032C7_A_Hour: Serial.print("Hour"); break; 
+         case RV3032C7_A_MinuteHour: Serial.print("Minute&Hour"); break; 
+         case RV3032C7_A_Date: Serial.print("Date"); break;
+         case RV3032C7_A_MinuteDate: Serial.print("Minute&Date"); break; 
+         case RV3032C7_A_HourDate: Serial.print("Hour&Date"); break; 
+         case RV3032C7_A_All: Serial.print("Minute&Hour&Date"); break; 
+       }
+       Serial.print(", Event: ");
+       switch (eventType) {
+          case RV3032C7_EV_Poll: Serial.print("Poll"); break;
+          case RV3032C7_EV_Int: Serial.print("Int"); break;
+          case RV3032C7_EV_IntClock: Serial.print("Int+Clock"); break; 
+       }
+       Serial.print("]");
+    }
+     
     // the value at INT-Pin (because of pullup 1 means no alarm)
     Serial.print(" INT: ");
     Serial.print(digitalRead(RTC_INTERRUPT_PIN));
     // whether a alarm happened happened
     Serial.print(" Alarm: ");
     Serial.println(rtc.alarmFired());
+    
     // status register values (see https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-3028-C7_App-Manual.pdf page 22)
     // Serial.print(" Control: 0d");
     // Serial.println(read_i2c_register(0x51, 0xd), BIN);
 
     // resetting INT and alarm 1 flag
     // using setAlarm, the next alarm could now be configured
-    if(rtc.alarmFired()) {
-        rtc.clearAlarm();
-        Serial.println(); Serial.println("Alarm cleared"); Serial.println();
+    if (rtc.alarmFired()) {
+        rtc.clearAlarm(); Serial.println(" - Alarm cleared"); 
+        //rtc.disableAlarm(); Serial.println(" - Alarm disabled"); // uncomment to disable further alarms
     }
-
+    Serial.println();
+    
     delay(2000);
 }
 
