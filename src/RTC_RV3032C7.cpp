@@ -14,6 +14,9 @@
 #define RV3032C7_ALARM1 0x08    ///< Alarm 1 register - Minutes
 #define RV3032C7_ALARM2 0x09    ///< Alarm 2 register - Hours
 #define RV3032C7_ALARM3 0x0A    ///< Alarm 2 register - Date
+#define RV3032C7_TIMER0 0x0B    ///< Timer Value 0 reg. lower 8 bits
+#define RV3032C7_TIMER1 0x0C    ///< Timer Value 1 reg. upper 4 bits 
+
 #define RV3032C7_STATUSREG 0x0D ///< Status register
 #define RV3032C7_CONTROL1 0x10  ///< Control register
 #define RV3032C7_CONTROL2 0x11  ///< Control register
@@ -38,8 +41,10 @@
 #define RV3032C7_PORF 0x02 ///< Power On Reset
 #define RV3032C7_VLF 0x01  ///< Voltage Low
 
-// Control register flags (some)
+// Control register flags/fields (some)
 #define RV3032C7_XBIT 0x20 ///< Control1, "X" bit (must be set to 1)
+#define RV3032C7_TE 0x08 ///< Control1, Periodic Countdown Timer Enable bit
+#define RV3032C7_TD 0x03 ///< Control1, Timer Clock Frequency selection
 #define RV3032C7_EERD 0x04 ///< Control1, ROM Memory Refresh Disable bit.
 #define RV3032C7_STOP 0x01 ///< Control2, STOP bit
 #define RV3032C7_EIE 0x04  ///< Control2, External Event Interrupt Enable bit
@@ -53,6 +58,7 @@
 
 // Clock Interrupt Mask register flags (only those used in this file)
 #define RV3032C7_CAIE 0x10 ///< Clock output when Alarm Interrupt Enable bit
+#define RV3032C7_CTIE 0x08 ///< Clock output when Periodic Countdown Timer Interrupt Enable bit
 
 // Power Management Unit (PMU) register flags (only those used in this file)
 #define RV3032C7_NCLKE                                                         \
@@ -217,9 +223,12 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
     write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
     write_register(RV3032C7_INT_MASK, intmask | RV3032C7_CAIE); // Set CAIE
   } else { // Disable Clock Output at alarm match to be sure
-    ctrl2 &= (~RV3032C7_CLKIE);               // clear CLKIE
-    write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
-    write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE)); // Clear CAIE
+    intmask &= ~RV3032C7_CAIE;
+    write_register(RV3032C7_INT_MASK, intmask); // Clear CAIE
+    if ( (intmask & 0x1F) == 0x00) {  // No user left in clock output mask register
+        ctrl2 &= (~RV3032C7_CLKIE);               // clear CLKIE
+        write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
+    }
   }
   return true; // No check needed for now, may be added in the future
 }
@@ -270,7 +279,7 @@ RV3032C7EventType RTC_RV3032C7::getAlarmEventType() {
   uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
   uint8_t event_type= (ctrl2 & RV3032C7_AIE) >> 3;
-  if ( ((intmask & RV3032C7_CAIE) != 0) &&  ((ctrl2 & RV3032C7_AIE) != 0) ) {
+  if ( ((intmask & RV3032C7_CAIE) != 0) &&  ((ctrl2 & RV3032C7_CLKIE) != 0) ) {
       event_type |= 0x02; 
   }
   switch(event_type) {
@@ -283,7 +292,6 @@ RV3032C7EventType RTC_RV3032C7::getAlarmEventType() {
   }
 }
 
-
 /**************************************************************************/
 /*!
     @brief  Disable alarm
@@ -294,16 +302,18 @@ RV3032C7EventType RTC_RV3032C7::getAlarmEventType() {
 void RTC_RV3032C7::disableAlarm(void) {
   uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
-  write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CAIE)); // Clear CAIE
-  // TODO: if we ever implement other functions that can set CLKIE then
-  // check intmask to see if we are the last user left before clearing CLKIE
-  ctrl2 &= ~(RV3032C7_AIE | RV3032C7_CLKIE);
-  write_register(RV3032C7_CONTROL2, ctrl2); // Disable Alarm Interrupts
-  
   // reset to power on default, preventing any further match 
   uint8_t buffer[4] = {RV3032C7_ALARM1, 0x00, 0x00, 0x00};
   i2c_dev->write(buffer, 4);
   
+  intmask &= ~RV3032C7_CAIE; // Clear CAIE 
+  write_register(RV3032C7_INT_MASK, intmask); // write register
+  if ( (intmask & 0x1F) == 0x00) {  // No user left in clock output mask register
+     ctrl2 &= (~RV3032C7_CLKIE);             // clear CLKIE
+  }
+  ctrl2 &= ~RV3032C7_AIE; // clear Alarm Interrupt Enable (AIE)
+  write_register(RV3032C7_CONTROL2, ctrl2);  // write register
+
   clearAlarm();
 }
 
@@ -335,6 +345,115 @@ void RTC_RV3032C7::clearAlarm(void) {
 bool RTC_RV3032C7::alarmFired(void) {
   return (read_register(RV3032C7_STATUSREG) & RV3032C7_AF) != 0 ? true : false;
 }
+
+/**************************************************************************/
+/*!
+    @brief  Enable Periodic Countdown Timer on the RV3032C7.
+        - If event_type is RV3032C7_EV_Poll the alarm status can be polled with
+   CountdownTimerFired()
+        - If event_type is RV3032C7_EV_Int, in addition the INT PIN goes low
+   (usually this is used to generate an interrupt)
+        - If event_type is RV3032C7_EV_IntClock, in addition to the INT PIN
+   going low, the clock is output on the CLKOUT pin while the INT pin is low
+        (even if it was turned off via disableClkOut()). The clock will be
+   output until the INT pin is cleared by clearCountdownTimer() or disabled with
+   disableCountdownTimer().
+        @param clkFreq One of the RV3032C7's Periodic Countdown Timer Clock Frequencies.
+         See the #RV3032C7TimerClockFreq enum for options and associated time ranges.
+        @param numPeriods The number of clkFreq periods (1-4095) to count down.
+        @param   event_type Desired event type, see #RV3032C7EventTyp enum
+*/
+/**************************************************************************/
+void RTC_RV3032C7::enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods, RV3032C7EventType event_type) {
+  uint8_t buffer[3] = { RV3032C7_TIMER0, lowByte(numPeriods), highByte(numPeriods) };
+
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);  
+
+  ctrl1 &= ~RV3032C7_TE;  // clear TE bit
+  write_register(RV3032C7_CONTROL2, ctrl1); // Disable Countdown Timer
+  ctrl2 &= ~RV3032C7_TIE;  // clear TIE bit
+  write_register(RV3032C7_CONTROL2, ctrl2); // Disable Timer Interrupt            
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_TF); // clear Timer flag
+
+  ctrl1 = (ctrl1 & (~RV3032C7_TD)) | (clkFreq & RV3032C7_TD);
+  write_register(RV3032C7_CONTROL2, ctrl1); // Set TD field
+  i2c_dev->write(buffer, 3); // Write Timer Value (12 bits)
+  
+  if (event_type & 0x01) { // Enable Interrupt at alarm match
+    ctrl2 |= RV3032C7_TIE;  //set Timer Interrupt Enable (TIE)
+    write_register(RV3032C7_CONTROL2, ctrl2); //enable Timer interrupt 
+  }
+  if (event_type & 0x02) {   // Enable Clock Output at timer interrupt
+    ctrl2 |= RV3032C7_CLKIE; // Set CLKIE
+    write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
+    write_register(RV3032C7_INT_MASK, intmask | RV3032C7_CTIE); // Set CTIE
+  } else { // Disable Clock Output at alarm match to be sure
+    intmask &= ~RV3032C7_CTIE;
+    write_register(RV3032C7_INT_MASK, intmask & (~RV3032C7_CTIE)); // Clear CTIE
+    if ( (intmask & 0x1F) == 0x00) {  // No user left in clock output mask register
+        ctrl2 &= (~RV3032C7_CLKIE);               // clear CLKIE
+        write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
+    }
+  }
+  write_register(RV3032C7_CONTROL2, ctrl1 | RV3032C7_TE); // Enable Countdown Timer
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the value of the Periodic Countdown Timer
+    @return the number of clkFreq periods to count down (uint16_t). Range: 0-4095 
+
+    The preset value of the countdown timer is returned and not the actual value (which is not possible to read).
+    At power on returns 0, otherwise it will return the last value set (valid values 1-4095)
+*/
+/**************************************************************************/
+uint16_t RTC_RV3032C7::getCountdownTimer() {
+  uint8_t buffer[3] = { RV3032C7_TIMER0, 0};
+  i2c_dev->write_then_read(buffer, 1, buffer, 2);
+  uint16_t numPeriods = ((uint16_t)buffer[1])<<8 | buffer[0];
+  return numPeriods;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the mode for the Periodic Countdown Timer
+    @return RV3032C7's Periodic Countdown Timer Clock Frequency. See the #RV3032C7TimerClockFreq enum for options and associated time ranges.
+*/
+/**************************************************************************/
+RV3032C7TimerClockFreq RTC_RV3032C7::getCountdownTimerClock() {
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  return (RV3032C7TimerClockFreq) (ctrl1 & RV3032C7_TD);
+
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the event type for the Periodic Countdown Timer
+    @return RV3032C7EventType enum value for the current Periodic Countdown Timer event type
+*/
+/**************************************************************************/
+RV3032C7EventType getCountdownTimerEventType() {
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  uint8_t event_type= (ctrl2 & RV3032C7_TIE) >> 4;
+  if ( ((intmask & RV3032C7_CTIE) != 0) &&  ((ctrl2 & RV3032C7_CLKIE) != 0) ) {
+      event_type |= 0x02; 
+  }
+  switch(event_type) {
+      case RV3032C7_EV_Poll:   
+      case RV3032C7_EV_Int:
+      case RV3032C7_EV_IntClock:
+          return (RV3032C7EventType) event_type;
+      default:
+          return RV3032C7_EV_Poll;
+  }
+}
+
+void RTC_RV3032C7::disableCountdownTimer(void);
+void RTC_RV3032C7::clearCountdownTimer(void);
+bool RTC_RV3032C7::CountdownTimerFired(void);
 
 /**************************************************************************/
 /*!

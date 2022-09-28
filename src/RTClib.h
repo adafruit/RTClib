@@ -136,6 +136,14 @@ enum RV3032C7AlarmMode {
   RV3032C7_A_All = 0x00,        /**< Alarm when minutes, hours & date match */
 };
 
+/** RV3032C7 Countdown Timer Clock frequency*/
+enum RV3032C7TimerClockFreq {
+  RV3032C7_Frequency4096Hz = 0x00,   /**< 4096 Hz */
+  RV3032C7_Frequency64Hz = 0x01,     /**< 64 Hz */
+  RV3032C7_FrequencySeconds = 0x02,  /**<  T=1s or 1 Hz */
+  RV3032C7_CFrequencyMinutes = 0x03, /**<  T=60s or 1/60 Hz */
+};
+
 /** RV3032C7 Event type */
 enum RV3032C7EventType {
   RV3032C7_EV_Poll = 0x00, /**< Polling via i2c, no interrupts */
@@ -477,6 +485,7 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
+  
   bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
                 RV3032C7EventType event_type = RV3032C7_EV_Int);
   DateTime getAlarm();
@@ -485,6 +494,15 @@ public:
   void disableAlarm(void);
   void clearAlarm(void);
   bool alarmFired(void);
+  
+  void enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods, RV3032C7EventType event_type = RV3032C7_EV_Int);
+  uint16_t getCountdownTimer();
+  RV3032C7TimerClockFreq getCountdownTimerClock();
+  RV3032C7EventType getCountdownTimerEventType();
+  void disableCountdownTimer(void);
+  void clearCountdownTimer(void);
+  bool CountdownTimerFired(void);
+
   void enableClkOut(void);
   void disableClkOut(void);
   bool isEnabledClkOut(void);
