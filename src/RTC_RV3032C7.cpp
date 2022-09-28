@@ -64,8 +64,7 @@
 #define RV3032C7_NCLKE                                                         \
   0x40 ///< Not CLKOUT Enable Bit in Power Management Unit (PMU)
 #define RV3032C7_BSM                                                           \
-  0x30 ///< Backup Switchover Mode                                                         \
-
+  0x30 ///< Backup Switchover Mode
 
 // Temperature register flags (some flags ended up here, albeit unrelated to
 // temperature)
@@ -328,12 +327,11 @@ void RTC_RV3032C7::clearAlarm(void) {
   write_register(RV3032C7_STATUSREG, ~RV3032C7_AF); // clear Alarm flag
   // In addition we clear the CLKF flag since it can be set as well if
   // RV3032C7_EV_IntClock
-  // TODO: if we ever implement other functions that can set CLKF then add
-  // option to clear only AF/CLKF
-  uint8_t treg =
-      read_register(RV3032C7_TEMPERATUREREG); // CLKF happens to be in the
-                                              // temperature register
-  write_register(RV3032C7_TEMPERATUREREG, treg & (~RV3032C7_CLKF));
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  if (intmask & RV3032C7_CAIE) {
+     uint8_t treg = read_register(RV3032C7_TEMPERATUREREG); // CLKF happens to be in the temperature register
+     write_register(RV3032C7_TEMPERATUREREG, treg & (~RV3032C7_CLKF));
+  }
 }
 
 /**************************************************************************/
@@ -434,7 +432,7 @@ RV3032C7TimerClockFreq RTC_RV3032C7::getCountdownTimerClock() {
     @return RV3032C7EventType enum value for the current Periodic Countdown Timer event type
 */
 /**************************************************************************/
-RV3032C7EventType getCountdownTimerEventType() {
+RV3032C7EventType RTC_RV3032C7::getCountdownTimerEventType() {
   uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
   uint8_t event_type= (ctrl2 & RV3032C7_TIE) >> 4;
@@ -451,9 +449,63 @@ RV3032C7EventType getCountdownTimerEventType() {
   }
 }
 
-void RTC_RV3032C7::disableCountdownTimer(void);
-void RTC_RV3032C7::clearCountdownTimer(void);
-bool RTC_RV3032C7::CountdownTimerFired(void);
+/**************************************************************************/
+/*!
+    @brief  Disable Periodic Countdown Timer
+    @details this function disables the Periodic Countdown Timer and in addition clears it (same as
+   clearCountdownTimer()
+*/
+/**************************************************************************/
+void RTC_RV3032C7::disableCountdownTimer(void) {
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  
+  // disable Periodic Countdown Timer 
+  ctrl1 &= ~RV3032C7_TE; // clear TE bit
+  write_register(RV3032C7_CONTROL1, ctrl1);  // write register
+
+  // disable Clock output when Periodic Countdown Timer Interrupt
+  intmask &= ~RV3032C7_CTIE; // Clear CTIE 
+  write_register(RV3032C7_INT_MASK, intmask); // write register
+  if ( (intmask & 0x1F) == 0x00) {  // No user left in clock output mask register
+     ctrl2 &= (~RV3032C7_CLKIE);             // clear CLKIE
+  }
+  
+  // clear Periodic Countdown Timer Interrupt Enable bit (TIE)
+  ctrl2 &= ~RV3032C7_TIE; // clear TIE bit
+  write_register(RV3032C7_CONTROL2, ctrl2);  // write register
+
+  clearCountdownTimer();
+  
+}
+
+/**************************************************************************/
+/*!
+    @brief  Clear status of Periodic Countdown Timer so that CountdownTimerFired() will return false
+    This also cause the INT PIN to go high (not active). If CLKOUT was activated by the timer, it will stop outputing the clock.
+*/
+/**************************************************************************/
+void RTC_RV3032C7::clearCountdownTimer(void) {
+  write_register(RV3032C7_STATUSREG, ~RV3032C7_TF); // clear Timer flag
+  // In addition we clear the CLKF flag since it can be set as well if
+  // RV3032C7_EV_IntClock
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+  if (intmask & RV3032C7_CTIE) {
+     uint8_t treg = read_register(RV3032C7_TEMPERATUREREG); // CLKF happens to be in the temperature register
+     write_register(RV3032C7_TEMPERATUREREG, treg & (~RV3032C7_CLKF));
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get status of the Periodic Countdown Timer
+        @return True if alarm has been fired otherwise false
+*/
+/**************************************************************************/
+bool RTC_RV3032C7::CountdownTimerFired(void) {
+  return (read_register(RV3032C7_STATUSREG) & RV3032C7_TF) != 0 ? true : false;  
+}
 
 /**************************************************************************/
 /*!
