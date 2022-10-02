@@ -25,6 +25,7 @@ Pcf8523OffsetMode	KEYWORD1
 Pcf8563SqwPinMode	KEYWORD1
 RV3032C7AlarmMode	KEYWORD1
 RV3032C7EventType	KEYWORD1
+RV3032C7TimerClockFreq	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -73,15 +74,20 @@ initialized	KEYWORD2
 enableSecondTimer	KEYWORD2
 disableSecondTimer	KEYWORD2
 enableCountdownTimer	KEYWORD2
+getCountdownTimer	KEYWORD2
+getCountdownTimerClock	KEYWORD2
+getCountdownTimerEventType	KEYWORD2
+clearCountdownTimer	KEYWORD2
+CountdownTimerFired	KEYWORD2
 disableCountdownTimer	KEYWORD2
 deconfigureAllTimers	KEYWORD2
 calibrate	KEYWORD2
-enable32K   KEYWORD2
-disable32K    KEYWORD2
-isEnabled32K    KEYWORD2
-enableClkOut    KEYWORD2
-disableClkOut    KEYWORD2
-isEnabledClkOut    KEYWORD2
+enable32K	KEYWORD2
+disable32K	KEYWORD2
+isEnabled32K	KEYWORD2
+enableClkOut	KEYWORD2
+disableClkOut	KEYWORD2
+isEnabledClkOut	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
