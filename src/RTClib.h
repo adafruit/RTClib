@@ -152,7 +152,10 @@ enum RV3032C7EventType {
       0x03, /**< Interrupt on INT pin + clock output on CLKOUT pin */
 };
 
-#define RV3032C7InvalidDate DateTime(2000, 5, 0x00, 0x00, 0x00)
+#define RV3032C7InvalidDate                                                    \
+  DateTime(2000, 5, 0x00, 0x00,                                                \
+           0x00) /**< Invalid date, returned by RTC_RV3032C7::getAlarm() when  \
+                    the alarm is disabled */
 
 /**************************************************************************/
 /*!
@@ -485,7 +488,7 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   DateTime now();
-  
+
   bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
                 RV3032C7EventType event_type = RV3032C7_EV_Int);
   DateTime getAlarm();
@@ -494,9 +497,10 @@ public:
   void disableAlarm(void);
   void clearAlarm(void);
   bool alarmFired(void);
-  
+
   void enableCountdownTimer();
-  void enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods, RV3032C7EventType event_type = RV3032C7_EV_Int);
+  void enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods,
+                            RV3032C7EventType event_type = RV3032C7_EV_Int);
   uint16_t getCountdownTimer();
   RV3032C7TimerClockFreq getCountdownTimerClock();
   RV3032C7EventType getCountdownTimerEventType();
