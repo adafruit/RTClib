@@ -377,7 +377,7 @@ void RTC_RV3032C7::enableCountdownTimer() {
 /*!
     @brief  Enable Periodic Countdown Timer on the RV3032C7.
         - If event_type is RV3032C7_EV_Poll the alarm status can be polled with
-   CountdownTimerFired()
+   countdownTimerFired()
         - If event_type is RV3032C7_EV_Int, in addition the INT PIN goes low
    (usually this is used to generate an interrupt)
         - If event_type is RV3032C7_EV_IntClock, in addition to the INT PIN
@@ -508,7 +508,7 @@ void RTC_RV3032C7::disableCountdownTimer(void) {
 /**************************************************************************/
 /*!
     @brief  Clear status of Periodic Countdown Timer so that
-   CountdownTimerFired() will return false
+   countdownTimerFired() will return false
     @details This also cause the INT PIN to go high (not active). If CLKOUT was
    activated by the timer, it will stop outputing the clock.
 */
@@ -532,7 +532,7 @@ void RTC_RV3032C7::clearCountdownTimer(void) {
         @return True if count has reach zero, otherwise false
 */
 /**************************************************************************/
-bool RTC_RV3032C7::CountdownTimerFired(void) {
+bool RTC_RV3032C7::countdownTimerFired(void) {
   return (read_register(RV3032C7_STATUSREG) & RV3032C7_TF) != 0 ? true : false;
 }
 

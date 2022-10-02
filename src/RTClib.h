@@ -506,7 +506,7 @@ public:
   RV3032C7EventType getCountdownTimerEventType();
   void disableCountdownTimer(void);
   void clearCountdownTimer(void);
-  bool CountdownTimerFired(void);
+  bool countdownTimerFired(void);
   void deconfigureAllTimers();
 
   void enableClkOut(void);
