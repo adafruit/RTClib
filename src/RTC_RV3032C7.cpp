@@ -369,7 +369,7 @@ bool RTC_RV3032C7::alarmFired(void) {
 /**************************************************************************/
 void RTC_RV3032C7::enableCountdownTimer() {
   uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
-  write_register(RV3032C7_CONTROL2,
+  write_register(RV3032C7_CONTROL1,
                  ctrl1 | RV3032C7_TE); // Enable Countdown Timer
 }
 
@@ -403,13 +403,13 @@ void RTC_RV3032C7::enableCountdownTimer(RV3032C7TimerClockFreq clkFreq,
   uint8_t intmask = read_register(RV3032C7_INT_MASK);
 
   ctrl1 &= ~RV3032C7_TE;                            // clear TE bit
-  write_register(RV3032C7_CONTROL2, ctrl1);         // Disable Countdown Timer
+  write_register(RV3032C7_CONTROL1, ctrl1);         // Disable Countdown Timer
   ctrl2 &= ~RV3032C7_TIE;                           // clear TIE bit
   write_register(RV3032C7_CONTROL2, ctrl2);         // Disable Timer Interrupt
   write_register(RV3032C7_STATUSREG, ~RV3032C7_TF); // clear Timer flag
 
   ctrl1 = (ctrl1 & (~RV3032C7_TD)) | (clkFreq & RV3032C7_TD);
-  write_register(RV3032C7_CONTROL2, ctrl1); // Set TD field
+  write_register(RV3032C7_CONTROL1, ctrl1); // Set TD field
   i2c_dev->write(buffer, 3);                // Write Timer Value (12 bits)
 
   if (event_type & 0x01) { // Enable Interrupt at alarm match
@@ -429,7 +429,7 @@ void RTC_RV3032C7::enableCountdownTimer(RV3032C7TimerClockFreq clkFreq,
       write_register(RV3032C7_CONTROL2, ctrl2); // write ctrl2 to register
     }
   }
-  write_register(RV3032C7_CONTROL2,
+  write_register(RV3032C7_CONTROL1,
                  ctrl1 | RV3032C7_TE); // Enable Countdown Timer
 }
 
