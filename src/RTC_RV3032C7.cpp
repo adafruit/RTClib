@@ -113,10 +113,9 @@ bool RTC_RV3032C7::begin(TwoWire *wireInstance) {
 /**************************************************************************/
 /*!
     @brief  Check the status register PORF flag to see if the RV3032C7
-   stopped due to power loss. After Power On, this function will
-   continue to return true until the time is set via adjust()
-    @return True if the oscillator stopped or false if it is
-   running without interruption since last time the time was set by adjust().
+   stopped due to power loss. 
+   @details After Power On, this function will continue to return true until the time is set via adjust()
+   @return True if the oscillator stopped or false if it is running without interruption since last time the time was set by adjust().
 */
 /**************************************************************************/
 bool RTC_RV3032C7::lostPower(void) {
@@ -127,8 +126,8 @@ bool RTC_RV3032C7::lostPower(void) {
 
 /**************************************************************************/
 /*!
-    @brief  Set the date and time. After this function returns, lostPower() will
-   return false until the next power loss
+    @brief  Set the date and time. 
+    @details After this function returns, lostPower() will return false until the next power loss
     @param dt DateTime object containing the date/time to set
 */
 /**************************************************************************/
@@ -164,7 +163,7 @@ DateTime RTC_RV3032C7::now() {
 /**************************************************************************/
 /*!
     @brief  Get the current temperature from the RV3032C7's temperature sensor.
-    The resoluton is 12 bits (corresponding to 0.0625 C)
+    @details The resoluton is 12 bits (corresponding to 0.0625 C)
     @return Current temperature (float)
 */
 /**************************************************************************/
@@ -182,6 +181,7 @@ float RTC_RV3032C7::getTemperature() {
 /**************************************************************************/
 /*!
     @brief  Set alarm for RV3032C7.
+    @details set and enable the Alarm function on the RV3032C7
         - If event_type is RV3032C7_EV_Poll the alarm status can be polled with
    alarmFired()
         - If event_type is RV3032C7_EV_Int, in addition the INT PIN goes low
@@ -238,7 +238,7 @@ bool RTC_RV3032C7::setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
     @return DateTime object with the Alarm data set in the
             day, hour, minutes, and seconds fields
 
-    At power on and after disableAlarm() returns RV3032C7InvalidDate
+    @details At power on and after disableAlarm() returns RV3032C7InvalidDate
 */
 /**************************************************************************/
 DateTime RTC_RV3032C7::getAlarm() {
@@ -319,7 +319,7 @@ void RTC_RV3032C7::disableAlarm(void) {
 /**************************************************************************/
 /*!
     @brief  Clear status of alarm so that alarmFired() will return false
-    This also cause the INT PIN to go high (not active). If CLKOUT was activated
+    @details This also cause the INT PIN to go high (not active). If CLKOUT was activated
    by the alarm, it will stop outputing the clock.
 */
 /**************************************************************************/
@@ -346,6 +346,22 @@ bool RTC_RV3032C7::alarmFired(void) {
 
 /**************************************************************************/
 /*!
+    @brief  Enable Periodic Countdown Timer on the RV3032C7. Frequency etc. will be the last one configured.
+    @details At power on and after deconfigureAllTimers() the timer is set as following:
+    - clock frequency = 4096 Hz
+    - num. periods = 0 (resulting in 4096 periods?)
+    - Event type = polling via i2c, no interrupts
+
+    The function has no effect if the timer is already enabled
+*/
+/**************************************************************************/
+void RTC_RV3032C7::enableCountdownTimer() {
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  write_register(RV3032C7_CONTROL2, ctrl1 | RV3032C7_TE); // Enable Countdown Timer
+}
+
+/**************************************************************************/
+/*!
     @brief  Enable Periodic Countdown Timer on the RV3032C7.
         - If event_type is RV3032C7_EV_Poll the alarm status can be polled with
    CountdownTimerFired()
@@ -358,7 +374,7 @@ bool RTC_RV3032C7::alarmFired(void) {
    disableCountdownTimer().
         @param clkFreq One of the RV3032C7's Periodic Countdown Timer Clock Frequencies.
          See the #RV3032C7TimerClockFreq enum for options and associated time ranges.
-        @param numPeriods The number of clkFreq periods (1-4095) to count down.
+        @param numPeriods The number of clkFreq periods (0-4095) to count down.
         @param   event_type Desired event type, see #RV3032C7EventTyp enum
 */
 /**************************************************************************/
@@ -403,8 +419,8 @@ void RTC_RV3032C7::enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t 
     @brief  Get the value of the Periodic Countdown Timer
     @return the number of clkFreq periods to count down (uint16_t). Range: 0-4095 
 
-    The preset value of the countdown timer is returned and not the actual value (which is not possible to read).
-    At power on returns 0, otherwise it will return the last value set (valid values 1-4095)
+    @details The preset value of the countdown timer is returned and not the actual value (which is not possible to read).
+    At power on returns 0, otherwise it will return the last value set (valid values 0-4095)
 */
 /**************************************************************************/
 uint16_t RTC_RV3032C7::getCountdownTimer() {
@@ -423,7 +439,6 @@ uint16_t RTC_RV3032C7::getCountdownTimer() {
 RV3032C7TimerClockFreq RTC_RV3032C7::getCountdownTimerClock() {
   uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
   return (RV3032C7TimerClockFreq) (ctrl1 & RV3032C7_TD);
-
 }
 
 /**************************************************************************/
@@ -454,36 +469,23 @@ RV3032C7EventType RTC_RV3032C7::getCountdownTimerEventType() {
     @brief  Disable Periodic Countdown Timer
     @details this function disables the Periodic Countdown Timer and in addition clears it (same as
    clearCountdownTimer()
+
 */
 /**************************************************************************/
 void RTC_RV3032C7::disableCountdownTimer(void) {
   uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
-  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
-  uint8_t intmask = read_register(RV3032C7_INT_MASK);
   
   // disable Periodic Countdown Timer 
   ctrl1 &= ~RV3032C7_TE; // clear TE bit
   write_register(RV3032C7_CONTROL1, ctrl1);  // write register
 
-  // disable Clock output when Periodic Countdown Timer Interrupt
-  intmask &= ~RV3032C7_CTIE; // Clear CTIE 
-  write_register(RV3032C7_INT_MASK, intmask); // write register
-  if ( (intmask & 0x1F) == 0x00) {  // No user left in clock output mask register
-     ctrl2 &= (~RV3032C7_CLKIE);             // clear CLKIE
-  }
-  
-  // clear Periodic Countdown Timer Interrupt Enable bit (TIE)
-  ctrl2 &= ~RV3032C7_TIE; // clear TIE bit
-  write_register(RV3032C7_CONTROL2, ctrl2);  // write register
-
   clearCountdownTimer();
-  
 }
 
 /**************************************************************************/
 /*!
     @brief  Clear status of Periodic Countdown Timer so that CountdownTimerFired() will return false
-    This also cause the INT PIN to go high (not active). If CLKOUT was activated by the timer, it will stop outputing the clock.
+    @details This also cause the INT PIN to go high (not active). If CLKOUT was activated by the timer, it will stop outputing the clock.
 */
 /**************************************************************************/
 void RTC_RV3032C7::clearCountdownTimer(void) {
@@ -500,11 +502,47 @@ void RTC_RV3032C7::clearCountdownTimer(void) {
 /**************************************************************************/
 /*!
     @brief  Get status of the Periodic Countdown Timer
-        @return True if alarm has been fired otherwise false
+        @return True if count has reach zero, otherwise false
 */
 /**************************************************************************/
 bool RTC_RV3032C7::CountdownTimerFired(void) {
   return (read_register(RV3032C7_STATUSREG) & RV3032C7_TF) != 0 ? true : false;  
+}
+
+/**************************************************************************/
+/*!
+    @brief  Stop all timers, clears their flags and settings on the RV3032C7.
+    @details This includes the Countdown Timer, Timer 2, and any
+   square wave configured with enableClkOut().
+   
+   Tipically this function is called at startup, to ensure the timers have a known state (since the state of the timer is preserved when backup power is used).
+   
+   Note: Currently the Timer 2 is not implemented (will be implemented using the periodic time update interrupt function)
+*/
+/**************************************************************************/
+void RTC_RV3032C7::deconfigureAllTimers() {
+  uint8_t ctrl1 = read_register(RV3032C7_CONTROL1);
+  uint8_t ctrl2 = read_register(RV3032C7_CONTROL2);
+  uint8_t intmask = read_register(RV3032C7_INT_MASK);
+
+  // disable Periodic Countdown Timer 
+  ctrl1 &= ~RV3032C7_TE; // clear TE bit
+  write_register(RV3032C7_CONTROL1, ctrl1);  // write register
+  // disable Clock output when Periodic Countdown Timer Interrupt
+  intmask &= ~RV3032C7_CTIE; // Clear CTIE 
+  write_register(RV3032C7_INT_MASK, intmask); // write register
+  // clear Periodic Countdown Timer Interrupt Enable bit (TIE)
+  ctrl2 &= ~RV3032C7_TIE; // clear TIE bit
+  write_register(RV3032C7_CONTROL2, ctrl2);  // write register
+  clearCountdownTimer();
+
+  // disable Clock Output 
+  RTC_RV3032C7::disableClkOut();
+
+  //clear CLKIE if no users left in clock output mask register    
+  if ( (intmask & 0x1F) == 0x00) {  // If no user left 
+     ctrl2 &= (~RV3032C7_CLKIE);    // clear CLKIE
+  }
 }
 
 /**************************************************************************/

@@ -495,6 +495,7 @@ public:
   void clearAlarm(void);
   bool alarmFired(void);
   
+  void enableCountdownTimer();
   void enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods, RV3032C7EventType event_type = RV3032C7_EV_Int);
   uint16_t getCountdownTimer();
   RV3032C7TimerClockFreq getCountdownTimerClock();
@@ -502,6 +503,7 @@ public:
   void disableCountdownTimer(void);
   void clearCountdownTimer(void);
   bool CountdownTimerFired(void);
+  void deconfigureAllTimers();
 
   void enableClkOut(void);
   void disableClkOut(void);
