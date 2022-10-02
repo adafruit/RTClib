@@ -140,8 +140,8 @@ enum RV3032C7AlarmMode {
 enum RV3032C7TimerClockFreq {
   RV3032C7_Frequency4096Hz = 0x00,   /**< 4096 Hz */
   RV3032C7_Frequency64Hz = 0x01,     /**< 64 Hz */
-  RV3032C7_FrequencySeconds = 0x02,  /**<  T=1s or 1 Hz */
-  RV3032C7_CFrequencyMinutes = 0x03, /**<  T=60s or 1/60 Hz */
+  RV3032C7_FrequencySecond = 0x02,  /**<  T=1s or 1 Hz */
+  RV3032C7_FrequencyMinute = 0x03, /**<  T=60s or 1/60 Hz */
 };
 
 /** RV3032C7 Event type */
