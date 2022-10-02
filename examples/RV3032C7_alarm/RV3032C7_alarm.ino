@@ -24,7 +24,7 @@ void setup() {
         while (1) delay(10);
     }
 
-    if(rtc.lostPower()) {
+    if (rtc.lostPower()) {
         // this will adjust to the date and time at compilation
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     }
