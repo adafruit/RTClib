@@ -100,7 +100,7 @@ void setup() {
   // Set the alarm to trigger in 2 Minutes using a DateTime object
   // The alarm will be triggered on exact match, so when the minutes,
   // hours, day of the month and day of the week the alarm time.
-  alarm = DateTime(compileTime + TimeSpan(timeSpan));
+  alarm = compileTime + TimeSpan(timeSpan);
 
   rtc.enableAlarm(alarm, /* minute_alarm */ true,
                   /* hour_alarm */ true, /* day_alarm */ true,
@@ -133,7 +133,7 @@ void loop() {
     printDateTime(rtc.now());
 
     timeSpan *= 2;
-    alarm = DateTime(rtc.now() + TimeSpan(timeSpan));
+    alarm = rtc.now() + TimeSpan(timeSpan);
     rtc.enableAlarm(alarm, /* minute_alarm */ true,
                     /* hour_alarm */ true, /* day_alarm */ true,
                     /* weekday_alarm*/ true);
