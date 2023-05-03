@@ -111,7 +111,7 @@ void setup() {
   Serial.println();
 
   Serial.print(F("Waiting for initial alarm interrupt at: "));
-  printDateTime(alarm);
+  printDateTime(testAlarm);
   Serial.println();
 
   Serial.println(F("=> The inital Interrupt will be triggered in ~2 Minutes! "
@@ -152,7 +152,7 @@ void loop() {
     Serial.println();
     Serial.println("Alarm should already been triggered:");
     printDateTime(rtc.now(), "Now:   ");
-    printDateTime(alarm, "Alarm: ");
+    printDateTime(testAlarm, "Alarm: ");
     Serial.println(
         F("=> This should not happen, check the alarm settings and wiring!"));
     while (1) {
