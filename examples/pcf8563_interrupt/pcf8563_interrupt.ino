@@ -34,7 +34,7 @@ volatile int numCountdownInterrupts = 0;
 
 // Triggered by the PCF8563 Countdown Timer interrupt at the end of a countdown
 // period. Meanwhile, the PCF8563 immediately starts the countdown again.
-void IRAM_ATTR countdownOver() {
+void countdownOver() {
   // Set a flag to run code in the loop():
   Serial.println("ISR");
   countdownInterruptTriggered = true;
@@ -43,7 +43,7 @@ void IRAM_ATTR countdownOver() {
 }
 
 // Triggered by normal operation of timer INT pin
-void IRAM_ATTR toggleLed() {
+void toggleLed() {
   // Run certain types of fast executing code here:
   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   // The clearTimer() function is called to reset the timer Flag
@@ -51,7 +51,7 @@ void IRAM_ATTR toggleLed() {
 }
 
 // Triggered by TI_TP mode of timer INT pin
-void IRAM_ATTR pulsedToggleLed() {
+void pulsedToggleLed() {
   // Run certain types of fast executing code here:
   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   // As we are using the TI_TP mode, the clearTimer() function is not called

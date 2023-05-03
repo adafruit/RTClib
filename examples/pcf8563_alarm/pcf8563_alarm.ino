@@ -21,7 +21,7 @@ uint32_t timeSpan = 120;
 
 // Triggered by the PCF8563 Countdown Timer interrupt at the end of a countdown
 // period. Meanwhile, the PCF8563 immediately starts the countdown again.
-void IRAM_ATTR isrCheckAlarm() {
+void isrCheckAlarm() {
   // Set a flag to run code in the loop():
   // Check if the interrupt was triggered by the alarm
   // When using the alarm and the timer, the interrupt could be triggered by
