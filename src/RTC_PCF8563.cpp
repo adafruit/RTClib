@@ -306,8 +306,6 @@ void RTC_PCF8563::enableAlarm(uint8_t minute, uint8_t hour, uint8_t day,
   write_register(PCF8563_CONTROL_2, ctlreg | 0x02);
 }
 
-uint8_t RTC_PCF8563::readByte(uint8_t reg) { return read_register(reg); }
-
 /**************************************************************************/
 /*!
     @brief  Disable the Alarm Interrupt on the PCF8563.

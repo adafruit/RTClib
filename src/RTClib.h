@@ -477,8 +477,6 @@ public:
   void disableAlarm(void);
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
-  // for testing
-  uint8_t readByte(uint8_t reg);
 };
 
 /**************************************************************************/
