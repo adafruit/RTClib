@@ -124,6 +124,29 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** PCF8563 Timer Source Clock Frequencies */
+enum Pcf8563TimerClockFreq {
+  PCF8563_TimerFrequency4kHz = 0x00, /**< 4096 Hz */
+  PCF8563_TimerFrequency64Hz =
+      0x01, /**<   64 Hz, resolution of 1/64ths, up to 3.98s */
+  PCF8563_TimerFrequencySecond =
+      0x02, /**<    1 Hz, resolution of 1s, up to 255s */
+  PCF8563_TimerFrequencyMinute =
+      0x03, /**< 1/60 Hz, resolution of 1min, up to 255min */
+};
+
+/** PCF8563 Timer Source Clock Frequencies */
+enum Pcf8563WeekdayAlarm {
+  PCF8563_WeekdayAlarmSunday = 0x00,    /**< Alarm on Every Sunday */
+  PCF8563_WeekdayAlarmMonday = 0x01,    /**< Alarm on Every Monday */
+  PCF8563_WeekdayAlarmTuesday = 0x02,   /**< Alarm on Every Tuesday */
+  PCF8563_WeekdayAlarmWednesday = 0x03, /**< Alarm on Every Wednesday */
+  PCF8563_WeekdayAlarmThursday = 0x04,  /**< Alarm on Every Thursday */
+  PCF8563_WeekdayAlarmFriday = 0x05,    /**< Alarm on Every Friday */
+  PCF8563_WeekdayAlarmSaturday = 0x06,  /**< Alarm on Every Saturday */
+  PCF8563_WeekdayAlarmDisable = 0x80    /**< Alarm on Every Date */
+};
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -439,8 +462,23 @@ public:
   void start(void);
   void stop(void);
   uint8_t isrunning();
+  bool timerFired();
+  bool alarmFired();
+  void clearTimer();
+  void clearAlarm();
+  void enableTimer(Pcf8563TimerClockFreq clkFreq, uint8_t numPeriods,
+                   bool pulse);
+  void enableTimer(Pcf8563TimerClockFreq clkFreq, uint8_t numPeriods);
+  void disableTimer(void);
+  void enableAlarm(const DateTime &dt_alarm, bool minute_alarm, bool hour_alarm,
+                   bool day_alarm, bool weekday_alarm);
+  void enableAlarm(uint8_t minute, uint8_t hour, uint8_t day,
+                   Pcf8563WeekdayAlarm weekday);
+  void disableAlarm(void);
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
+  // for testing
+  uint8_t readByte(uint8_t reg);
 };
 
 /**************************************************************************/
