@@ -16,7 +16,7 @@ const int timerInterruptPin = 13; // ESP12F
 // Variables modified during an interrupt must be declared volatile
 volatile bool alarmTriggered = false;
 
-DateTime alarm = DateTime();
+DateTime testAlarm = DateTime();
 uint32_t timeSpan = 120;
 
 // Triggered by the PCF8563 Countdown Timer interrupt at the end of a countdown
@@ -100,9 +100,9 @@ void setup() {
   // Set the alarm to trigger in 2 Minutes using a DateTime object
   // The alarm will be triggered on exact match, so when the minutes,
   // hours, day of the month and day of the week the alarm time.
-  alarm = compileTime + TimeSpan(timeSpan);
+  testAlarm = compileTime + TimeSpan(timeSpan);
 
-  rtc.enableAlarm(alarm, /* minute_alarm */ true,
+  rtc.enableAlarm(testAlarm, /* minute_alarm */ true,
                   /* hour_alarm */ true, /* day_alarm */ true,
                   /* weekday_alarm*/ true);
 
@@ -133,12 +133,12 @@ void loop() {
     printDateTime(rtc.now());
 
     timeSpan *= 2;
-    alarm = rtc.now() + TimeSpan(timeSpan);
-    rtc.enableAlarm(alarm, /* minute_alarm */ true,
+    testAlarm = rtc.now() + TimeSpan(timeSpan);
+    rtc.enableAlarm(testAlarm, /* minute_alarm */ true,
                     /* hour_alarm */ true, /* day_alarm */ true,
                     /* weekday_alarm*/ true);
     Serial.print(F("Set new Alarm to "));
-    printDateTime(alarm);
+    printDateTime(testAlarm);
     Serial.println();
     alarmTriggered = false;
   } else {
@@ -148,7 +148,7 @@ void loop() {
   // Exit condition to double check the Alarm
   // A 10 second buffer is added to the alarm to account
   // for the time it takes to print the output.
-  if (rtc.now() > alarm + TimeSpan(10)) {
+  if (rtc.now() > testAlarm + TimeSpan(10)) {
     Serial.println();
     Serial.println("Alarm should already been triggered:");
     printDateTime(rtc.now(), "Now:   ");
