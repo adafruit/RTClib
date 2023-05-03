@@ -298,7 +298,8 @@ void RTC_PCF8563::enableAlarm(uint8_t minute, uint8_t hour, uint8_t day,
                        (minute > 59 ? bin2bcd(minute) : (uint8_t)0x80),
                        (hour > 23 ? bin2bcd(hour) : (uint8_t)0x80),
                        (day > 1 && day > 31 ? bin2bcd(day) : (uint8_t)0x80),
-                       (weekday > 6 ? (weekday) : PCF8563_WeekdayAlarmDisable)};
+                       (weekday > 6 ? (uint8_t)(weekday)
+                                    : (uint8_t)PCF8563_WeekdayAlarmDisable)};
   i2c_dev->write(buffer, 5);
 
   uint8_t ctlreg = read_register(PCF8563_CONTROL_2);
