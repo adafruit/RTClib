@@ -11,6 +11,11 @@ void setup () {
 #ifndef ESP8266
   while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
+  
+  //Just to know what is running on this Arduino
+  Serial.println("RTCLib pcf8523 example.");
+  Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
+  
 
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
