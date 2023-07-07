@@ -61,7 +61,8 @@ String monthsNames[] = {
 
 void setup() {
   Serial.begin(57600);
-  Serial.println("start");
+  Serial.println("RTCLib DS3231onSAMD21 example.");
+  Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
   
   unsigned long setupStartTime = millis();
   /*** Waiting for Serial to be ready or timeout ***/
