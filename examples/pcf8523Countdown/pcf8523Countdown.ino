@@ -39,6 +39,8 @@ void setup () {
   while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
 
+ 
+
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
@@ -52,6 +54,8 @@ void setup () {
   // countdown period, then it will be released to be pulled HIGH again.
   pinMode(timerInterruptPin, INPUT_PULLUP);
 
+   //Just to know what is running on this Arduino
+  Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
   Serial.println(F("\nStarting PCF8523 Countdown Timer example."));
   Serial.print(F("Configured to expect PCF8523 INT/SQW pin connected to input pin: "));
   Serial.println(timerInterruptPin);
