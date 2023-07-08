@@ -17,7 +17,7 @@ RTC_DS3231 rtc;
 void setup() {
     Serial.begin(9600);
     Serial.println("RTCLib DS3231_alarm example.");
-    Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
+    Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and compilation date.
     // Initializing the RTC.
     if(!rtc.begin()) {
         Serial.println("Couldn't find RTC!");
