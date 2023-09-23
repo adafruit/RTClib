@@ -124,6 +124,14 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** PCF8563 CLKOUT pin mode settings */
+enum Pcf8563AlarmRegister {
+  PCF8523_ALARM_MINUTE =  0x0A,  ///< Minute Alarm register
+  PCF8523_ALARM_HOUR =  0x0B,    ///< Hour Alarm register
+  PCF8523_ALARM_DAY =  0x0C,     ///< Day Alarm register
+  PCF8523_ALARM_WEEKDAY =  0x0D, ///< WeekDay Alarm register
+};
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -409,9 +417,19 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   bool initialized(void);
+  bool is_alarm_fired(void);
+  bool is_any_alarm_setup(void);
   DateTime now();
+  void upgrade_osci_capa_to_12pf5();
   void start(void);
   void stop(void);
+  void reset(void);
+  void set_battery_switch_over(uint8_t battery_switch_over_value);
+  void set_alarm_value_for_register(Pcf8563AlarmRegister the_register,uint8_t the_value);
+  uint8_t get_alarm_value_for_register(Pcf8563AlarmRegister the_register);
+  void enable_alarm();
+  void clear_alarm();
+  void disable_alarm();
   uint8_t isrunning();
   Pcf8523SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
