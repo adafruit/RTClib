@@ -58,23 +58,24 @@ bool RTC_PCF8523::initialized(void) {
 */
 /**************************************************************************/
 
-void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,uint8_t the_value) {
-  //set the value and enable the AEN_X (enabled with 0 value)
-  switch(the_register){
-    case PCF8523_ALARM_MINUTE:
-      write_register(the_register,bin2bcd((the_value%60) & 0x7F));
-      break;
-    case PCF8523_ALARM_HOUR:
-      write_register(the_register,bin2bcd((the_value%24) & 0x7F));
-      break;
-    case PCF8523_ALARM_DAY:
-      write_register(the_register,bin2bcd((the_value%32) & 0x7F));
-      break;
-    case PCF8523_ALARM_WEEKDAY:
-      write_register(the_register,bin2bcd((the_value%8) & 0x7F));
-      break;
-    default:
-      break;
+void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,
+                                           uint8_t the_value) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    write_register(the_register, bin2bcd((the_value % 60) & 0x7F));
+    break;
+  case PCF8523_ALARM_HOUR:
+    write_register(the_register, bin2bcd((the_value % 24) & 0x7F));
+    break;
+  case PCF8523_ALARM_DAY:
+    write_register(the_register, bin2bcd((the_value % 32) & 0x7F));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    write_register(the_register, bin2bcd((the_value % 8) & 0x7F));
+    break;
+  default:
+    break;
   }
 }
 
@@ -84,23 +85,24 @@ void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,uin
 */
 /**************************************************************************/
 
-uint8_t RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register) {
-  //set the value and enable the AEN_X (enabled with 0 value)
-  switch(the_register){
-    case PCF8523_ALARM_MINUTE:
-      return bcd2bin(read_register(the_register));
-      break;
-    case PCF8523_ALARM_HOUR:
-      return bcd2bin(read_register(the_register));
-      break;
-    case PCF8523_ALARM_DAY:
-      return bcd2bin(read_register(the_register));
-      break;
-    case PCF8523_ALARM_WEEKDAY:
-      return bcd2bin(read_register(the_register));
-      break;
-    default:
-      break;
+uint8_t
+RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_HOUR:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_DAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  default:
+    break;
   }
   return 0xFF;
 }
@@ -113,8 +115,7 @@ uint8_t RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register)
 
 void RTC_PCF8523::upgradeOsciCapaTo12pf5() {
   write_register(PCF8523_CONTROL_1,
-    read_register(PCF8523_CONTROL_1) | (1 << 7));//Enable CAP_SEL
-  
+                 read_register(PCF8523_CONTROL_1) | (1 << 7)); // Enable CAP_SEL
 }
 
 /**************************************************************************/
@@ -125,8 +126,7 @@ void RTC_PCF8523::upgradeOsciCapaTo12pf5() {
 
 void RTC_PCF8523::enableAlarm() {
   write_register(PCF8523_CONTROL_1,
-    read_register(PCF8523_CONTROL_1) | (1 << 1));//Enable AIE
-  
+                 read_register(PCF8523_CONTROL_1) | (1 << 1)); // Enable AIE
 }
 
 /**************************************************************************/
@@ -136,7 +136,7 @@ void RTC_PCF8523::enableAlarm() {
 /**************************************************************************/
 
 bool RTC_PCF8523::isAlarmFired(void) {
-  return (read_register(PCF8523_CONTROL_2) & (1 << 3));//Check AF
+  return (read_register(PCF8523_CONTROL_2) & (1 << 3)); // Check AF
 }
 
 /**************************************************************************/
@@ -147,7 +147,7 @@ bool RTC_PCF8523::isAlarmFired(void) {
 
 void RTC_PCF8523::clearAlarm() {
   write_register(PCF8523_CONTROL_2,
-    read_register(PCF8523_CONTROL_2) & ~(1 << 3));//Clear AF
+                 read_register(PCF8523_CONTROL_2) & ~(1 << 3)); // Clear AF
 }
 
 /**************************************************************************/
@@ -158,11 +158,11 @@ void RTC_PCF8523::clearAlarm() {
 
 void RTC_PCF8523::disableAlarm() {
   write_register(PCF8523_CONTROL_1,
-    read_register(PCF8523_CONTROL_1) & ~(1 << 1));//Disable AIE
-  write_register(PCF8523_ALARM_MINUTE,0x80);
-  write_register(PCF8523_ALARM_HOUR,0x80);
-  write_register(PCF8523_ALARM_DAY,0x80);
-  write_register(PCF8523_ALARM_WEEKDAY,0x80);
+                 read_register(PCF8523_CONTROL_1) & ~(1 << 1)); // Disable AIE
+  write_register(PCF8523_ALARM_MINUTE, 0x80);
+  write_register(PCF8523_ALARM_HOUR, 0x80);
+  write_register(PCF8523_ALARM_DAY, 0x80);
+  write_register(PCF8523_ALARM_WEEKDAY, 0x80);
 }
 
 /**************************************************************************/
@@ -172,7 +172,7 @@ void RTC_PCF8523::disableAlarm() {
 /**************************************************************************/
 
 bool RTC_PCF8523::isAnyAlarmSetup(void) {
-  if(read_register(PCF8523_CONTROL_1) & (1<<1)){
+  if (read_register(PCF8523_CONTROL_1) & (1 << 1)) {
     return true;
   }
   return false;
@@ -184,7 +184,7 @@ bool RTC_PCF8523::isAnyAlarmSetup(void) {
 */
 /**************************************************************************/
 void RTC_PCF8523::setBatterySwitchOver(uint8_t battery_switch_over_value) {
-  write_register(PCF8523_CONTROL_3,battery_switch_over_value);
+  write_register(PCF8523_CONTROL_3, battery_switch_over_value);
 }
 
 /**************************************************************************/
@@ -250,9 +250,7 @@ void RTC_PCF8523::stop(void) {
     @brief  Reset RTC sending 0x58 in register Control_1
 */
 /**************************************************************************/
-void RTC_PCF8523::reset(void) {
-  write_register(PCF8523_CONTROL_1,0x58);
-}
+void RTC_PCF8523::reset(void) { write_register(PCF8523_CONTROL_1, 0x58); }
 
 /**************************************************************************/
 /*!
