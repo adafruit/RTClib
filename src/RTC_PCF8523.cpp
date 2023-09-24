@@ -202,16 +202,6 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
                        bin2bcd(0), // skip weekdays
                        bin2bcd(dt.month()),
                        bin2bcd(dt.year() - 2000U)};
-
-#ifdef DEBUG_RTCLIB
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",3,buffer[1]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",4,buffer[2]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",5,buffer[3]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",6,buffer[4]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",7,buffer[5]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",8,buffer[6]);
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",9,buffer[7]);
-#endif /* DEBUG_RTCLIB */
   i2c_dev->write(buffer, 8);
 
   // set to battery switchover mode

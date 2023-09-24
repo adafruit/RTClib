@@ -65,9 +65,6 @@
 /**************************************************************************/
 void RTC_I2C::write_register(uint8_t reg, uint8_t val) {
   uint8_t buffer[2] = {reg, val};
-#ifdef DEBUG_RTCLIB
-  DEBUG_RTCLIB.printf("I2C_W(0x%02X,0x%02X)\n",reg,val);
-#endif /* DEBUG_RTCLIB */
   i2c_dev->write(buffer, 2);
 }
 
@@ -82,9 +79,6 @@ uint8_t RTC_I2C::read_register(uint8_t reg) {
   uint8_t buffer[1];
   i2c_dev->write(&reg, 1);
   i2c_dev->read(buffer, 1);
-#ifdef DEBUG_RTCLIB
-  DEBUG_RTCLIB.printf("I2C_R(0x%02X)=0x%02X\n",reg,buffer[0]);
-#endif /* DEBUG_RTCLIB */
   return buffer[0];
 }
 
