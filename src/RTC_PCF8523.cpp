@@ -58,7 +58,7 @@ bool RTC_PCF8523::initialized(void) {
 */
 /**************************************************************************/
 
-void RTC_PCF8523::set_alarm_value_for_register(Pcf8563AlarmRegister the_register,uint8_t the_value) {
+void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,uint8_t the_value) {
   //set the value and enable the AEN_X (enabled with 0 value)
   switch(the_register){
     case PCF8523_ALARM_MINUTE:
@@ -84,7 +84,7 @@ void RTC_PCF8523::set_alarm_value_for_register(Pcf8563AlarmRegister the_register
 */
 /**************************************************************************/
 
-uint8_t RTC_PCF8523::get_alarm_value_for_register(Pcf8563AlarmRegister the_register) {
+uint8_t RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register) {
   //set the value and enable the AEN_X (enabled with 0 value)
   switch(the_register){
     case PCF8523_ALARM_MINUTE:
@@ -111,7 +111,7 @@ uint8_t RTC_PCF8523::get_alarm_value_for_register(Pcf8563AlarmRegister the_regis
 */
 /**************************************************************************/
 
-void RTC_PCF8523::upgrade_osci_capa_to_12pf5() {
+void RTC_PCF8523::upgradeOsciCapaTo12pf5() {
   write_register(PCF8523_CONTROL_1,
     read_register(PCF8523_CONTROL_1) | (1 << 7));//Enable CAP_SEL
   
@@ -119,11 +119,11 @@ void RTC_PCF8523::upgrade_osci_capa_to_12pf5() {
 
 /**************************************************************************/
 /*!
-    @brief  Enable Alarm based on previous set_alarm_value_for_register call
+    @brief  Enable Alarm based on previous setAlarmValueForRegister call
 */
 /**************************************************************************/
 
-void RTC_PCF8523::enable_alarm() {
+void RTC_PCF8523::enableAlarm() {
   write_register(PCF8523_CONTROL_1,
     read_register(PCF8523_CONTROL_1) | (1 << 1));//Enable AIE
   
@@ -135,8 +135,8 @@ void RTC_PCF8523::enable_alarm() {
 */
 /**************************************************************************/
 
-bool RTC_PCF8523::is_alarm_fired(void) {
-  return (read_register(PCF8523_CONTROL_2) && (1 << 3));//Check AF
+bool RTC_PCF8523::isAlarmFired(void) {
+  return (read_register(PCF8523_CONTROL_2) & (1 << 3));//Check AF
 }
 
 /**************************************************************************/
@@ -145,7 +145,7 @@ bool RTC_PCF8523::is_alarm_fired(void) {
 */
 /**************************************************************************/
 
-void RTC_PCF8523::clear_alarm() {
+void RTC_PCF8523::clearAlarm() {
   write_register(PCF8523_CONTROL_2,
     read_register(PCF8523_CONTROL_2) & ~(1 << 3));//Clear AF
 }
@@ -156,9 +156,7 @@ void RTC_PCF8523::clear_alarm() {
 */
 /**************************************************************************/
 
-void RTC_PCF8523::disable_alarm() {
-  //write_register(PCF8523_CONTROL_1,
-  //  read_register(PCF8523_CONTROL_1) & 0xFD);//Disable AIE
+void RTC_PCF8523::disableAlarm() {
   write_register(PCF8523_CONTROL_1,
     read_register(PCF8523_CONTROL_1) & ~(1 << 1));//Disable AIE
   write_register(PCF8523_ALARM_MINUTE,0x80);
@@ -173,8 +171,8 @@ void RTC_PCF8523::disable_alarm() {
 */
 /**************************************************************************/
 
-bool RTC_PCF8523::is_any_alarm_setup(void) {
-  if(read_register(PCF8523_CONTROL_1) && (1<<1)){
+bool RTC_PCF8523::isAnyAlarmSetup(void) {
+  if(read_register(PCF8523_CONTROL_1) & (1<<1)){
     return true;
   }
   return false;
@@ -185,7 +183,7 @@ bool RTC_PCF8523::is_any_alarm_setup(void) {
     @brief  Set RTC battery switch-over mode in register Control_3
 */
 /**************************************************************************/
-void RTC_PCF8523::set_battery_switch_over(uint8_t battery_switch_over_value) {
+void RTC_PCF8523::setBatterySwitchOver(uint8_t battery_switch_over_value) {
   write_register(PCF8523_CONTROL_3,battery_switch_over_value);
 }
 
@@ -217,7 +215,7 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
   i2c_dev->write(buffer, 8);
 
   // set to battery switchover mode
-  set_battery_switch_over(0x00);
+  setBatterySwitchOver(0x00);
 }
 
 /**************************************************************************/
