@@ -45,7 +45,7 @@ bool RTC_PCF8523::lostPower(void) {
 /*!
     @brief  Check control register 3 to see if we've run adjust() yet (setting
    the date/time and battery switchover mode)
-    @return True if the PCF8523 has been set up, false if not
+    @return 1 if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
 bool RTC_PCF8523::initialized(void) {
@@ -55,6 +55,8 @@ bool RTC_PCF8523::initialized(void) {
 /**************************************************************************/
 /*!
     @brief  Set RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @param the_value The Alarm register value
 */
 /**************************************************************************/
 
@@ -82,6 +84,8 @@ void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,
 /**************************************************************************/
 /*!
     @brief  Get RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @return The value for the requested Alarm register
 */
 /**************************************************************************/
 
@@ -132,6 +136,7 @@ void RTC_PCF8523::enableAlarm() {
 /**************************************************************************/
 /*!
     @brief  Check Alarm fired
+    @return 1 if an alarm fired
 */
 /**************************************************************************/
 
@@ -168,6 +173,7 @@ void RTC_PCF8523::disableAlarm() {
 /**************************************************************************/
 /*!
     @brief  Ask if any Alarm is setup
+    @return true if an alarm is setup
 */
 /**************************************************************************/
 
@@ -181,6 +187,7 @@ bool RTC_PCF8523::isAnyAlarmSetup(void) {
 /**************************************************************************/
 /*!
     @brief  Set RTC battery switch-over mode in register Control_3
+    @param battery_switch_over_value The value for battery switch over register
 */
 /**************************************************************************/
 void RTC_PCF8523::setBatterySwitchOver(uint8_t battery_switch_over_value) {
