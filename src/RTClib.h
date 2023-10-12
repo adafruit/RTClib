@@ -353,6 +353,7 @@ public:
   bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
   uint8_t isrunning(void);
+  void halt(bool halt);
   DateTime now();
   Ds1307SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Ds1307SqwPinMode mode);

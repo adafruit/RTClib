@@ -3,6 +3,7 @@
 #define DS1307_ADDRESS 0x68 ///< I2C address for DS1307
 #define DS1307_CONTROL 0x07 ///< Control register
 #define DS1307_NVRAM 0x08   ///< Start of RAM registers - 56 bytes, 0x08 to 0x3f
+#define DS1307_HALT 0x80
 
 /**************************************************************************/
 /*!
@@ -27,6 +28,22 @@ bool RTC_DS1307::begin(TwoWire *wireInstance) {
 */
 /**************************************************************************/
 uint8_t RTC_DS1307::isrunning(void) { return !(read_register(0) >> 7); }
+
+/**************************************************************************/
+/*!
+    @brief  Set DS1307 halt state
+    @param halt set halt to specified value
+*/
+/**************************************************************************/
+void RTC_DS1307::halt(bool halt) {
+  uint8_t reg = read_register(0);
+  if (halt) {
+    reg |= DS1307_HALT;
+  } else {
+    reg &= ~DS1307_HALT;
+  }
+  write_register(0, reg);
+}
 
 /**************************************************************************/
 /*!
