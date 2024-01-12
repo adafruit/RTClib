@@ -423,6 +423,10 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+  int8_t readOffsetReg();
+  String getOffsetMode();  
+  int8_t getOffset();
+
 };
 
 /**************************************************************************/
