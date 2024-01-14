@@ -75,6 +75,15 @@ void setup() {
   Serial.print("Calculated Offset for calibration is: ");
   Serial.println(offset);  // Print to control calculated offset
 
+  // In order to provide a method of reading the offset register, which may contain an previous calibration
+  // two methods are provided; 1. rtc.readOffsetReg(), or 2. rtc.getOffsetMode() and rtc.getOffset()
+  // Hint:
+  // 	Once the calibration Offset mode and Offset are known a line can be entered in the setup of the operating project sketch
+  // 	to re-establish the offset register after a battery replacement or clock reset. Note that your sketch will still require a method
+  // 	to insert the actual date and time.
+  // 	In the case of the above sample the line to insert in setup() would be:
+  //   	rtc.calibrate(PCF8523_TwoHours, 16); // re-insert previously calculated calibration after clock reset.
+
   // read offset register  *******************************
   Serial.println("Read RTC PCF8523 Offset Register");  // Print to control offset
 
