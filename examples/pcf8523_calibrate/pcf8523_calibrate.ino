@@ -88,7 +88,7 @@ void setup() {
   Serial.println("Read RTC PCF8523 Offset Register");  // Print to control offset
 
   // Method 1 ****************************
-  int8_t OffsetReg = rtc.readOffsetReg();
+  uint8_t OffsetReg = rtc.readOffsetReg();
   Serial.print("Offset mode is: ");
   if bitRead (OffsetReg, 7) {
     Serial.println("PCF8523_OneMinute");
