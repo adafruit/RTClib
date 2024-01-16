@@ -323,7 +323,7 @@ String RTC_PCF8523::getOffsetMode() {
 /*!
     @brief read the offset register
     @details The offset parameter is held in bits 0 to 6 as a signed 7bit integer
-    bit 6 needs to be copied to bit 7 to convert to a signed 8bit integer
+      bit 6 needs to be copied to bit 7 to convert to a signed 8bit integer
     @return offset
 */
 /**************************************************************************/
