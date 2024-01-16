@@ -1,4 +1,6 @@
-// Date and time functions using a PCF8523 RTC connected via I2C and Wire lib
+// Functions to calibrate a PCF8523 RTC connected via I2C and Wire lib
+// Functions to check the calibration once written or
+// to check an unknown possible previous calibration
 #include "RTClib.h"
 
 RTC_PCF8523 rtc;
@@ -88,27 +90,35 @@ void setup() {
   Serial.println("Read RTC PCF8523 Offset Register");  // Print to control offset
 
   // Method 1 ****************************
-  uint8_t OffsetReg = rtc.readOffsetReg();
+  // Read offset register and interpret the result
+  Serial.println("Method 1");
+  uint8_t OffsetReg = rtc.readOffsetReg();  // get raw data
   Serial.print("Offset mode is: ");
-  if bitRead (OffsetReg, 7) {
+  if (bitRead(OffsetReg, 7)) {  // if bit 7 is 0b1
     Serial.println("PCF8523_OneMinute");
-  } else {
+  } else {  // bit 7 is 0b0
     Serial.println("PCF8523_TwoHours ");
   }
   offset = OffsetReg;
+  // The offset parameter is held in bits 0 to 6 as a signed 7bit integer
+  // bit 6 needs to be copied to bit 7 to convert to a signed 8bit integer
   bitWrite(offset, 7, bitRead(OffsetReg, 6));
   Serial.print("Offset is: ");
   Serial.println(offset);  // Print to control offset
+  Serial.println();
 
   // Method 2 ****************************
-  String OffsetMode = String(rtc.getOffsetMode());
+  // Obtain and output Offset Mode
+  Serial.println("Method 2");
   Serial.print("Offset mode is: ");
-  Serial.println(OffsetMode);
+  Serial.println(rtc.getOffsetMode());  // Print to control Offset Mode
 
-  offset = rtc.getOffset();
+  // offset = rtc.getOffset();
+  //  Obtain and output Offset value -64 to +63
   Serial.print("Offset is: ");
-  Serial.println(offset);  // Print to control offset
-                           // End read offset register  *******************************
+  Serial.println(rtc.getOffset());  // Print to control offset
+  Serial.println();
+  // End read offset register  *******************************
 
   DateTime now = rtc.now();
 
