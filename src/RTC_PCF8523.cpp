@@ -1,14 +1,21 @@
 #include "RTClib.h"
 
-#define PCF8523_ADDRESS 0x68       ///< I2C address for PCF8523
-#define PCF8523_CLKOUTCONTROL 0x0F ///< Timer and CLKOUT control register
-#define PCF8523_CONTROL_1 0x00     ///< Control and status register 1
-#define PCF8523_CONTROL_2 0x01     ///< Control and status register 2
-#define PCF8523_CONTROL_3 0x02     ///< Control and status register 3
+#define PCF8523_ADDRESS 0x68           ///< I2C address for PCF8523
+#define PCF8523_CLKOUTCONTROL 0x0F     ///< Timer and CLKOUT control register
+#define PCF8523_CONTROL_1 0x00         ///< Control and status register 1
+#define PCF8523_CONTROL_2 0x01         ///< Control and status register 2
+#define PCF8523_CONTROL_3 0x02         ///< Control and status register 3
+#define PCF8523_ALARM_REG 0x0A         ///< Alarm register
+#define PCF8523_ALARM_WEEKDAY_REG 0x0D ///< Alarm Weekday register
 #define PCF8523_TIMER_B_FRCTL 0x12 ///< Timer B source clock frequency control
 #define PCF8523_TIMER_B_VALUE 0x13 ///< Timer B value (number clock periods)
 #define PCF8523_OFFSET 0x0E        ///< Offset register
 #define PCF8523_STATUSREG 0x03     ///< Status register
+
+#define PCF8523_ALARM_MINUTE 0x01
+#define PCF8523_ALARM_HOUR 0x02
+#define PCF8523_ALARM_DATE 0x04
+#define PCF8523_ALARM_WEEKDAY 0x08
 
 /**************************************************************************/
 /*!
@@ -64,7 +71,7 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
                        bin2bcd(dt.minute()),
                        bin2bcd(dt.hour()),
                        bin2bcd(dt.day()),
-                       bin2bcd(0), // skip weekdays
+                       bin2bcd(dt.dayOfTheWeek()),
                        bin2bcd(dt.month()),
                        bin2bcd(dt.year() - 2000U)};
   i2c_dev->write(buffer, 8);
@@ -166,6 +173,71 @@ void RTC_PCF8523::enableSecondTimer() {
 void RTC_PCF8523::disableSecondTimer() {
   write_register(PCF8523_CONTROL_1,
                  read_register(PCF8523_CONTROL_1) & ~(1 << 2));
+}
+
+/**************************************************************************/
+/*!
+    @brief   Enables alarm timer with current date/time and alarm mode.
+    @details The alarm will trigger at the specified date and time. The
+   INT/SQW pin will be pulled low when the specified time is reached. The
+   CLKOUT square wave will be disabled during the operation of the timer as
+   they interrupt on the same pin. Alarm modes are offered in the
+   Pcf8523AlarmMode enum.
+
+   If the alarm mode is set to PCF8523_AlarmWeekday, it will repeat on the
+   weekday of the original date/time setting.
+    @param dt Date/Time for the alarm.
+    @param alarmMode Sets the alarm mode from the Pcf8523AlarmMode enum.
+*/
+/**************************************************************************/
+void RTC_PCF8523::enableAlarm(const DateTime &dt,
+                              const Pcf8523AlarmMode alarmMode) {
+  // Disable square wave generation on SQW/INT pin, otherwise interrupt
+  // will trigger.
+  writeSqwPinMode(PCF8523_OFF);
+  // Clear alarm interrupt flag
+  write_register(PCF8523_CONTROL_2,
+                 ~(1 << 3) & read_register(PCF8523_CONTROL_2));
+
+  // Enable alarm interrupts
+  write_register(PCF8523_CONTROL_1,
+                 (1 << 1) | read_register(PCF8523_CONTROL_1));
+
+  // Converts number to BCD then sets enable bit (bit 7) to 0 or 1
+  // based on the alarm mode.
+  uint8_t alarmMinute = (uint8_t)((bin2bcd(dt.minute()) | (1 << 7)) &
+                                  ~((alarmMode & PCF8523_ALARM_MINUTE) << 7));
+  uint8_t alarmHour = (uint8_t)((bin2bcd(dt.hour()) | (1 << 7)) &
+                                ~((alarmMode & PCF8523_ALARM_HOUR) << 6));
+  uint8_t alarmDate = (uint8_t)((bin2bcd(dt.day()) | (1 << 7)) &
+                                ~((alarmMode & PCF8523_ALARM_DATE) << 5));
+  uint8_t alarmWeekday = (uint8_t)((bin2bcd(dt.dayOfTheWeek())) | (1 << 7)) &
+                         ~((alarmMode & PCF8523_ALARM_WEEKDAY) << 4);
+
+  uint8_t buffer[5] = {PCF8523_ALARM_REG, alarmMinute, alarmHour, alarmDate,
+                       alarmWeekday};
+
+  i2c_dev->write(buffer, 5);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disables alarm timer and resets alarm interrupt.
+    @details Turns off alarm timer in Control Register 2 and clears
+   interrupt flag.
+
+   Note: enableAlarmTimer() disables CLKOUT square wave feature. CLKOUT
+   square wave remains disabled after using this function. Use
+   writeSqwPinMode() to reactivate if required.
+*/
+/**************************************************************************/
+void RTC_PCF8523::disableAlarm() {
+  // Clear alarm interrupt bit
+  write_register(PCF8523_CONTROL_2,
+                 ~(1 << 3) & read_register(PCF8523_CONTROL_2));
+  // Disable alarm activation flag
+  write_register(PCF8523_CONTROL_1,
+                 ~(1 << 1) & read_register(PCF8523_CONTROL_1));
 }
 
 /**************************************************************************/
