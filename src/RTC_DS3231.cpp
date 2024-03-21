@@ -6,6 +6,7 @@
 #define DS3231_ALARM2 0x0B    ///< Alarm 2 register
 #define DS3231_CONTROL 0x0E   ///< Control register
 #define DS3231_STATUSREG 0x0F ///< Status register
+#define DS3231_AGING 0x10     ///< Aging offset register
 #define DS3231_TEMPERATUREREG                                                  \
   0x11 ///< Temperature register (high byte - low byte is at 0x12), 10-bit
        ///< temperature value
@@ -116,6 +117,22 @@ float RTC_DS3231::getTemperature() {
   i2c_dev->write_then_read(buffer, 1, buffer, 2);
   return (float)buffer[0] + (buffer[1] >> 6) * 0.25f;
 }
+
+/**************************************************************************/
+/*!
+    @brief  Get the current value of the aging offset register
+    @return Aging offset (signed int8)
+*/
+/**************************************************************************/
+int8_t RTC_DS3231::getAging() { return read_register(DS3231_AGING); }
+
+/**************************************************************************/
+/*!
+    @brief  Set a new value for the aging offset register
+    @param  val Aging offset
+*/
+/**************************************************************************/
+void RTC_DS3231::setAging(int8_t val) { write_register(DS3231_AGING, val); }
 
 /**************************************************************************/
 /*!
