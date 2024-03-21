@@ -23,6 +23,8 @@ PCF8523TimerClockFreq	KEYWORD1
 PCF8523TimerIntPulse	KEYWORD1
 Pcf8523OffsetMode	KEYWORD1
 Pcf8563SqwPinMode	KEYWORD1
+Pcf8563TimerClockFreq   KEYWORD1
+Pcf8563WeekDayAlarm    KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -61,18 +63,22 @@ setAlarm2	KEYWORD2
 disableAlarm	KEYWORD2
 clearAlarm	KEYWORD2
 alarmFired	KEYWORD2
+timerFired  KEYWORD2
+enableTimer	KEYWORD2
+disableTimer    KEYWORD2
 getTemperature	KEYWORD2
 lostPower	KEYWORD2
 initialized	KEYWORD2
 enableSecondTimer	KEYWORD2
 disableSecondTimer	KEYWORD2
-enableCountdownTimer	KEYWORD2
-disableCountdownTimer	KEYWORD2
+enableTimerInterruptPulse	KEYWORD2
+disableTimerInterruptPulse    KEYWORD2
 deconfigureAllTimers	KEYWORD2
 calibrate	KEYWORD2
 enable32K   KEYWORD2
 disable32K    KEYWORD2
 isEnabled32K    KEYWORD2
+enableAlarm    KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
