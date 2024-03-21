@@ -44,10 +44,14 @@ void showTimeSpan(const char* txt, const TimeSpan& ts) {
 
 void setup () {
     Serial.begin(57600);
-
+    
 #ifndef ESP8266
     while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
+
+    Serial.println("RTCLib datecalc example.");
+    Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
+
 
     DateTime dt0 (0, 1, 1, 0, 0, 0);
     showDate("dt0", dt0);

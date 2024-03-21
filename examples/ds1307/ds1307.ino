@@ -12,6 +12,9 @@ void setup () {
   while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
 
+  Serial.println("RTCLib DS1307 example.");
+  Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
+  
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();

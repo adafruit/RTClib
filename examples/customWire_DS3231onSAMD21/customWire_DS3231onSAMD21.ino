@@ -61,12 +61,15 @@ String monthsNames[] = {
 
 void setup() {
   Serial.begin(57600);
-  Serial.println("start");
-  
+ 
   unsigned long setupStartTime = millis();
   /*** Waiting for Serial to be ready or timeout ***/
   while(!Serial && millis() - setupStartTime < 3000);
 
+  //Just to keep track of what is running on this Arduino
+  Serial.println("RTCLib DS3231onSAMD21 example.");
+  Serial.println("Starting " __FILE__ " from " __DATE__ __TIME__);// Prints the file name and curent date.
+  
   /* 
    * Initialising pins 6 and 5 to be routed to the SERCOM0 pads 0 and 1 in order
    * to be used as SDA and SCL. Without this step the periphearl won't be patched through
