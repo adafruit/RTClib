@@ -124,6 +124,39 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
 };
 
+/** RV3032C7 Alarm mode */
+enum RV3032C7AlarmMode {
+  RV3032C7_A_PerMinute = 0x07,  /**< Alarm once per minute */
+  RV3032C7_A_Minute = 0x06,     /**< Alarm when minutes match */
+  RV3032C7_A_Hour = 0x05,       /**< Alarm when hours match */
+  RV3032C7_A_MinuteHour = 0x04, /**< Alarm when minutes & hours match */
+  RV3032C7_A_Date = 0x03,       /**< Alarm when date (day of month) match */
+  RV3032C7_A_MinuteDate = 0x02, /**< Alarm when minutes & date match */
+  RV3032C7_A_HourDate = 0x01,   /**< Alarm when hours & date match */
+  RV3032C7_A_All = 0x00,        /**< Alarm when minutes, hours & date match */
+};
+
+/** RV3032C7 Countdown Timer Clock frequency*/
+enum RV3032C7TimerClockFreq {
+  RV3032C7_Frequency4096Hz = 0x00,   /**< 4096 Hz */
+  RV3032C7_Frequency64Hz = 0x01,     /**< 64 Hz */
+  RV3032C7_FrequencySecond = 0x02,  /**<  T=1s or 1 Hz */
+  RV3032C7_FrequencyMinute = 0x03, /**<  T=60s or 1/60 Hz */
+};
+
+/** RV3032C7 Event type */
+enum RV3032C7EventType {
+  RV3032C7_EV_Poll = 0x00, /**< Polling via i2c, no interrupts */
+  RV3032C7_EV_Int = 0x01,  /**< Trigger interrupt on INT pin */
+  RV3032C7_EV_IntClock =
+      0x03, /**< Interrupt on INT pin + clock output on CLKOUT pin */
+};
+
+#define RV3032C7InvalidDate                                                    \
+  DateTime(2000, 5, 0x00, 0x00,                                                \
+           0x00) /**< Invalid date, returned by RTC_RV3032C7::getAlarm() when  \
+                    the alarm is disabled */
+
 /**************************************************************************/
 /*!
     @brief  Simple general-purpose date/time class (no TZ / DST / leap
@@ -441,6 +474,53 @@ public:
   uint8_t isrunning();
   Pcf8563SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8563SqwPinMode mode);
+};
+
+/**************************************************************************/
+/*!
+    @brief  RTC based on the RV-3032-C7 chip connected via I2C and the Wire
+   library
+*/
+/**************************************************************************/
+class RTC_RV3032C7 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  void adjust(const DateTime &dt);
+  bool lostPower(void);
+  DateTime now();
+
+  bool setAlarm(const DateTime &dt, RV3032C7AlarmMode alarm_mode,
+                RV3032C7EventType event_type = RV3032C7_EV_Int);
+  DateTime getAlarm();
+  RV3032C7AlarmMode getAlarmMode();
+  RV3032C7EventType getAlarmEventType();
+  void disableAlarm(void);
+  void clearAlarm(void);
+  bool alarmFired(void);
+
+  void enableCountdownTimer();
+  void enableCountdownTimer(RV3032C7TimerClockFreq clkFreq, uint8_t numPeriods,
+                            RV3032C7EventType event_type = RV3032C7_EV_Int);
+  uint16_t getCountdownTimer();
+  RV3032C7TimerClockFreq getCountdownTimerClock();
+  RV3032C7EventType getCountdownTimerEventType();
+  void disableCountdownTimer(void);
+  void clearCountdownTimer(void);
+  bool countdownTimerFired(void);
+  void deconfigureAllTimers();
+
+  void enableClkOut(void);
+  void disableClkOut(void);
+  bool isEnabledClkOut(void);
+  float getTemperature(); // in Celsius degree
+  /*!
+      @brief  Convert the day of the week to a representation suitable for
+              storing in the RV3032C7: from 1 (Monday) to 7 (Sunday).
+      @param  d Day of the week as represented by the library:
+              from 0 (Sunday) to 6 (Saturday).
+      @return the converted value
+  */
+  static uint8_t dowToRV3032C7(uint8_t d) { return d == 0 ? 7 : d; }
 };
 
 /**************************************************************************/
