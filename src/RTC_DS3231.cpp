@@ -340,8 +340,19 @@ void RTC_DS3231::clearAlarm(uint8_t alarm_num) {
 
 /**************************************************************************/
 /*!
-    @brief  Get status of alarm
-        @param 	alarm_num Alarm number to check status of
+    @brief  Get enabled status of alarm
+        @param 	alarm_num Alarm number to check enabled status of
+        @return True if alarm is enabled otherwise false
+*/
+/**************************************************************************/
+bool RTC_DS3231::alarmEnabled(uint8_t alarm_num) {
+  return (read_register(DS3231_CONTROL) >> (alarm_num - 1)) & 0x1;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get fired status of alarm
+        @param 	alarm_num Alarm number to check fired status of
         @return True if alarm has been fired otherwise false
 */
 /**************************************************************************/
