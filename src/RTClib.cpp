@@ -347,10 +347,9 @@ DateTime::DateTime(const __FlashStringHelper *date,
 /*!
     @brief  Constructor for creating a DateTime from an ISO8601 date string.
 
-    This constructor expects its parameters to be a string in the
-    https://en.wikipedia.org/wiki/ISO_8601 format, e.g:
-
-    "2020-06-25T15:29:37"
+    This constructor expects its parameter to be a string in the
+    [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format, e.g:
+    `"2020-06-25T15:29:37"`.
 
     Usage:
 
@@ -358,7 +357,21 @@ DateTime::DateTime(const __FlashStringHelper *date,
     DateTime dt("2020-06-25T15:29:37");
     ```
 
-    @note The year must be > 2000, as only the yOff is considered.
+    Out of the many date/time formats defined by ISO 8601, this constructor
+    only supports `YYYY-MM-DDThh:mm:ss`, as well as truncated versions of
+    this format lacking the higher-precision components. Truncated date/time
+    specifications are interpreted as the first second of the specified
+    period, for example:
+
+    | parameter        | interpreted as      |
+    |------------------|---------------------|
+    | 2020-06-25T15:29 | 2020-06-25T15:29:00 |
+    | 2020-06-25T15    | 2020-06-25T15:00:00 |
+    | 2020-06-25       | 2020-06-25T00:00:00 |
+    | 2020-06          | 2020-06-01T00:00:00 |
+    | 2020             | 2020-01-01T00:00:00 |
+
+    @note The year must be >= 2000, as only the last two digits are considered.
 
     @param iso8601dateTime
            A dateTime string in iso8601 format,
