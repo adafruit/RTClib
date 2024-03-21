@@ -290,3 +290,46 @@ void RTC_PCF8523::deconfigureAllTimers() {
 void RTC_PCF8523::calibrate(Pcf8523OffsetMode mode, int8_t offset) {
   write_register(PCF8523_OFFSET, ((uint8_t)offset & 0x7F) | mode);
 }
+/**************************************************************************/
+/*!
+    @brief read the offset register
+    @return OffsetReg the raw value of the register
+*/
+/**************************************************************************/
+
+uint8_t RTC_PCF8523::readOffsetReg() {
+  uint8_t OffsetReg = read_register(PCF8523_OFFSET);
+  return OffsetReg;
+}
+
+/**************************************************************************/
+/*!
+    @brief read the offset register
+    @return OffsetMode
+*/
+/**************************************************************************/
+
+String RTC_PCF8523::getOffsetMode() {
+  String OffsetMode;
+  if (bitRead(readOffsetReg(), 7)) {
+    OffsetMode = String("PCF8523_OneMinute");
+  } else {
+    OffsetMode = String("PCF8523_TwoHours ");
+  }
+  return OffsetMode;
+}
+
+/**************************************************************************/
+/*!
+    @brief read the offset register
+    @details The offset parameter is held in bits 0 to 6 as a signed 7bit
+   integer bit 6 needs to be copied to bit 7 to convert to a signed 8bit integer
+    @return offset
+*/
+/**************************************************************************/
+
+int8_t RTC_PCF8523::getOffset() {
+  int8_t offset = readOffsetReg();
+  bitWrite(offset, 7, bitRead(offset, 6));
+  return offset;
+}
