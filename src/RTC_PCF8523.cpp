@@ -45,11 +45,153 @@ bool RTC_PCF8523::lostPower(void) {
 /*!
     @brief  Check control register 3 to see if we've run adjust() yet (setting
    the date/time and battery switchover mode)
-    @return True if the PCF8523 has been set up, false if not
+    @return 1 if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
 bool RTC_PCF8523::initialized(void) {
   return (read_register(PCF8523_CONTROL_3) & 0xE0) != 0xE0;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @param the_value The Alarm register value
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,
+                                           uint8_t the_value) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    write_register(the_register, bin2bcd((the_value % 60) & 0x7F));
+    break;
+  case PCF8523_ALARM_HOUR:
+    write_register(the_register, bin2bcd((the_value % 24) & 0x7F));
+    break;
+  case PCF8523_ALARM_DAY:
+    write_register(the_register, bin2bcd((the_value % 32) & 0x7F));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    write_register(the_register, bin2bcd((the_value % 8) & 0x7F));
+    break;
+  default:
+    break;
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @return The value for the requested Alarm register
+*/
+/**************************************************************************/
+
+uint8_t
+RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_HOUR:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_DAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  default:
+    break;
+  }
+  return 0xFF;
+}
+
+/**************************************************************************/
+/*!
+    @brief  RTC Upgrade oscillator capacitor From 7pF to 12.5pF
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::upgradeOsciCapaTo12pf5() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) | (1 << 7)); // Enable CAP_SEL
+}
+
+/**************************************************************************/
+/*!
+    @brief  Enable Alarm based on previous setAlarmValueForRegister call
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::enableAlarm() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) | (1 << 1)); // Enable AIE
+}
+
+/**************************************************************************/
+/*!
+    @brief  Check Alarm fired
+    @return 1 if an alarm fired
+*/
+/**************************************************************************/
+
+bool RTC_PCF8523::isAlarmFired(void) {
+  return (read_register(PCF8523_CONTROL_2) & (1 << 3)); // Check AF
+}
+
+/**************************************************************************/
+/*!
+    @brief  Clear Alarm
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::clearAlarm() {
+  write_register(PCF8523_CONTROL_2,
+                 read_register(PCF8523_CONTROL_2) & ~(1 << 3)); // Clear AF
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable Alarm
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::disableAlarm() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) & ~(1 << 1)); // Disable AIE
+  write_register(PCF8523_ALARM_MINUTE, 0x80);
+  write_register(PCF8523_ALARM_HOUR, 0x80);
+  write_register(PCF8523_ALARM_DAY, 0x80);
+  write_register(PCF8523_ALARM_WEEKDAY, 0x80);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Ask if any Alarm is setup
+    @return true if an alarm is setup
+*/
+/**************************************************************************/
+
+bool RTC_PCF8523::isAnyAlarmSetup(void) {
+  if (read_register(PCF8523_CONTROL_1) & (1 << 1)) {
+    return true;
+  }
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set RTC battery switch-over mode in register Control_3
+    @param battery_switch_over_value The value for battery switch over register
+*/
+/**************************************************************************/
+void RTC_PCF8523::setBatterySwitchOver(uint8_t battery_switch_over_value) {
+  write_register(PCF8523_CONTROL_3, battery_switch_over_value);
 }
 
 /**************************************************************************/
@@ -70,7 +212,7 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
   i2c_dev->write(buffer, 8);
 
   // set to battery switchover mode
-  write_register(PCF8523_CONTROL_3, 0x00);
+  setBatterySwitchOver(0x00);
 }
 
 /**************************************************************************/
@@ -109,6 +251,13 @@ void RTC_PCF8523::stop(void) {
   write_register(PCF8523_CONTROL_1,
                  read_register(PCF8523_CONTROL_1) | (1 << 5));
 }
+
+/**************************************************************************/
+/*!
+    @brief  Reset RTC sending 0x58 in register Control_1
+*/
+/**************************************************************************/
+void RTC_PCF8523::reset(void) { write_register(PCF8523_CONTROL_1, 0x58); }
 
 /**************************************************************************/
 /*!
