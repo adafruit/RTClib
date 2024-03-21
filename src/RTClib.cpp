@@ -21,18 +21,18 @@
   This library provides the following classes:
 
   - Classes for manipulating dates, times and durations:
-    - DateTime represents a specific point in time; this is the data
-      type used for setting and reading the supported RTCs
-    - TimeSpan represents the length of a time interval
+        - DateTime represents a specific point in time; this is the data
+          type used for setting and reading the supported RTCs
+        - TimeSpan represents the length of a time interval
   - Interfacing specific RTC chips:
-    - RTC_DS1307
-    - RTC_DS3231
-    - RTC_PCF8523
-    - RTC_PCF8563
+        - RTC_DS1307
+        - RTC_DS3231
+        - RTC_PCF8523
+        - RTC_PCF8563
   - RTC emulated in software; do not expect much accuracy out of these:
-    - RTC_Millis is based on `millis()`
-    - RTC_Micros is based on `micros()`; its drift rate can be tuned by
-      the user
+        - RTC_Millis is based on `millis()`
+        - RTC_Micros is based on `micros()`; its drift rate can be tuned by
+          the user
 
   @section license License
 
@@ -58,9 +58,9 @@
 
 /**************************************************************************/
 /*!
-    @brief Write value to register.
-    @param reg register address
-    @param val value to write
+        @brief Write value to register.
+        @param reg register address
+        @param val value to write
 */
 /**************************************************************************/
 void RTC_I2C::write_register(uint8_t reg, uint8_t val) {
@@ -70,9 +70,9 @@ void RTC_I2C::write_register(uint8_t reg, uint8_t val) {
 
 /**************************************************************************/
 /*!
-    @brief Read value from register.
-    @param reg register address
-    @return value of register
+        @brief Read value from register.
+        @param reg register address
+        @return value of register
 */
 /**************************************************************************/
 uint8_t RTC_I2C::read_register(uint8_t reg) {
@@ -96,12 +96,12 @@ const uint8_t daysInMonth[] PROGMEM = {31, 28, 31, 30, 31, 30,
 
 /**************************************************************************/
 /*!
-    @brief  Given a date, return number of days since 2000/01/01,
-            valid for 2000--2099
-    @param y Year
-    @param m Month
-    @param d Day
-    @return Number of days
+        @brief  Given a date, return number of days since 2000/01/01,
+                        valid for 2000--2099
+        @param y Year
+        @param m Month
+        @param d Day
+        @return Number of days
 */
 /**************************************************************************/
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
@@ -117,13 +117,13 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
 
 /**************************************************************************/
 /*!
-    @brief  Given a number of days, hours, minutes, and seconds, return the
+        @brief  Given a number of days, hours, minutes, and seconds, return the
    total seconds
-    @param days Days
-    @param h Hours
-    @param m Minutes
-    @param s Seconds
-    @return Number of seconds total
+        @param days Days
+        @param h Hours
+        @param m Minutes
+        @param s Seconds
+        @return Number of seconds total
 */
 /**************************************************************************/
 static uint32_t time2ulong(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
@@ -132,30 +132,30 @@ static uint32_t time2ulong(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
 
 /**************************************************************************/
 /*!
-    @brief  Constructor from
-        [Unix time](https://en.wikipedia.org/wiki/Unix_time).
+        @brief  Constructor from
+                [Unix time](https://en.wikipedia.org/wiki/Unix_time).
 
-    This builds a DateTime from an integer specifying the number of seconds
-    elapsed since the epoch: 1970-01-01 00:00:00. This number is analogous
-    to Unix time, with two small differences:
+        This builds a DateTime from an integer specifying the number of seconds
+        elapsed since the epoch: 1970-01-01 00:00:00. This number is analogous
+        to Unix time, with two small differences:
 
-     - The Unix epoch is specified to be at 00:00:00
-       [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time),
-       whereas this class has no notion of time zones. The epoch used in
-       this class is then at 00:00:00 on whatever time zone the user chooses
-       to use, ignoring changes in DST.
+         - The Unix epoch is specified to be at 00:00:00
+           [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time),
+           whereas this class has no notion of time zones. The epoch used in
+           this class is then at 00:00:00 on whatever time zone the user chooses
+           to use, ignoring changes in DST.
 
-     - Unix time is conventionally represented with signed numbers, whereas
-       this constructor takes an unsigned argument. Because of this, it does
-       _not_ suffer from the
-       [year 2038 problem](https://en.wikipedia.org/wiki/Year_2038_problem).
+         - Unix time is conventionally represented with signed numbers, whereas
+           this constructor takes an unsigned argument. Because of this, it does
+           _not_ suffer from the
+           [year 2038 problem](https://en.wikipedia.org/wiki/Year_2038_problem).
 
-    If called without argument, it returns the earliest time representable
-    by this class: 2000-01-01 00:00:00.
+        If called without argument, it returns the earliest time representable
+        by this class: 2000-01-01 00:00:00.
 
-    @see The `unixtime()` method is the converse of this constructor.
+        @see The `unixtime()` method is the converse of this constructor.
 
-    @param t Time elapsed in seconds since 1970-01-01 00:00:00.
+        @param t Time elapsed in seconds since 1970-01-01 00:00:00.
 */
 /**************************************************************************/
 DateTime::DateTime(uint32_t t) {
@@ -187,16 +187,16 @@ DateTime::DateTime(uint32_t t) {
 
 /**************************************************************************/
 /*!
-    @brief  Constructor from (year, month, day, hour, minute, second).
-    @warning If the provided parameters are not valid (e.g. 31 February),
-           the constructed DateTime will be invalid.
-    @see   The `isValid()` method can be used to test whether the
-           constructed DateTime is valid.
-    @param year Either the full year (range: 2000--2099) or the offset from
-        year 2000 (range: 0--99).
-    @param month Month number (1--12).
-    @param day Day of the month (1--31).
-    @param hour,min,sec Hour (0--23), minute (0--59) and second (0--59).
+        @brief  Constructor from (year, month, day, hour, minute, second).
+        @warning If the provided parameters are not valid (e.g. 31 February),
+                   the constructed DateTime will be invalid.
+        @see   The `isValid()` method can be used to test whether the
+                   constructed DateTime is valid.
+        @param year Either the full year (range: 2000--2099) or the offset from
+                year 2000 (range: 0--99).
+        @param month Month number (1--12).
+        @param day Day of the month (1--31).
+        @param hour,min,sec Hour (0--23), minute (0--59) and second (0--59).
 */
 /**************************************************************************/
 DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
@@ -213,8 +213,8 @@ DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
 
 /**************************************************************************/
 /*!
-    @brief  Copy constructor.
-    @param copy DateTime to copy.
+        @brief  Copy constructor.
+        @param copy DateTime to copy.
 */
 /**************************************************************************/
 DateTime::DateTime(const DateTime &copy)
@@ -223,9 +223,10 @@ DateTime::DateTime(const DateTime &copy)
 
 /**************************************************************************/
 /*!
-    @brief  Convert a string containing two digits to uint8_t, e.g. "09" returns
+        @brief  Convert a string containing two digits to uint8_t, e.g. "09"
+   returns
    9
-    @param p Pointer to a string containing two digits
+        @param p Pointer to a string containing two digits
 */
 /**************************************************************************/
 static uint8_t conv2d(const char *p) {
@@ -237,21 +238,21 @@ static uint8_t conv2d(const char *p) {
 
 /**************************************************************************/
 /*!
-    @brief  Constructor for generating the build time.
+        @brief  Constructor for generating the build time.
 
-    This constructor expects its parameters to be strings in the format
-    generated by the compiler's preprocessor macros `__DATE__` and
-    `__TIME__`. Usage:
+        This constructor expects its parameters to be strings in the format
+        generated by the compiler's preprocessor macros `__DATE__` and
+        `__TIME__`. Usage:
 
-    ```
-    DateTime buildTime(__DATE__, __TIME__);
-    ```
+        ```
+        DateTime buildTime(__DATE__, __TIME__);
+        ```
 
-    @note The `F()` macro can be used to reduce the RAM footprint, see
-        the next constructor.
+        @note The `F()` macro can be used to reduce the RAM footprint, see
+                the next constructor.
 
-    @param date Date string, e.g. "Apr 16 2020".
-    @param time Time string, e.g. "18:34:56".
+        @param date Date string, e.g. "Apr 16 2020".
+        @param time Time string, e.g. "18:34:56".
 */
 /**************************************************************************/
 DateTime::DateTime(const char *date, const char *time) {
@@ -291,17 +292,17 @@ DateTime::DateTime(const char *date, const char *time) {
 
 /**************************************************************************/
 /*!
-    @brief  Memory friendly constructor for generating the build time.
+        @brief  Memory friendly constructor for generating the build time.
 
-    This version is intended to save RAM by keeping the date and time
-    strings in program memory. Use it with the `F()` macro:
+        This version is intended to save RAM by keeping the date and time
+        strings in program memory. Use it with the `F()` macro:
 
-    ```
-    DateTime buildTime(F(__DATE__), F(__TIME__));
-    ```
+        ```
+        DateTime buildTime(F(__DATE__), F(__TIME__));
+        ```
 
-    @param date Date PROGMEM string, e.g. F("Apr 16 2020").
-    @param time Time PROGMEM string, e.g. F("18:34:56").
+        @param date Date PROGMEM string, e.g. F("Apr 16 2020").
+        @param time Time PROGMEM string, e.g. F("18:34:56").
 */
 /**************************************************************************/
 DateTime::DateTime(const __FlashStringHelper *date,
@@ -345,24 +346,24 @@ DateTime::DateTime(const __FlashStringHelper *date,
 
 /**************************************************************************/
 /*!
-    @brief  Constructor for creating a DateTime from an ISO8601 date string.
+        @brief  Constructor for creating a DateTime from an ISO8601 date string.
 
-    This constructor expects its parameters to be a string in the
-    https://en.wikipedia.org/wiki/ISO_8601 format, e.g:
+        This constructor expects its parameters to be a string in the
+        https://en.wikipedia.org/wiki/ISO_8601 format, e.g:
 
-    "2020-06-25T15:29:37"
+        "2020-06-25T15:29:37"
 
-    Usage:
+        Usage:
 
-    ```
-    DateTime dt("2020-06-25T15:29:37");
-    ```
+        ```
+        DateTime dt("2020-06-25T15:29:37");
+        ```
 
-    @note The year must be > 2000, as only the yOff is considered.
+        @note The year must be > 2000, as only the yOff is considered.
 
-    @param iso8601dateTime
-           A dateTime string in iso8601 format,
-           e.g. "2020-06-25T15:29:37".
+        @param iso8601dateTime
+                   A dateTime string in iso8601 format,
+                   e.g. "2020-06-25T15:29:37".
 
 */
 /**************************************************************************/
@@ -379,8 +380,8 @@ DateTime::DateTime(const char *iso8601dateTime) {
 
 /**************************************************************************/
 /*!
-    @brief  Check whether this DateTime is valid.
-    @return true if valid, false if not.
+        @brief  Check whether this DateTime is valid.
+        @return true if valid, false if not.
 */
 /**************************************************************************/
 bool DateTime::isValid() const {
@@ -393,48 +394,48 @@ bool DateTime::isValid() const {
 
 /**************************************************************************/
 /*!
-    @brief  Writes the DateTime as a string in a user-defined format.
+        @brief  Writes the DateTime as a string in a user-defined format.
 
-    The _buffer_ parameter should be initialized by the caller with a string
-    specifying the requested format. This format string may contain any of
-    the following specifiers:
+        The _buffer_ parameter should be initialized by the caller with a string
+        specifying the requested format. This format string may contain any of
+        the following specifiers:
 
-    | specifier | output                                                 |
-    |-----------|--------------------------------------------------------|
-    | YYYY      | the year as a 4-digit number (2000--2099)              |
-    | YY        | the year as a 2-digit number (00--99)                  |
-    | MM        | the month as a 2-digit number (01--12)                 |
-    | MMM       | the abbreviated English month name ("Jan"--"Dec")      |
-    | DD        | the day as a 2-digit number (01--31)                   |
-    | DDD       | the abbreviated English day of the week ("Mon"--"Sun") |
-    | AP        | either "AM" or "PM"                                    |
-    | ap        | either "am" or "pm"                                    |
-    | hh        | the hour as a 2-digit number (00--23 or 01--12)        |
-    | mm        | the minute as a 2-digit number (00--59)                |
-    | ss        | the second as a 2-digit number (00--59)                |
+        | specifier | output                                                 |
+        |-----------|--------------------------------------------------------|
+        | YYYY      | the year as a 4-digit number (2000--2099)              |
+        | YY        | the year as a 2-digit number (00--99)                  |
+        | MM        | the month as a 2-digit number (01--12)                 |
+        | MMM       | the abbreviated English month name ("Jan"--"Dec")      |
+        | DD        | the day as a 2-digit number (01--31)                   |
+        | DDD       | the abbreviated English day of the week ("Mon"--"Sun") |
+        | AP        | either "AM" or "PM"                                    |
+        | ap        | either "am" or "pm"                                    |
+        | hh        | the hour as a 2-digit number (00--23 or 01--12)        |
+        | mm        | the minute as a 2-digit number (00--59)                |
+        | ss        | the second as a 2-digit number (00--59)                |
 
-    If either "AP" or "ap" is used, the "hh" specifier uses 12-hour mode
-    (range: 01--12). Otherwise it works in 24-hour mode (range: 00--23).
+        If either "AP" or "ap" is used, the "hh" specifier uses 12-hour mode
+        (range: 01--12). Otherwise it works in 24-hour mode (range: 00--23).
 
-    The specifiers within _buffer_ will be overwritten with the appropriate
-    values from the DateTime. Any characters not belonging to one of the
-    above specifiers are left as-is.
+        The specifiers within _buffer_ will be overwritten with the appropriate
+        values from the DateTime. Any characters not belonging to one of the
+        above specifiers are left as-is.
 
-    __Example__: The format "DDD, DD MMM YYYY hh:mm:ss" generates an output
-    of the form "Thu, 16 Apr 2020 18:34:56.
+        __Example__: The format "DDD, DD MMM YYYY hh:mm:ss" generates an output
+        of the form "Thu, 16 Apr 2020 18:34:56.
 
-    @see The `timestamp()` method provides similar functionnality, but it
-        returns a `String` object and supports a limited choice of
-        predefined formats.
+        @see The `timestamp()` method provides similar functionnality, but it
+                returns a `String` object and supports a limited choice of
+                predefined formats.
 
-    @param[in,out] buffer Array of `char` for holding the format description
-        and the formatted DateTime. Before calling this method, the buffer
-        should be initialized by the user with the format string. The method
-        will overwrite the buffer with the formatted date and/or time.
+        @param[in,out] buffer Array of `char` for holding the format description
+                and the formatted DateTime. Before calling this method, the
+   buffer should be initialized by the user with the format string. The method
+                will overwrite the buffer with the formatted date and/or time.
 
-    @return A pointer to the provided buffer. This is returned for
-        convenience, in order to enable idioms such as
-        `Serial.println(now.toString(buffer));`
+        @return A pointer to the provided buffer. This is returned for
+                convenience, in order to enable idioms such as
+                `Serial.println(now.toString(buffer));`
 */
 /**************************************************************************/
 
@@ -530,8 +531,8 @@ char *DateTime::toString(char *buffer) const {
 
 /**************************************************************************/
 /*!
-      @brief  Return the hour in 12-hour format.
-      @return Hour (1--12).
+          @brief  Return the hour in 12-hour format.
+          @return Hour (1--12).
 */
 /**************************************************************************/
 uint8_t DateTime::twelveHour() const {
@@ -546,8 +547,8 @@ uint8_t DateTime::twelveHour() const {
 
 /**************************************************************************/
 /*!
-    @brief  Return the day of the week.
-    @return Day of week as an integer from 0 (Sunday) to 6 (Saturday).
+        @brief  Return the day of the week.
+        @return Day of week as an integer from 0 (Sunday) to 6 (Saturday).
 */
 /**************************************************************************/
 uint8_t DateTime::dayOfTheWeek() const {
@@ -557,12 +558,12 @@ uint8_t DateTime::dayOfTheWeek() const {
 
 /**************************************************************************/
 /*!
-    @brief  Return Unix time: seconds since 1 Jan 1970.
+        @brief  Return Unix time: seconds since 1 Jan 1970.
 
-    @see The `DateTime::DateTime(uint32_t)` constructor is the converse of
-        this method.
+        @see The `DateTime::DateTime(uint32_t)` constructor is the converse of
+                this method.
 
-    @return Number of seconds since 1970-01-01 00:00:00.
+        @return Number of seconds since 1970-01-01 00:00:00.
 */
 /**************************************************************************/
 uint32_t DateTime::unixtime(void) const {
@@ -576,15 +577,15 @@ uint32_t DateTime::unixtime(void) const {
 
 /**************************************************************************/
 /*!
-    @brief  Convert the DateTime to seconds since 1 Jan 2000
+        @brief  Convert the DateTime to seconds since 1 Jan 2000
 
-    The result can be converted back to a DateTime with:
+        The result can be converted back to a DateTime with:
 
-    ```cpp
-    DateTime(SECONDS_FROM_1970_TO_2000 + value)
-    ```
+        ```cpp
+        DateTime(SECONDS_FROM_1970_TO_2000 + value)
+        ```
 
-    @return Number of seconds since 2000-01-01 00:00:00.
+        @return Number of seconds since 2000-01-01 00:00:00.
 */
 /**************************************************************************/
 uint32_t DateTime::secondstime(void) const {
@@ -596,9 +597,9 @@ uint32_t DateTime::secondstime(void) const {
 
 /**************************************************************************/
 /*!
-    @brief  Add a TimeSpan to the DateTime object
-    @param span TimeSpan object
-    @return New DateTime object with span added to it.
+        @brief  Add a TimeSpan to the DateTime object
+        @param span TimeSpan object
+        @return New DateTime object with span added to it.
 */
 /**************************************************************************/
 DateTime DateTime::operator+(const TimeSpan &span) const {
@@ -607,9 +608,9 @@ DateTime DateTime::operator+(const TimeSpan &span) const {
 
 /**************************************************************************/
 /*!
-    @brief  Subtract a TimeSpan from the DateTime object
-    @param span TimeSpan object
-    @return New DateTime object with span subtracted from it.
+        @brief  Subtract a TimeSpan from the DateTime object
+        @param span TimeSpan object
+        @return New DateTime object with span subtracted from it.
 */
 /**************************************************************************/
 DateTime DateTime::operator-(const TimeSpan &span) const {
@@ -618,14 +619,14 @@ DateTime DateTime::operator-(const TimeSpan &span) const {
 
 /**************************************************************************/
 /*!
-    @brief  Subtract one DateTime from another
+        @brief  Subtract one DateTime from another
 
-    @note Since a TimeSpan cannot be negative, the subtracted DateTime
-        should be less (earlier) than or equal to the one it is
-        subtracted from.
+        @note Since a TimeSpan cannot be negative, the subtracted DateTime
+                should be less (earlier) than or equal to the one it is
+                subtracted from.
 
-    @param right The DateTime object to subtract from self (the left object)
-    @return TimeSpan of the difference between DateTimes.
+        @param right The DateTime object to subtract from self (the left object)
+        @return TimeSpan of the difference between DateTimes.
 */
 /**************************************************************************/
 TimeSpan DateTime::operator-(const DateTime &right) const {
@@ -634,14 +635,14 @@ TimeSpan DateTime::operator-(const DateTime &right) const {
 
 /**************************************************************************/
 /*!
-    @author Anton Rieutskyi
-    @brief  Test if one DateTime is less (earlier) than another.
-    @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-    @see use `isValid()` method to check if DateTime object is valid
-    @param right Comparison DateTime object
-    @return True if the left DateTime is earlier than the right one,
-        false otherwise.
+        @author Anton Rieutskyi
+        @brief  Test if one DateTime is less (earlier) than another.
+        @warning if one or both DateTime objects are invalid, returned value is
+                meaningless
+        @see use `isValid()` method to check if DateTime object is valid
+        @param right Comparison DateTime object
+        @return True if the left DateTime is earlier than the right one,
+                false otherwise.
 */
 /**************************************************************************/
 bool DateTime::operator<(const DateTime &right) const {
@@ -659,13 +660,13 @@ bool DateTime::operator<(const DateTime &right) const {
 
 /**************************************************************************/
 /*!
-    @author Anton Rieutskyi
-    @brief  Test if two DateTime objects are equal.
-    @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-    @see use `isValid()` method to check if DateTime object is valid
-    @param right Comparison DateTime object
-    @return True if both DateTime objects are the same, false otherwise.
+        @author Anton Rieutskyi
+        @brief  Test if two DateTime objects are equal.
+        @warning if one or both DateTime objects are invalid, returned value is
+                meaningless
+        @see use `isValid()` method to check if DateTime object is valid
+        @param right Comparison DateTime object
+        @return True if both DateTime objects are the same, false otherwise.
 */
 /**************************************************************************/
 bool DateTime::operator==(const DateTime &right) const {
@@ -676,17 +677,17 @@ bool DateTime::operator==(const DateTime &right) const {
 
 /**************************************************************************/
 /*!
-    @brief  Return a ISO 8601 timestamp as a `String` object.
+        @brief  Return a ISO 8601 timestamp as a `String` object.
 
-    The generated timestamp conforms to one of the predefined, ISO
-    8601-compatible formats for representing the date (if _opt_ is
-    `TIMESTAMP_DATE`), the time (`TIMESTAMP_TIME`), or both
-    (`TIMESTAMP_FULL`).
+        The generated timestamp conforms to one of the predefined, ISO
+        8601-compatible formats for representing the date (if _opt_ is
+        `TIMESTAMP_DATE`), the time (`TIMESTAMP_TIME`), or both
+        (`TIMESTAMP_FULL`).
 
-    @see The `toString()` method provides more general string formatting.
+        @see The `toString()` method provides more general string formatting.
 
-    @param opt Format of the timestamp
-    @return Timestamp string, e.g. "2020-04-16T18:34:56".
+        @param opt Format of the timestamp
+        @return Timestamp string, e.g. "2020-04-16T18:34:56".
 */
 /**************************************************************************/
 String DateTime::timestamp(timestampOpt opt) const {
@@ -712,21 +713,21 @@ String DateTime::timestamp(timestampOpt opt) const {
 
 /**************************************************************************/
 /*!
-    @brief  Create a new TimeSpan object in seconds
-    @param seconds Number of seconds
+        @brief  Create a new TimeSpan object in seconds
+        @param seconds Number of seconds
 */
 /**************************************************************************/
 TimeSpan::TimeSpan(int32_t seconds) : _seconds(seconds) {}
 
 /**************************************************************************/
 /*!
-    @brief  Create a new TimeSpan object using a number of
+        @brief  Create a new TimeSpan object using a number of
    days/hours/minutes/seconds e.g. Make a TimeSpan of 3 hours and 45 minutes:
    new TimeSpan(0, 3, 45, 0);
-    @param days Number of days
-    @param hours Number of hours
-    @param minutes Number of minutes
-    @param seconds Number of seconds
+        @param days Number of days
+        @param hours Number of hours
+        @param minutes Number of minutes
+        @param seconds Number of seconds
 */
 /**************************************************************************/
 TimeSpan::TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds)
@@ -735,17 +736,17 @@ TimeSpan::TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds)
 
 /**************************************************************************/
 /*!
-    @brief  Copy constructor, make a new TimeSpan using an existing one
-    @param copy The TimeSpan to copy
+        @brief  Copy constructor, make a new TimeSpan using an existing one
+        @param copy The TimeSpan to copy
 */
 /**************************************************************************/
 TimeSpan::TimeSpan(const TimeSpan &copy) : _seconds(copy._seconds) {}
 
 /**************************************************************************/
 /*!
-    @brief  Add two TimeSpans
-    @param right TimeSpan to add
-    @return New TimeSpan object, sum of left and right
+        @brief  Add two TimeSpans
+        @param right TimeSpan to add
+        @return New TimeSpan object, sum of left and right
 */
 /**************************************************************************/
 TimeSpan TimeSpan::operator+(const TimeSpan &right) const {
@@ -754,9 +755,9 @@ TimeSpan TimeSpan::operator+(const TimeSpan &right) const {
 
 /**************************************************************************/
 /*!
-    @brief  Subtract a TimeSpan
-    @param right TimeSpan to subtract
-    @return New TimeSpan object, right subtracted from left
+        @brief  Subtract a TimeSpan
+        @param right TimeSpan to subtract
+        @return New TimeSpan object, right subtracted from left
 */
 /**************************************************************************/
 TimeSpan TimeSpan::operator-(const TimeSpan &right) const {

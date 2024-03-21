@@ -56,24 +56,70 @@ enum Ds3231Alarm1Mode {
   DS3231_A1_PerSecond = 0x0F, /**< Alarm once per second */
   DS3231_A1_Second = 0x0E,    /**< Alarm when seconds match */
   DS3231_A1_Minute = 0x0C,    /**< Alarm when minutes and seconds match */
-  DS3231_A1_Hour = 0x08,      /**< Alarm when hours, minutes
-                                   and seconds match */
-  DS3231_A1_Date = 0x00,      /**< Alarm when date (day of month), hours,
-                                   minutes and seconds match */
-  DS3231_A1_Day = 0x10        /**< Alarm when day (day of week), hours,
-                                   minutes and seconds match */
+  DS3231_A1_Hour =
+      0x08, /**< Alarm when hours, minutes
+                                                 and seconds match */
+  DS3231_A1_Date =
+      0x00, /**< Alarm when date (day of month), hours,
+                                                 minutes and seconds match */
+  DS3231_A1_Day =
+      0x10 /**< Alarm when day (day of week), hours,
+                                                minutes and seconds match */
 };
+
 /** DS3231 Alarm modes for alarm 2 */
 enum Ds3231Alarm2Mode {
-  DS3231_A2_PerMinute = 0x7, /**< Alarm once per minute
-                                  (whenever seconds are 0) */
-  DS3231_A2_Minute = 0x6,    /**< Alarm when minutes match */
-  DS3231_A2_Hour = 0x4,      /**< Alarm when hours and minutes match */
-  DS3231_A2_Date = 0x0,      /**< Alarm when date (day of month), hours
-                                  and minutes match */
-  DS3231_A2_Day = 0x8        /**< Alarm when day (day of week), hours
-                                  and minutes match */
+  DS3231_A2_PerMinute =
+      0x7,                /**< Alarm once per minute
+                                                               (whenever seconds are 0) */
+  DS3231_A2_Minute = 0x6, /**< Alarm when minutes match */
+  DS3231_A2_Hour = 0x4,   /**< Alarm when hours and minutes match */
+  DS3231_A2_Date =
+      0x0,            /**< Alarm when date (day of month), hours
+                                                           and minutes match */
+  DS3231_A2_Day = 0x8 /**< Alarm when day (day of week), hours
+                                                           and minutes match */
 };
+
+/** DS3232 SQW pin mode settings */
+enum Ds3232SqwPinMode {
+  DS3232_OFF = 0x1C,            /**< Off */
+  DS3232_SquareWave1Hz = 0x00,  /**<  1Hz square wave */
+  DS3232_SquareWave1kHz = 0x08, /**<  1kHz square wave */
+  DS3232_SquareWave4kHz = 0x10, /**<  4kHz square wave */
+  DS3232_SquareWave8kHz = 0x18  /**<  8kHz square wave */
+};
+
+/** DS3232 Alarm modes for alarm 1 */
+enum Ds3232Alarm1Mode {
+  DS3232_A1_PerSecond = 0x0F, /**< Alarm once per second */
+  DS3232_A1_Second = 0x0E,    /**< Alarm when seconds match */
+  DS3232_A1_Minute = 0x0C,    /**< Alarm when minutes and seconds match */
+  DS3232_A1_Hour =
+      0x08, /**< Alarm when hours, minutes
+                                                 and seconds match */
+  DS3232_A1_Date =
+      0x00, /**< Alarm when date (day of month), hours,
+                                                 minutes and seconds match */
+  DS3232_A1_Day =
+      0x10 /**< Alarm when day (day of week), hours,
+                                                minutes and seconds match */
+};
+
+/** DS3232 Alarm modes for alarm 2 */
+enum Ds3232Alarm2Mode {
+  DS32312_A2_PerMinute =
+      0x7,                /**< Alarm once per minute
+                                                              (whenever seconds are 0) */
+  DS3232_A2_Minute = 0x6, /**< Alarm when minutes match */
+  DS3232_A2_Hour = 0x4,   /**< Alarm when hours and minutes match */
+  DS3232_A2_Date =
+      0x0,            /**< Alarm when date (day of month), hours
+                                                           and minutes match */
+  DS3232_A2_Day = 0x8 /**< Alarm when day (day of week), hours
+                                                           and minutes match */
+};
+
 /** PCF8523 INT/SQW pin mode settings */
 enum Pcf8523SqwPinMode {
   PCF8523_OFF = 7,             /**< Off */
@@ -88,10 +134,12 @@ enum Pcf8523SqwPinMode {
 
 /** PCF8523 Timer Source Clock Frequencies for Timers A and B */
 enum PCF8523TimerClockFreq {
-  PCF8523_Frequency4kHz = 0,   /**< 1/4096th second = 244 microseconds,
-                                    max 62.256 milliseconds */
-  PCF8523_Frequency64Hz = 1,   /**< 1/64th second = 15.625 milliseconds,
-                                    max 3.984375 seconds */
+  PCF8523_Frequency4kHz =
+      0, /**< 1/4096th second = 244 microseconds,
+                                              max 62.256 milliseconds */
+  PCF8523_Frequency64Hz =
+      1,                       /**< 1/64th second = 15.625 milliseconds,
+                                                                        max 3.984375 seconds */
   PCF8523_FrequencySecond = 2, /**< 1 second, max 255 seconds = 4.25 minutes */
   PCF8523_FrequencyMinute = 3, /**< 1 minute, max 255 minutes = 4.25 hours */
   PCF8523_FrequencyHour = 4,   /**< 1 hour, max 255 hours = 10.625 days */
@@ -126,18 +174,18 @@ enum Pcf8563SqwPinMode {
 
 /**************************************************************************/
 /*!
-    @brief  Simple general-purpose date/time class (no TZ / DST / leap
-            seconds).
+        @brief  Simple general-purpose date/time class (no TZ / DST / leap
+                        seconds).
 
-    This class stores date and time information in a broken-down form, as a
-    tuple (year, month, day, hour, minute, second). The day of the week is
-    not stored, but computed on request. The class has no notion of time
-    zones, daylight saving time, or
-    [leap seconds](http://en.wikipedia.org/wiki/Leap_second): time is stored
-    in whatever time zone the user chooses to use.
+        This class stores date and time information in a broken-down form, as a
+        tuple (year, month, day, hour, minute, second). The day of the week is
+        not stored, but computed on request. The class has no notion of time
+        zones, daylight saving time, or
+        [leap seconds](http://en.wikipedia.org/wiki/Leap_second): time is stored
+        in whatever time zone the user chooses to use.
 
-    The class supports dates in the range from 1 Jan 2000 to 31 Dec 2099
-    inclusive.
+        The class supports dates in the range from 1 Jan 2000 to 31 Dec 2099
+        inclusive.
 */
 /**************************************************************************/
 class DateTime {
@@ -153,40 +201,40 @@ public:
   char *toString(char *buffer) const;
 
   /*!
-      @brief  Return the year.
-      @return Year (range: 2000--2099).
+          @brief  Return the year.
+          @return Year (range: 2000--2099).
   */
   uint16_t year() const { return 2000U + yOff; }
   /*!
-      @brief  Return the month.
-      @return Month number (1--12).
+          @brief  Return the month.
+          @return Month number (1--12).
   */
   uint8_t month() const { return m; }
   /*!
-      @brief  Return the day of the month.
-      @return Day of the month (1--31).
+          @brief  Return the day of the month.
+          @return Day of the month (1--31).
   */
   uint8_t day() const { return d; }
   /*!
-      @brief  Return the hour
-      @return Hour (0--23).
+          @brief  Return the hour
+          @return Hour (0--23).
   */
   uint8_t hour() const { return hh; }
 
   uint8_t twelveHour() const;
   /*!
-      @brief  Return whether the time is PM.
-      @return 0 if the time is AM, 1 if it's PM.
+          @brief  Return whether the time is PM.
+          @return 0 if the time is AM, 1 if it's PM.
   */
   uint8_t isPM() const { return hh >= 12; }
   /*!
-      @brief  Return the minute.
-      @return Minute (0--59).
+          @brief  Return the minute.
+          @return Minute (0--59).
   */
   uint8_t minute() const { return mm; }
   /*!
-      @brief  Return the second.
-      @return Second (0--59).
+          @brief  Return the second.
+          @return Second (0--59).
   */
   uint8_t second() const { return ss; }
 
@@ -199,8 +247,8 @@ public:
   uint32_t unixtime(void) const;
 
   /*!
-      Format of the ISO 8601 timestamp generated by `timestamp()`. Each
-      option corresponds to a `toString()` format as follows:
+          Format of the ISO 8601 timestamp generated by `timestamp()`. Each
+          option corresponds to a `toString()` format as follows:
   */
   enum timestampOpt {
     TIMESTAMP_FULL, //!< `YYYY-MM-DDThh:mm:ss`
@@ -215,46 +263,48 @@ public:
   bool operator<(const DateTime &right) const;
 
   /*!
-      @brief  Test if one DateTime is greater (later) than another.
-      @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-      @see use `isValid()` method to check if DateTime object is valid
-      @param right DateTime object to compare
-      @return True if the left DateTime is later than the right one,
-        false otherwise
+          @brief  Test if one DateTime is greater (later) than another.
+          @warning if one or both DateTime objects are invalid, returned value
+     is meaningless
+          @see use `isValid()` method to check if DateTime object is valid
+          @param right DateTime object to compare
+          @return True if the left DateTime is later than the right one,
+            false otherwise
   */
   bool operator>(const DateTime &right) const { return right < *this; }
 
   /*!
-      @brief  Test if one DateTime is less (earlier) than or equal to another
-      @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-      @see use `isValid()` method to check if DateTime object is valid
-      @param right DateTime object to compare
-      @return True if the left DateTime is earlier than or equal to the
-        right one, false otherwise
+          @brief  Test if one DateTime is less (earlier) than or equal to
+     another
+          @warning if one or both DateTime objects are invalid, returned value
+     is meaningless
+          @see use `isValid()` method to check if DateTime object is valid
+          @param right DateTime object to compare
+          @return True if the left DateTime is earlier than or equal to the
+            right one, false otherwise
   */
   bool operator<=(const DateTime &right) const { return !(*this > right); }
 
   /*!
-      @brief  Test if one DateTime is greater (later) than or equal to another
-      @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-      @see use `isValid()` method to check if DateTime object is valid
-      @param right DateTime object to compare
-      @return True if the left DateTime is later than or equal to the right
-        one, false otherwise
+          @brief  Test if one DateTime is greater (later) than or equal to
+     another
+          @warning if one or both DateTime objects are invalid, returned value
+     is meaningless
+          @see use `isValid()` method to check if DateTime object is valid
+          @param right DateTime object to compare
+          @return True if the left DateTime is later than or equal to the right
+            one, false otherwise
   */
   bool operator>=(const DateTime &right) const { return !(*this < right); }
   bool operator==(const DateTime &right) const;
 
   /*!
-      @brief  Test if two DateTime objects are not equal.
-      @warning if one or both DateTime objects are invalid, returned value is
-        meaningless
-      @see use `isValid()` method to check if DateTime object is valid
-      @param right DateTime object to compare
-      @return True if the two objects are not equal, false if they are
+          @brief  Test if two DateTime objects are not equal.
+          @warning if one or both DateTime objects are invalid, returned value
+     is meaningless
+          @see use `isValid()` method to check if DateTime object is valid
+          @param right DateTime object to compare
+          @return True if the two objects are not equal, false if they are
   */
   bool operator!=(const DateTime &right) const { return !(*this == right); }
 
@@ -269,7 +319,8 @@ protected:
 
 /**************************************************************************/
 /*!
-    @brief  Timespan which can represent changes in time with seconds accuracy.
+        @brief  Timespan which can represent changes in time with seconds
+   accuracy.
 */
 /**************************************************************************/
 class TimeSpan {
@@ -279,35 +330,35 @@ public:
   TimeSpan(const TimeSpan &copy);
 
   /*!
-      @brief  Number of days in the TimeSpan
-              e.g. 4
-      @return int16_t days
+          @brief  Number of days in the TimeSpan
+                          e.g. 4
+          @return int16_t days
   */
   int16_t days() const { return _seconds / 86400L; }
   /*!
-      @brief  Number of hours in the TimeSpan
-              This is not the total hours, it includes the days
-              e.g. 4 days, 3 hours - NOT 99 hours
-      @return int8_t hours
+          @brief  Number of hours in the TimeSpan
+                          This is not the total hours, it includes the days
+                          e.g. 4 days, 3 hours - NOT 99 hours
+          @return int8_t hours
   */
   int8_t hours() const { return _seconds / 3600 % 24; }
   /*!
-      @brief  Number of minutes in the TimeSpan
-              This is not the total minutes, it includes days/hours
-              e.g. 4 days, 3 hours, 27 minutes
-      @return int8_t minutes
+          @brief  Number of minutes in the TimeSpan
+                          This is not the total minutes, it includes days/hours
+                          e.g. 4 days, 3 hours, 27 minutes
+          @return int8_t minutes
   */
   int8_t minutes() const { return _seconds / 60 % 60; }
   /*!
-      @brief  Number of seconds in the TimeSpan
-              This is not the total seconds, it includes the days/hours/minutes
-              e.g. 4 days, 3 hours, 27 minutes, 7 seconds
-      @return int8_t seconds
+          @brief  Number of seconds in the TimeSpan
+                          This is not the total seconds, it includes the
+     days/hours/minutes e.g. 4 days, 3 hours, 27 minutes, 7 seconds
+          @return int8_t seconds
   */
   int8_t seconds() const { return _seconds % 60; }
   /*!
-      @brief  Total number of seconds in the TimeSpan, e.g. 358027
-      @return int32_t seconds
+          @brief  Total number of seconds in the TimeSpan, e.g. 358027
+          @return int32_t seconds
   */
   int32_t totalseconds() const { return _seconds; }
 
@@ -320,22 +371,22 @@ protected:
 
 /**************************************************************************/
 /*!
-    @brief  A generic I2C RTC base class. DO NOT USE DIRECTLY
+        @brief  A generic I2C RTC base class. DO NOT USE DIRECTLY
 */
 /**************************************************************************/
 class RTC_I2C {
 protected:
   /*!
-      @brief  Convert a binary coded decimal value to binary. RTC stores
+          @brief  Convert a binary coded decimal value to binary. RTC stores
     time/date values as BCD.
-      @param val BCD value
-      @return Binary value
+          @param val BCD value
+          @return Binary value
   */
   static uint8_t bcd2bin(uint8_t val) { return val - 6 * (val >> 4); }
   /*!
-      @brief  Convert a binary value to BCD format for the RTC registers
-      @param val Binary value
-      @return BCD value
+          @brief  Convert a binary value to BCD format for the RTC registers
+          @param val Binary value
+          @return BCD value
   */
   static uint8_t bin2bcd(uint8_t val) { return val + 6 * (val / 10); }
   Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
@@ -345,7 +396,8 @@ protected:
 
 /**************************************************************************/
 /*!
-    @brief  RTC based on the DS1307 chip connected via I2C and the Wire library
+        @brief  RTC based on the DS1307 chip connected via I2C and the Wire
+   library
 */
 /**************************************************************************/
 class RTC_DS1307 : RTC_I2C {
@@ -364,7 +416,8 @@ public:
 
 /**************************************************************************/
 /*!
-    @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
+        @brief  RTC based on the DS3231 chip connected via I2C and the Wire
+   library
 */
 /**************************************************************************/
 class RTC_DS3231 : RTC_I2C {
@@ -389,18 +442,61 @@ public:
   bool isEnabled32K(void);
   float getTemperature(); // in Celsius degree
   /*!
-      @brief  Convert the day of the week to a representation suitable for
-              storing in the DS3231: from 1 (Monday) to 7 (Sunday).
-      @param  d Day of the week as represented by the library:
-              from 0 (Sunday) to 6 (Saturday).
-      @return the converted value
+          @brief  Convert the day of the week to a representation suitable for
+                          storing in the DS3231: from 1 (Monday) to 7 (Sunday).
+          @param  d Day of the week as represented by the library:
+                          from 0 (Sunday) to 6 (Saturday).
+          @return the converted value
   */
   static uint8_t dowToDS3231(uint8_t d) { return d == 0 ? 7 : d; }
 };
-
 /**************************************************************************/
 /*!
-    @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
+        @brief  RTC based on the DS3232 chip connected via I2C and the Wire
+   library
+*/
+/**************************************************************************/
+class RTC_DS3232 : RTC_I2C {
+public:
+  boolean begin(TwoWire *wireInstance = &Wire);
+  void adjust(const DateTime &dt);
+  bool lostPower(void);
+  DateTime now();
+  Ds3232SqwPinMode readSqwPinMode();
+  void writeSqwPinMode(Ds3232SqwPinMode mode);
+  bool setAlarm1(const DateTime &dt, Ds3232Alarm1Mode alarm_mode);
+  bool setAlarm2(const DateTime &dt, Ds3232Alarm2Mode alarm_mode);
+  void disableAlarm(uint8_t alarm_num);
+  void clearAlarm(uint8_t alarm_num);
+  bool alarmFired(uint8_t alarm_num);
+  void enable32K(void);
+  void disable32K(void);
+  bool isEnabled32K(void);
+  void enableBB32KHZ(void);
+  void disableBB32KHZ(void);
+  bool isEnabledBB32KHZ(void);
+  void clearOSF(void);
+  void enableEOSC(void);
+  void disableEOSC(void);
+  bool isEnabledEOSC(void);
+  float getTemperature(); // in Celsius degree
+  /*!
+          @brief  Convert the day of the week to a representation suitable for
+                          storing in the DS3232: from 1 (Monday) to 7 (Sunday).
+          @param  d Day of the week as represented by the library:
+                          from 0 (Sunday) to 6 (Saturday).
+          @return the converted value
+  */
+  static uint8_t dowToDS3232(uint8_t d) { return d == 0 ? 7 : d; }
+  uint8_t readnvram(uint8_t address);
+  void readnvram(uint8_t *buf, uint8_t size, uint8_t address);
+  void writenvram(uint8_t address, uint8_t data);
+  void writenvram(uint8_t address, const uint8_t *buf, uint8_t size);
+};
+/**************************************************************************/
+/*!
+        @brief  RTC based on the PCF8523 chip connected via I2C and the Wire
+   library
 */
 /**************************************************************************/
 class RTC_PCF8523 : RTC_I2C {
@@ -427,7 +523,8 @@ public:
 
 /**************************************************************************/
 /*!
-    @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
+        @brief  RTC based on the PCF8563 chip connected via I2C and the Wire
+   library
 */
 /**************************************************************************/
 class RTC_PCF8563 : RTC_I2C {
@@ -445,15 +542,15 @@ public:
 
 /**************************************************************************/
 /*!
-    @brief  RTC using the internal millis() clock, has to be initialized before
-   use. NOTE: this is immune to millis() rollover events.
+        @brief  RTC using the internal millis() clock, has to be initialized
+   before use. NOTE: this is immune to millis() rollover events.
 */
 /**************************************************************************/
 class RTC_Millis {
 public:
   /*!
-      @brief  Start the RTC
-      @param dt DateTime object with the date/time to set
+          @brief  Start the RTC
+          @param dt DateTime object with the date/time to set
   */
   void begin(const DateTime &dt) { adjust(dt); }
   void adjust(const DateTime &dt);
@@ -461,37 +558,37 @@ public:
 
 protected:
   /*!
-      Unix time from the previous call to now().
+          Unix time from the previous call to now().
 
-      This, together with `lastMillis`, defines the alignment between
-      the `millis()` timescale and the Unix timescale. Both variables
-      are updated on each call to now(), which prevents rollover issues.
+          This, together with `lastMillis`, defines the alignment between
+          the `millis()` timescale and the Unix timescale. Both variables
+          are updated on each call to now(), which prevents rollover issues.
   */
   uint32_t lastUnix;
   /*!
-      `millis()` value corresponding `lastUnix`.
+          `millis()` value corresponding `lastUnix`.
 
-      Note that this is **not** the `millis()` value of the last call to
-      now(): it's the `millis()` value corresponding to the last **full
-      second** of Unix time preceding the last call to now().
+          Note that this is **not** the `millis()` value of the last call to
+          now(): it's the `millis()` value corresponding to the last **full
+          second** of Unix time preceding the last call to now().
   */
   uint32_t lastMillis;
 };
 
 /**************************************************************************/
 /*!
-    @brief  RTC using the internal micros() clock, has to be initialized before
-            use. Unlike RTC_Millis, this can be tuned in order to compensate for
-            the natural drift of the system clock. Note that now() has to be
-            called more frequently than the micros() rollover period, which is
-            approximately 71.6 minutes.
+        @brief  RTC using the internal micros() clock, has to be initialized
+   before use. Unlike RTC_Millis, this can be tuned in order to compensate for
+                        the natural drift of the system clock. Note that now()
+   has to be called more frequently than the micros() rollover period, which is
+                        approximately 71.6 minutes.
 */
 /**************************************************************************/
 class RTC_Micros {
 public:
   /*!
-      @brief  Start the RTC
-      @param dt DateTime object with the date/time to set
+          @brief  Start the RTC
+          @param dt DateTime object with the date/time to set
   */
   void begin(const DateTime &dt) { adjust(dt); }
   void adjust(const DateTime &dt);
@@ -500,18 +597,18 @@ public:
 
 protected:
   /*!
-      Number of microseconds reported by `micros()` per "true"
-      (calibrated) second.
+          Number of microseconds reported by `micros()` per "true"
+          (calibrated) second.
   */
   uint32_t microsPerSecond = 1000000;
   /*!
-      Unix time from the previous call to now().
+          Unix time from the previous call to now().
 
-      The timing logic is identical to RTC_Millis.
+          The timing logic is identical to RTC_Millis.
   */
   uint32_t lastUnix;
   /*!
-      `micros()` value corresponding to `lastUnix`.
+          `micros()` value corresponding to `lastUnix`.
   */
   uint32_t lastMicros;
 };
