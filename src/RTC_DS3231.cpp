@@ -6,6 +6,7 @@
 #define DS3231_ALARM2 0x0B    ///< Alarm 2 register
 #define DS3231_CONTROL 0x0E   ///< Control register
 #define DS3231_STATUSREG 0x0F ///< Status register
+#define DS3231_AGINGREG 0x10  ///< Aging offset register
 #define DS3231_TEMPERATUREREG                                                  \
   0x11 ///< Temperature register (high byte - low byte is at 0x12), 10-bit
        ///< temperature value
@@ -381,4 +382,28 @@ void RTC_DS3231::disable32K(void) {
 /**************************************************************************/
 bool RTC_DS3231::isEnabled32K(void) {
   return (read_register(DS3231_STATUSREG) >> 0x03) & 0x01;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the value of the Aging Offset Register
+    @see    setAgingOffset() for an explanation of this register
+    @return The current value of the Aging Offset Register
+*/
+/**************************************************************************/
+int8_t RTC_DS3231::getAgingOffset() { return read_register(DS3231_AGINGREG); }
+
+/**************************************************************************/
+/*!
+    @brief  Update the Aging Offset Register
+    @details The Aging Offset Register can be used to compensate for
+             systematic drift due to aging. A positive value makes the RTC
+             run slower, a negative value makes it run faster. The effect is
+             temperature dependent. At room temperature, the RTC frequency
+             changes by roughly 0.1 ppm per unit of offset.
+    @param  offset New offset to be written into the register
+*/
+/**************************************************************************/
+void RTC_DS3231::setAgingOffset(int8_t offset) {
+  write_register(DS3231_AGINGREG, offset);
 }

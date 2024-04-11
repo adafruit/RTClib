@@ -388,6 +388,8 @@ public:
   void disable32K(void);
   bool isEnabled32K(void);
   float getTemperature(); // in Celsius degree
+  int8_t getAgingOffset();
+  void setAgingOffset(int8_t);
   /*!
       @brief  Convert the day of the week to a representation suitable for
               storing in the DS3231: from 1 (Monday) to 7 (Sunday).
