@@ -114,7 +114,8 @@ void RTC_DS3231::writeSqwPinMode(Ds3231SqwPinMode mode) {
 float RTC_DS3231::getTemperature() {
   uint8_t buffer[2] = {DS3231_TEMPERATUREREG, 0};
   i2c_dev->write_then_read(buffer, 1, buffer, 2);
-  return (float)buffer[0] + (buffer[1] >> 6) * 0.25f;
+  int16_t temp = uint16_t(buffer[0]) << 8 | buffer[1];
+  return temp * (1 / 256.0);
 }
 
 /**************************************************************************/
