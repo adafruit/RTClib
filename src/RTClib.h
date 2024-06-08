@@ -97,6 +97,14 @@ enum PCF8523TimerClockFreq {
   PCF8523_FrequencyHour = 4,   /**< 1 hour, max 255 hours = 10.625 days */
 };
 
+/** PCF8523 Watchdog Timeout */
+enum PCF8523WatchdogTimeoutUnity {
+  PCF8523_WDG_DISABLED = 0, /** Watchog Timer disabled*/
+  PCF8523_WDG_SEC = 2,      /** Watchog Timer unity will be seconds*/
+  PCF8523_WDG_MIN = 3,      /** Watchog Timer unity will be minutes*/
+  PCF8523_WDG_HOUR = 4,     /** Watchog Timer unity will be hours*/
+};
+
 /** PCF8523 Timer Interrupt Low Pulse Width options for Timer B only */
 enum PCF8523TimerIntPulse {
   PCF8523_LowPulse3x64Hz = 0,  /**<  46.875 ms   3/64ths second */
@@ -122,6 +130,14 @@ enum Pcf8563SqwPinMode {
   PCF8563_SquareWave32Hz = 0x82, /**< 32Hz square wave */
   PCF8563_SquareWave1kHz = 0x81, /**< 1kHz square wave */
   PCF8563_SquareWave32kHz = 0x80 /**< 32kHz square wave */
+};
+
+/** PCF8563 CLKOUT pin mode settings */
+enum Pcf8563AlarmRegister {
+  PCF8523_ALARM_MINUTE = 0x0A,  ///< Minute Alarm register
+  PCF8523_ALARM_HOUR = 0x0B,    ///< Hour Alarm register
+  PCF8523_ALARM_DAY = 0x0C,     ///< Day Alarm register
+  PCF8523_ALARM_WEEKDAY = 0x0D, ///< WeekDay Alarm register
 };
 
 /**************************************************************************/
@@ -409,9 +425,21 @@ public:
   void adjust(const DateTime &dt);
   bool lostPower(void);
   bool initialized(void);
+  bool isWatchdogFired(void);
+  bool isAlarmFired(void);
+  bool isAnyAlarmSetup(void);
   DateTime now();
+  void upgradeOsciCapaTo12pf5();
   void start(void);
   void stop(void);
+  void reset(void);
+  void setBatterySwitchOver(uint8_t battery_switch_over_value);
+  void setAlarmValueForRegister(Pcf8563AlarmRegister the_register,
+                                uint8_t the_value);
+  uint8_t getAlarmValueForRegister(Pcf8563AlarmRegister the_register);
+  void enableAlarm();
+  void clearAlarm();
+  void disableAlarm();
   uint8_t isrunning();
   Pcf8523SqwPinMode readSqwPinMode();
   void writeSqwPinMode(Pcf8523SqwPinMode mode);
@@ -423,6 +451,12 @@ public:
   void disableCountdownTimer(void);
   void deconfigureAllTimers(void);
   void calibrate(Pcf8523OffsetMode mode, int8_t offset);
+  void enableWatchdog(PCF8523WatchdogTimeoutUnity wdgTimeoutUnity, uint8_t wdgTimeoutValue);
+  void resetWatchdog(void);
+  void disableWatchdog(void);
+private:
+  PCF8523WatchdogTimeoutUnity wdgTimeoutUnitySet;
+  uint8_t wdgTimeoutValueSet;
 };
 
 /**************************************************************************/

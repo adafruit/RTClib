@@ -5,6 +5,8 @@
 #define PCF8523_CONTROL_1 0x00     ///< Control and status register 1
 #define PCF8523_CONTROL_2 0x01     ///< Control and status register 2
 #define PCF8523_CONTROL_3 0x02     ///< Control and status register 3
+#define PCF8523_TIMER_A_FRCTL 0x10 ///< Timer A source clock frequency control
+#define PCF8523_TIMER_A_VALUE 0x11 ///< Timer A value (number clock periods)
 #define PCF8523_TIMER_B_FRCTL 0x12 ///< Timer B source clock frequency control
 #define PCF8523_TIMER_B_VALUE 0x13 ///< Timer B value (number clock periods)
 #define PCF8523_OFFSET 0x0E        ///< Offset register
@@ -18,6 +20,8 @@
 */
 /**************************************************************************/
 bool RTC_PCF8523::begin(TwoWire *wireInstance) {
+  wdgTimeoutUnitySet = PCF8523_WDG_DISABLED;
+  wdgTimeoutValueSet = 0;
   if (i2c_dev)
     delete i2c_dev;
   i2c_dev = new Adafruit_I2CDevice(PCF8523_ADDRESS, wireInstance);
@@ -45,11 +49,166 @@ bool RTC_PCF8523::lostPower(void) {
 /*!
     @brief  Check control register 3 to see if we've run adjust() yet (setting
    the date/time and battery switchover mode)
-    @return True if the PCF8523 has been set up, false if not
+    @return 1 if the PCF8523 has been set up, false if not
 */
 /**************************************************************************/
 bool RTC_PCF8523::initialized(void) {
   return (read_register(PCF8523_CONTROL_3) & 0xE0) != 0xE0;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @param the_value The Alarm register value
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::setAlarmValueForRegister(Pcf8563AlarmRegister the_register,
+                                           uint8_t the_value) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    write_register(the_register, bin2bcd((the_value % 60) & 0x7F));
+    break;
+  case PCF8523_ALARM_HOUR:
+    write_register(the_register, bin2bcd((the_value % 24) & 0x7F));
+    break;
+  case PCF8523_ALARM_DAY:
+    write_register(the_register, bin2bcd((the_value % 32) & 0x7F));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    write_register(the_register, bin2bcd((the_value % 8) & 0x7F));
+    break;
+  default:
+    break;
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get RTC alarm value for a specific register
+    @param the_register The Alarm register concerned
+    @return The value for the requested Alarm register
+*/
+/**************************************************************************/
+
+uint8_t
+RTC_PCF8523::getAlarmValueForRegister(Pcf8563AlarmRegister the_register) {
+  // set the value and enable the AEN_X (enabled with 0 value)
+  switch (the_register) {
+  case PCF8523_ALARM_MINUTE:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_HOUR:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_DAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  case PCF8523_ALARM_WEEKDAY:
+    return bcd2bin(read_register(the_register));
+    break;
+  default:
+    break;
+  }
+  return 0xFF;
+}
+
+/**************************************************************************/
+/*!
+    @brief  RTC Upgrade oscillator capacitor From 7pF to 12.5pF
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::upgradeOsciCapaTo12pf5() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) | (1 << 7)); // Enable CAP_SEL
+}
+
+/**************************************************************************/
+/*!
+    @brief  Enable Alarm based on previous setAlarmValueForRegister call
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::enableAlarm() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) | (1 << 1)); // Enable AIE
+}
+
+/**************************************************************************/
+/*!
+    @brief  Check Watchdog TimerA fired, isWatchdogFired must be read at the
+    very beginning, because flag is read-only and cleared by reading
+    register Control_2
+    @return 1 if a Watchdog TimerA fired
+*/
+/**************************************************************************/
+
+bool RTC_PCF8523::isWatchdogFired(void) {
+  return (read_register(PCF8523_CONTROL_2) & (1 << 7)); // Check WTAF
+}
+
+/**************************************************************************/
+/*!
+    @brief  Check Alarm fired
+    @return 1 if an alarm fired
+*/
+/**************************************************************************/
+
+bool RTC_PCF8523::isAlarmFired(void) {
+  return (read_register(PCF8523_CONTROL_2) & (1 << 3)); // Check AF
+}
+
+/**************************************************************************/
+/*!
+    @brief  Clear Alarm
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::clearAlarm() {
+  write_register(PCF8523_CONTROL_2,
+                 read_register(PCF8523_CONTROL_2) & ~(1 << 3)); // Clear AF
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable Alarm
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::disableAlarm() {
+  write_register(PCF8523_CONTROL_1,
+                 read_register(PCF8523_CONTROL_1) & ~(1 << 1)); // Disable AIE
+  write_register(PCF8523_ALARM_MINUTE, 0x80);
+  write_register(PCF8523_ALARM_HOUR, 0x80);
+  write_register(PCF8523_ALARM_DAY, 0x80);
+  write_register(PCF8523_ALARM_WEEKDAY, 0x80);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Ask if any Alarm is setup
+    @return true if an alarm is setup
+*/
+/**************************************************************************/
+
+bool RTC_PCF8523::isAnyAlarmSetup(void) {
+  if (read_register(PCF8523_CONTROL_1) & (1 << 1)) {
+    return true;
+  }
+  return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Set RTC battery switch-over mode in register Control_3
+    @param battery_switch_over_value The value for battery switch over register
+*/
+/**************************************************************************/
+void RTC_PCF8523::setBatterySwitchOver(uint8_t battery_switch_over_value) {
+  write_register(PCF8523_CONTROL_3, battery_switch_over_value);
 }
 
 /**************************************************************************/
@@ -70,7 +229,7 @@ void RTC_PCF8523::adjust(const DateTime &dt) {
   i2c_dev->write(buffer, 8);
 
   // set to battery switchover mode
-  write_register(PCF8523_CONTROL_3, 0x00);
+  setBatterySwitchOver(0x00);
 }
 
 /**************************************************************************/
@@ -109,6 +268,17 @@ void RTC_PCF8523::stop(void) {
   write_register(PCF8523_CONTROL_1,
                  read_register(PCF8523_CONTROL_1) | (1 << 5));
 }
+
+/**************************************************************************/
+/*!
+    @brief  Reset RTC sending 0x58 in register Control_1
+*/
+/**************************************************************************/
+void RTC_PCF8523::reset(void) {
+  wdgTimeoutUnitySet = PCF8523_WDG_DISABLED;
+  wdgTimeoutValueSet = 0;
+  write_register(PCF8523_CONTROL_1, 0x58);
+  }
 
 /**************************************************************************/
 /*!
@@ -166,6 +336,84 @@ void RTC_PCF8523::enableSecondTimer() {
 void RTC_PCF8523::disableSecondTimer() {
   write_register(PCF8523_CONTROL_1,
                  read_register(PCF8523_CONTROL_1) & ~(1 << 2));
+}
+
+/**************************************************************************/
+/*!
+    @brief  Enable Timer A as Watchdog permanent Interrupt on the PCF8523.
+  How :
+  TAC[2:1] = 10 : {Tmr_CLKOUT_ctrl(0x0F)} : set as watchdog timer
+  TAQ[2:0] : {Tmr_A_freq_ctrl(0x10)} : determine source clock frequency
+  WTAIE(2) : {Control_2(0x01)} : watchdog timer A interrupt enabled
+
+  TAM(7) : {Tmr_CLKOUT_ctrl(0x0F)} : control the interrupt generation mode(permanent) force to 0
+
+  T_A : {Tmr_A_reg(0x11)} : determines the watchdog timer-period
+
+  The watchdog timer counts down from value T_A in register Tmr_A_reg (11h). When the
+  counter reaches 1, the watchdog timer flag WTAF (register Control_2) is set logic 1 on the
+  next rising edge of the timer clock
+
+  The counter does not automatically reload
+
+  When loading the counter with any valid value of T_A except 0, (interrupt is cleared, and watchdog timer starts)
+  When loading the counter with 0, The watchdog timer stops
+
+  A read of the register Control_2 (01h) automatically resets WTAF (WTAF = 0) and clears the interrupt
+*/
+/**************************************************************************/
+void RTC_PCF8523::enableWatchdog(PCF8523WatchdogTimeoutUnity wdgTimeoutUnity, uint8_t wdgTimeoutValue) {
+  uint8_t ctlreg = read_register(PCF8523_CONTROL_2);
+  if(wdgTimeoutUnitySet || wdgTimeoutValueSet){
+    disableWatchdog();
+  }
+  if((!wdgTimeoutUnity)||(!wdgTimeoutValue)){
+    return;
+  }
+  wdgTimeoutUnitySet = wdgTimeoutUnity;
+  wdgTimeoutValueSet = wdgTimeoutValue;
+  write_register(PCF8523_TIMER_A_VALUE,0);//Stop the watchdog timer
+  //TAC[2:1] = 10 : {Tmr_CLKOUT_ctrl(0x0F)} : set as watchdog timer
+  write_register(PCF8523_CLKOUTCONTROL,
+    (read_register(PCF8523_CLKOUTCONTROL) & 0xFC) | (0x02 << 1));
+  //TAQ[2:0] : {Tmr_A_freq_ctrl(0x10)} : determine source clock frequency
+  write_register(PCF8523_TIMER_A_FRCTL,
+    (read_register(PCF8523_TIMER_A_FRCTL) & 0xF8) | wdgTimeoutUnitySet);
+  //WTAIE(2) : {Control_2(0x01)} : watchdog timer A interrupt enabled
+  write_register(PCF8523_CONTROL_2, ctlreg | (1 << 2));
+  //TAM(7) : {Tmr_CLKOUT_ctrl(0x0F)} : control the interrupt generation mode(permanent) force to 0
+  write_register(PCF8523_CLKOUTCONTROL,
+    read_register(PCF8523_CLKOUTCONTROL) & ~(1<<7));
+
+  //Start the watchdog timer
+  write_register(PCF8523_TIMER_A_VALUE, wdgTimeoutValueSet);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reset Timer A Watchdog on the PCF8523.
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::resetWatchdog(void) {
+  if((!wdgTimeoutUnitySet)||(!wdgTimeoutValueSet)){
+    return;
+  }
+  write_register(PCF8523_TIMER_A_VALUE, wdgTimeoutValueSet);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Disable Timer A Watchdog on the PCF8523.
+*/
+/**************************************************************************/
+
+void RTC_PCF8523::disableWatchdog(void) {
+  uint8_t ctlreg = read_register(PCF8523_CONTROL_2);
+  // WTAIE set to 0
+  write_register(PCF8523_CONTROL_2, ctlreg & ~(1 << 2));
+  wdgTimeoutUnitySet = PCF8523_WDG_DISABLED;
+  wdgTimeoutValueSet = 0;
 }
 
 /**************************************************************************/
