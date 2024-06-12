@@ -1,89 +1,188 @@
-// Date and time functions using a PCF8563 RTC connected via I2C and Wire lib
+/**************************************************************************/
+/*
+  Countdown Timer using a PCF8563 RTC connected via I2C and Wire lib
+  with the INT pin wired to an interrupt-capable input.
+
+  This sketch sets a countdown timer, and executes code when it reaches 0,
+  then blinks the built-in LED like BlinkWithoutDelay, but without millis()!
+
+  NOTE:
+  You must connect the PCF8563's interrupt pin to your Arduino or other
+  microcontroller on an input pin that can handle interrupts, and that has a
+  pullup resistor, or add an external pull-up resistor. The pin will be briefly
+  pulled low each time the countdown reaches 0. This example will not work
+  without the interrupt pin connected!
+
+  On Adafruit breakout boards, the interrupt pin is labeled 'INT' or 'SQW'.
+*/
+/**************************************************************************/
+
 #include "RTClib.h"
 
+// using an ESP12-E module:
+// use 2 Wire SCL: GPIO5 and SDA: GPIO4 to connect to the RTC
 RTC_PCF8563 rtc;
 
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+// Input pin with interrupt capability
+// const int timerInterruptPin = 2;  // Most Arduinos
+// const int timerInterruptPin = 5; // Adafruit Feather M0/M4/nRF52840
+const int timerInterruptPin = 13; // ESP12F
 
-// use D2 for INT0; attach to CLKOUT pin on RTC
-const uint8_t INT_PIN = 2;
+// Variables modified during an interrupt must be declared volatile
+volatile bool countdownInterruptTriggered = false;
+volatile int numCountdownInterrupts = 0;
 
-// flag to update serial; set in interrupt callback
-volatile uint8_t tick_tock = 1;
-
-// INT0 interrupt callback; update tick_tock flag
-void set_tick_tock(void) {
-  tick_tock = 1;
+// Triggered by the PCF8563 Countdown Timer interrupt at the end of a countdown
+// period. Meanwhile, the PCF8563 immediately starts the countdown again.
+void countdownOver() {
+  // Set a flag to run code in the loop():
+  Serial.println("ISR");
+  countdownInterruptTriggered = true;
+  numCountdownInterrupts++;
+  rtc.clearTimer();
 }
 
-void setup () {
-  Serial.begin(115200);
+// Triggered by normal operation of timer INT pin
+void toggleLed() {
+  // Run certain types of fast executing code here:
+  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+  // The clearTimer() function is called to reset the timer Flag
+  rtc.clearTimer();
+}
+
+// Triggered by TI_TP mode of timer INT pin
+void pulsedToggleLed() {
+  // Run certain types of fast executing code here:
+  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+  // As we are using the TI_TP mode, the clearTimer() function is not called
+  // to reset the timer Flag as it is done automatically by the PCF8563.
+}
+
+void setup() {
+
+  Serial.begin(57600);
+  Serial.println("\n");
 
 #ifndef ESP8266
-  while (!Serial); // wait for serial port to connect. Needed for native USB
+  while (!Serial)
+    ; // wait for serial port to connect. Needed for native USB
 #endif
 
-
-  pinMode(INT_PIN, INPUT);        // set up interrupt pin
-  digitalWrite(INT_PIN, HIGH);    // turn on pullup resistors
-  // attach interrupt to set_tick_tock callback on rising edge of INT0
-  attachInterrupt(digitalPinToInterrupt(INT_PIN), set_tick_tock, RISING);
-
-  if (! rtc.begin()) {
+  // initialize RTC
+  if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    while (1) delay(10);
+    while (1)
+      delay(10);
   }
 
-  if (rtc.lostPower()) {
-    Serial.println("RTC is NOT initialized, let's set the time!");
-    // When time needs to be set on a new device, or after a power loss, the
-    // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    // This line sets the RTC with an explicit date & time, for example to set
-    // January 21, 2014 at 3am you would call:
-    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
-    //
-    // Note: allow 2 seconds after inserting battery or applying external power
-    // without battery before calling adjust(). This gives the PCF8523's
-    // crystal oscillator time to stabilize. If you call adjust() very quickly
-    // after the RTC is powered, lostPower() may still return true.
-  }
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
 
+  Serial.println(F("\nStarting PCF8563 Countdown Timer example."));
+  Serial.print(
+      F("Configured to expect PCF8563 INT/SQW pin connected to input pin: "));
+  Serial.println(timerInterruptPin);
+  Serial.println(
+      F("This example will not work without the interrupt pin connected!\n\n"));
 
+  // Timer configuration is not cleared on an RTC reset due to battery backup!
+  rtc.disableAlarm();
+  rtc.disableTimer();
 
-  // When time needs to be re-set on a previously configured device, the
-  // following line sets the RTC to the date & time this sketch was compiled
-  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  // This line sets the RTC with an explicit date & time, for example to set
-  // January 21, 2014 at 3am you would call:
-  // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+  Serial.println(
+      F("First, use the PCF8563's 'Countdown Timer' with an interrupt."));
+  Serial.println(
+      F("Set the countdown for 10 seconds and we'll let it run for 2 rounds."));
+  Serial.println(F("Starting Countdown Timer now..."));
 
-  // When the RTC was stopped and stays connected to the battery, it has
-  // to be restarted by clearing the STOP bit. Let's do this to ensure
-  // the RTC is running.
-  rtc.start();
+  // These are the PCF8563's built-in "Timer Source Clock Frequencies".
+  // They are predefined time periods you choose as your base unit of time,
+  // depending on the length of countdown timer you need.
+  // The minimum length of your countdown is 1 time period.
+  // The maximum length of your countdown is 255 time periods.
+  //
+  // PCF8563_TimerFrequencyMinute = 1 minute, max 4.25 hours
+  // PCF8563_TimerFrequencySecond = 1 second, max 4.25 minutes
+  // PCF8563_TimerFrequency64Hz   = 1/64 of a second (15.625 milliseconds),
+  // max 3.984 seconds
+  // PCF8563_TimerFrequency4kHz   = 1/4096 of a second (244
+  // microseconds), max 62.256 milliseconds
+  //
+  // Uncomment an example below:
 
-  // turn on 1Hz clock out, used as INT0 for serial update every second
-  rtc.writeSqwPinMode(PCF8563_SquareWave1Hz);
+  // rtc.enableTimer(PCF8563_TimerFrequencyHour, 24);    // 1 day
+  // rtc.enableTimer(PCF8563_TimerFrequencyMinute, 150); // 2.5 hours
+  rtc.enableTimer(PCF8563_TimerFrequencySecond, 10); // 10 seconds
+  // rtc.enableTimer(PCF8563_TimerFrequency64Hz, 32);    // 1/2 second
+  // rtc.enableTimer(PCF8563_TimerFrequency64Hz, 16);    // 1/4 second
+  // rtc.enableTimer(PCF8563_TimerFrequency4kHz, 205);   // 50
+  // milliseconds
+
+  attachInterrupt(digitalPinToInterrupt(timerInterruptPin), countdownOver,
+                  FALLING);
+
+  // This message proves we're not blocked while counting down!
+  Serial.println(F("  While we're waiting, a word of caution:"));
+  Serial.println(F("  When starting a new countdown timer, the first time "
+                   "period is not of fixed"));
+  Serial.println(F("  duration. The amount of inaccuracy for the first time "
+                   "period is up to one full"));
+  Serial.println(F("  clock frequency. Example: just the first second of the "
+                   "first round of a new"));
+  Serial.println(
+      F("  countdown based on PCF8563_TimerFrequencySecond may be off by "
+        "as much as 1 second!"));
+  Serial.println(F("  For critical timing, consider starting actions on the "
+                   "first interrupt."));
 }
 
-void loop () {
+void loop() {
+  if (countdownInterruptTriggered && numCountdownInterrupts == 1) {
+    Serial.println(
+        F("Countdown interrupt triggered. Accurate timekeeping starts now."));
+    countdownInterruptTriggered = false; // don't come in here again
+  } else if (countdownInterruptTriggered && numCountdownInterrupts == 2) {
+    Serial.println(F("2nd countdown interrupt triggered. Disabling countdown "
+                     "and detaching interrupt.\n\n"));
+    rtc.disableTimer();
+    detachInterrupt(digitalPinToInterrupt(timerInterruptPin));
+    delay(2000);
 
-  // check if time display should be output
-  if(tick_tock) {
+    Serial.println(F("Now, set up the PCF8563's Timer to toggle the "
+                     "built-in LED at 1Hz..."));
+    Serial.println(
+        F("This time, we'll use the PCF8563's Timer Interrupt Pin "
+          "and reset the Timer Flag within the interrupt service routine."));
+    attachInterrupt(digitalPinToInterrupt(timerInterruptPin), toggleLed,
+                    FALLING);
+    rtc.enableTimer(PCF8563_TimerFrequency64Hz, 64);
+    Serial.println(F("Look for the built-in LED to flash 1 second ON, 1 second "
+                     "OFF, repeat. "));
+    Serial.println(F("Meanwhile this program will use delay() to block code "
+                     "execution briefly"));
+    Serial.println(F("before moving on to the last example. Notice the LED "
+                     "keeps blinking!\n\n"));
+    delay(20000); // less accurate, blocks execution here. Meanwhile Second
+                  // Timer keeps running.
 
-    DateTime now = rtc.now();
+    Serial.println(F("Now, set up the PCF8563's Timer to toggle the "
+                     "built-in LED at 2Hz..."));
+    Serial.println(F("This time, we'll use the PCF8563's Timer Interrupt Pin "
+                     "with a pulsed timer interrupt. So no need to reset the "
+                     "Timer Flag within the interrupt service routine."));
+    attachInterrupt(digitalPinToInterrupt(timerInterruptPin), pulsedToggleLed,
+                    FALLING);
+    rtc.enableTimer(PCF8563_TimerFrequency64Hz, 32,
+                    /* Enable the pulse */ true);
+    Serial.println(
+        F("Look for the built-in LED to flash 0.5 second ON, 0.5 second "
+          "OFF, repeat. "));
+    Serial.println(F("This is the end of this example, the LED will keep "
+                     "blinking forever.\n\n"));
 
-    char time_format[] = "hh:mm:ss AP";
-    char date_format[] = "MM/DD/YYYY";
-
-    Serial.println(now.toString(time_format));
-    Serial.println(now.toString(date_format));
-    Serial.println();
-
-    tick_tock = 0;
-
+    countdownInterruptTriggered = false; // don't come in here again
   }
 
+  // Nothing to do here...
 }
