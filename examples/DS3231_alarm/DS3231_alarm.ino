@@ -87,8 +87,12 @@ void loop() {
     Serial.print("] SQW: ");
     Serial.print(digitalRead(CLOCK_INTERRUPT_PIN));
 
-    // whether a alarm fired
-    Serial.print(" Fired: ");
+    // indicates if alarm 1 is enabled
+    Serial.print(", Enabled: ");
+    Serial.print(rtc.alarmEnabled(1));
+
+    // whether alarm 1 fired
+    Serial.print(", Fired: ");
     Serial.print(rtc.alarmFired(1));
 
     // Serial.print(" Alarm2: ");
