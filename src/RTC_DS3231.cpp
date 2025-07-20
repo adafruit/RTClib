@@ -127,9 +127,6 @@ float RTC_DS3231::getTemperature() {
 /**************************************************************************/
 bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
   uint8_t ctrl = read_register(DS3231_CONTROL);
-  if (!(ctrl & 0x04)) {
-    return false;
-  }
 
   uint8_t A1M1 = (alarm_mode & 0x01) << 7; // Seconds bit 7.
   uint8_t A1M2 = (alarm_mode & 0x02) << 6; // Minutes bit 7.
@@ -160,9 +157,6 @@ bool RTC_DS3231::setAlarm1(const DateTime &dt, Ds3231Alarm1Mode alarm_mode) {
 /**************************************************************************/
 bool RTC_DS3231::setAlarm2(const DateTime &dt, Ds3231Alarm2Mode alarm_mode) {
   uint8_t ctrl = read_register(DS3231_CONTROL);
-  if (!(ctrl & 0x04)) {
-    return false;
-  }
 
   uint8_t A2M2 = (alarm_mode & 0x01) << 7; // Minutes bit 7.
   uint8_t A2M3 = (alarm_mode & 0x02) << 6; // Hour bit 7.

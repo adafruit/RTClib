@@ -348,7 +348,7 @@ protected:
     @brief  RTC based on the DS1307 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS1307 : RTC_I2C {
+class RTC_DS1307 : public RTC_I2C {
 public:
   bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
@@ -367,7 +367,7 @@ public:
     @brief  RTC based on the DS3231 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_DS3231 : RTC_I2C {
+class RTC_DS3231 : public RTC_I2C {
 public:
   bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
@@ -403,7 +403,7 @@ public:
     @brief  RTC based on the PCF8523 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_PCF8523 : RTC_I2C {
+class RTC_PCF8523 : public RTC_I2C {
 public:
   bool begin(TwoWire *wireInstance = &Wire);
   void adjust(const DateTime &dt);
@@ -430,7 +430,7 @@ public:
     @brief  RTC based on the PCF8563 chip connected via I2C and the Wire library
 */
 /**************************************************************************/
-class RTC_PCF8563 : RTC_I2C {
+class RTC_PCF8563 : public RTC_I2C {
 public:
   bool begin(TwoWire *wireInstance = &Wire);
   bool lostPower(void);
