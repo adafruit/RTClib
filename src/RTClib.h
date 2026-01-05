@@ -142,7 +142,8 @@ enum Pcf8563SqwPinMode {
 /**************************************************************************/
 class DateTime {
 public:
-  DateTime(uint32_t t = SECONDS_FROM_1970_TO_2000);
+  DateTime();
+  DateTime(uint32_t t);
   DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour = 0,
            uint8_t min = 0, uint8_t sec = 0);
   DateTime(const DateTime &copy);
@@ -274,7 +275,8 @@ protected:
 /**************************************************************************/
 class TimeSpan {
 public:
-  TimeSpan(int32_t seconds = 0);
+  TimeSpan();
+  TimeSpan(int32_t seconds);
   TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds);
   TimeSpan(const TimeSpan &copy);
 

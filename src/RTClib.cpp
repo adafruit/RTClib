@@ -132,6 +132,14 @@ static uint32_t time2ulong(uint16_t days, uint8_t h, uint8_t m, uint8_t s) {
 
 /**************************************************************************/
 /*!
+    @brief  Default constructor.
+*/
+/**************************************************************************/
+DateTime::DateTime()
+    : yOff(0) , m(1) , d(1) , hh(0), mm(0), ss(0) {}
+
+/**************************************************************************/
+/*!
     @brief  Constructor from
         [Unix time](https://en.wikipedia.org/wiki/Unix_time).
 
@@ -709,6 +717,14 @@ String DateTime::timestamp(timestampOpt opt) const {
   }
   return String(buffer);
 }
+
+/**************************************************************************/
+/*!
+    @brief  Default constructor.
+*/
+/**************************************************************************/
+TimeSpan::TimeSpan()
+    : _seconds(0) {}
 
 /**************************************************************************/
 /*!
