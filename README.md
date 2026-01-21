@@ -26,6 +26,7 @@ ATSAM3X8E          |      X       |             |            | Use SDA1 and SCL1
 ATSAM21D           |      X       |             |            |
 ATtiny85 @ 16MHz   |      X       |             |            |
 ATtiny85 @ 8MHz    |      X       |             |            |
+ESP32-S3           |      X       |             |            | Use 8 as SDA and 9 as SCL
 Intel Curie @ 32MHz |             |             |     X       |
 STM32F2            |             |             |     X       |
 
