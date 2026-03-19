@@ -356,7 +356,7 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
     @return False if interrupt flag is not set, otherwise true
 */
 /**************************************************************************/
-bool RTC_DS3231::getAlarmedState(uint8_t alarm_num){
+bool RTC_DS3231::getAlarmedState(uint8_t alarm_num) {
   uint8_t alarmedState = read_register(DS3231_CONTROL);
   alarmedState &= (1 << (alarm_num - 1));
   return alarmedState;
