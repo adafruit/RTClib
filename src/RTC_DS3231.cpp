@@ -351,6 +351,19 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 
 /**************************************************************************/
 /*!
+    @brief  Get the state of the alarm interrupt flag
+        @param 	alarm_num Alarm number
+    @return False if interrupt flag is not set, otherwise true
+*/
+/**************************************************************************/
+bool RTC_DS3231::getAlarmedState(uint8_t alarm_num) {
+  uint8_t alarmedState = read_register(DS3231_CONTROL);
+  alarmedState &= (1 << (alarm_num - 1));
+  return alarmedState;
+}
+
+/**************************************************************************/
+/*!
     @brief  Enable 32KHz Output
     @details The 32kHz output is enabled by default. It requires an external
     pull-up resistor to function correctly
