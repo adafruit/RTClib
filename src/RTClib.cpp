@@ -213,16 +213,6 @@ DateTime::DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour,
 
 /**************************************************************************/
 /*!
-    @brief  Copy constructor.
-    @param copy DateTime to copy.
-*/
-/**************************************************************************/
-DateTime::DateTime(const DateTime &copy)
-    : yOff(copy.yOff), m(copy.m), d(copy.d), hh(copy.hh), mm(copy.mm),
-      ss(copy.ss) {}
-
-/**************************************************************************/
-/*!
     @brief  Convert a string containing two digits to uint8_t, e.g. "09" returns
    9
     @param p Pointer to a string containing two digits
@@ -732,14 +722,6 @@ TimeSpan::TimeSpan(int32_t seconds) : _seconds(seconds) {}
 TimeSpan::TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds)
     : _seconds((int32_t)days * 86400L + (int32_t)hours * 3600 +
                (int32_t)minutes * 60 + seconds) {}
-
-/**************************************************************************/
-/*!
-    @brief  Copy constructor, make a new TimeSpan using an existing one
-    @param copy The TimeSpan to copy
-*/
-/**************************************************************************/
-TimeSpan::TimeSpan(const TimeSpan &copy) : _seconds(copy._seconds) {}
 
 /**************************************************************************/
 /*!

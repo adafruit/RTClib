@@ -145,7 +145,6 @@ public:
   DateTime(uint32_t t = SECONDS_FROM_1970_TO_2000);
   DateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour = 0,
            uint8_t min = 0, uint8_t sec = 0);
-  DateTime(const DateTime &copy);
   DateTime(const char *date, const char *time);
   DateTime(const __FlashStringHelper *date, const __FlashStringHelper *time);
   DateTime(const char *iso8601date);
@@ -276,7 +275,6 @@ class TimeSpan {
 public:
   TimeSpan(int32_t seconds = 0);
   TimeSpan(int16_t days, int8_t hours, int8_t minutes, int8_t seconds);
-  TimeSpan(const TimeSpan &copy);
 
   /*!
       @brief  Number of days in the TimeSpan
