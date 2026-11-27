@@ -108,7 +108,8 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
   if (y >= 2000U)
     y -= 2000U;
   uint16_t days = d;
-  for (uint8_t i = 1; i < m; ++i)
+  // daysInMonth has 11 entries: an invalid month must not walk past it
+  for (uint8_t i = 1; i < m && i < 12; ++i)
     days += pgm_read_byte(daysInMonth + i - 1);
   if (m > 2 && y % 4 == 0)
     ++days;
